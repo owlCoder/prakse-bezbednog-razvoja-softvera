@@ -16,13 +16,24 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function register(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
+  async function register(email, password) {
+    return await createUserWithEmailAndPassword(auth, email, password);
   }
 
-  function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
+  async function login(email, password) {
+    return await signInWithEmailAndPassword(auth, email, password);
   }
+
+  async function resetPassword(email) {
+    try {
+      await auth().sendPasswordResetEmail(email);
+      return "success";
+    } catch (error) {
+      return {
+        error: error.message,
+      };
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

@@ -29,6 +29,9 @@ export default function Register() {
     try {
       setLoading(true);
       await register(email, password);
+      // kreirati upis u firestore o baznim informacija tipa ime prezime itd
+      
+
       navigate("/");
     } catch (e) {
       alert("Failed to register");
