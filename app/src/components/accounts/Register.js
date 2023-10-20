@@ -28,9 +28,9 @@ export default function Register() {
     let res = JSON.parse(await register(email, password));
     setResponse(res["response"]);
     setLoading(false);
-    if (res && res["response"] === "OK") {
-      navigate("/");
-    }
+    // if (res && res["response"] === "OK") {
+    //   navigate("/");
+    // }
   }
 
   return (

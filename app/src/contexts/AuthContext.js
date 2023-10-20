@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {auth, firestore } from "../config/firebase";
@@ -19,17 +20,32 @@ export function AuthProvider({ children }) {
   async function register(email, password) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(auth.currentUser);
 
       // kreiranje zapisa u firestore podataka o korisniku todo1
-
-      // todo2 upis u audit INFO Korisnik sa UID se registrovao u sistem
-      await addDoc(doc(firestore, "audit"), {
-        messageType: "INFO",
-        message: "Korisnik sa email " + email + " je registrovan na sistem.",
-        date: firestore.FieldValue.serverTimestamp()
+      await addDoc(collection(firestore, "users"), {
+        uid: auth.currentUser.uid,
+        email: email,
+        ime: "",
+        prezime: "",
+        datumRodjenja: "",
+        photoBase64: "",
+        kupljenePloceUids: [],
+        prodatePloceUids: [],
+        postavljeniOglasiUids: [],
+        verifikovan_email: false,
+        uloga: "base",
+        pristupio: serverTimestamp()
       });
 
-      return JSON.stringify({"response": "OK"});
+      // todo2 upis u audit INFO Korisnik sa UID se registrovao u sistem
+      await addDoc(collection(firestore, "audit"), {
+        messageType: "INFO",
+        message: "Korisnik sa email " + email + " je registrovan na sistem.",
+        date: serverTimestamp()
+      });
+
+      return JSON.stringify({"response": "Verifikacioni email je poslat na Vašu e-adresu."});
     }
     catch(error) {
       // todo 3 upisati u audit preko api call neuspesna registracija
@@ -48,6 +64,12 @@ export function AuthProvider({ children }) {
         return JSON.stringify({"response": "Registracija nije moguća!"});
       }
       else {
+        await addDoc(collection(firestore, "audit"), {
+          messageType: "ERROR",
+          message: error.message,
+          date: serverTimestamp()
+        });
+
         return JSON.stringify({"response": "Desila se nepoznata greška. Pokušajte ponovo kasnije."});
       }
     } 
@@ -58,7 +80,12 @@ export function AuthProvider({ children }) {
       await signInWithEmailAndPassword(auth, email, password);
 
       // azuriranje polja last login time
-      
+      // provera da li je verifikovao email
+      if(auth && auth.currentUser.emailVerified == false) {
+        return JSON.stringify({"response": "Niste verifikovali email adresu!"});
+      }
+
+
       // todo2 upis u audit info korisnik se prijavio 
       await addDoc(collection(firestore, "audit"), {
         messageType: "INFO",
@@ -83,10 +110,20 @@ export function AuthProvider({ children }) {
         return JSON.stringify({"response": "Nemamo nigde evidentiran Vaš nalog. Možda da probate da se registruje?"});
       }
       else if(error.code === "auth/too-many-requests") {
+        await addDoc(collection(firestore, "audit"), {
+          messageType: "WARNING",
+          message: "Korisnik sa email " + email + " je pokušao da pristupi sa tuđim nalogom na sistem.",
+          date: serverTimestamp()
+        });
         return JSON.stringify({"response": "Previše pokušaja neuspešne prijave. Pokušajte ponovo kasnije!"});
       }
       else {
-        console.log(error);
+        await addDoc(collection(firestore, "audit"), {
+          messageType: "ERROR",
+          message: error.message,
+          date: serverTimestamp()
+        });
+
         return JSON.stringify({"response": "Desila se nepoznata greška. Pokušajte ponovo kasnije."});
       }
     } 
@@ -94,7 +131,13 @@ export function AuthProvider({ children }) {
 
   async function signOut()
   {
-    try { 
+    try {
+      await addDoc(collection(firestore, "audit"), {
+        messageType: "INFO",
+        message: "Korisnik sa email " + auth.currentUser.email + " se odjavio sa sistema.",
+        date: serverTimestamp()
+      });
+
       await auth.signOut();
 
       return {"response": "success"};
@@ -108,8 +151,19 @@ export function AuthProvider({ children }) {
   async function resetPassword(email) {
     try {
       await auth().sendPasswordResetEmail(email);
+      await addDoc(collection(firestore, "audit"), {
+        messageType: "INFO",
+        message: "Korisnik sa email " + email + " је zahtevao resetovanje lozinke.",
+        date: serverTimestamp()
+      });
       return "success";
     } catch (error) {
+      await addDoc(collection(firestore, "audit"), {
+        messageType: "ERROR",
+        message: error.message,
+        date: serverTimestamp()
+      });
+
       return {
         error: error.message,
       };
@@ -129,7 +183,8 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     register,
-    signOut
+    signOut,
+    resetPassword
   };
 
   return (
