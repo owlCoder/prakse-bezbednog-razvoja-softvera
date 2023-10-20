@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-    const { currentUser, signOut } = useAuth();
+    const { currentUser, signOut, resetPassword } = useAuth();
     const navigate = useNavigate();
-
+    
     useEffect(() => {
 
     }, [currentUser, navigate]);
@@ -13,6 +13,12 @@ export default function Home() {
     async function handleLogout(e) {
         e.preventDefault();
         await signOut();
+        navigate("/");
+    }
+
+    async function handlePasswordReset(e) {
+        e.preventDefault();
+        await resetPassword();
         navigate("/");
     }
 
@@ -30,8 +36,9 @@ export default function Home() {
                 </h1>
                 <p className="mt-6 text-base leading-7 text-gray-600">Super za tebe, nastavi dalje!</p>
                 {currentUser ? 
-                    <form className="mt-10 flex items-center justify-center gap-x-6" onSubmit={handleLogout}>
+                    <form className="mt-10 flex items-center justify-center gap-x-6">
                         <button type="submit" onClick={handleLogout} className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Odjava</button>
+                        <button type="submit" onClick={handlePasswordReset} className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Resetovanje lozinke</button>
                     </form> : 
                     <form className="mt-10 flex items-center justify-center gap-x-6" onSubmit={handleLogin}>
                         <button type="submit" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Prijava</button>

@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import {auth, firestore } from "../config/firebase";
 import { addDoc, collection, doc, setDoc, serverTimestamp } from "firebase/firestore"; 
@@ -23,7 +24,7 @@ export function AuthProvider({ children }) {
       await sendEmailVerification(auth.currentUser);
 
       // kreiranje zapisa u firestore podataka o korisniku todo1
-      await addDoc(collection(firestore, "users"), {
+      await setDoc(doc(firestore, "users", auth.currentUser.uid), {
         uid: auth.currentUser.uid,
         email: email,
         ime: "",
@@ -33,7 +34,6 @@ export function AuthProvider({ children }) {
         kupljenePloceUids: [],
         prodatePloceUids: [],
         postavljeniOglasiUids: [],
-        verifikovan_email: false,
         uloga: "base",
         pristupio: serverTimestamp()
       });
@@ -84,7 +84,6 @@ export function AuthProvider({ children }) {
       if(auth && auth.currentUser.emailVerified == false) {
         return JSON.stringify({"response": "Niste verifikovali email adresu!"});
       }
-
 
       // todo2 upis u audit info korisnik se prijavio 
       await addDoc(collection(firestore, "audit"), {
@@ -148,12 +147,12 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function resetPassword(email) {
+  async function resetPassword() {
     try {
-      await auth().sendPasswordResetEmail(email);
+      await sendPasswordResetEmail(auth, auth.currentUser.email);
       await addDoc(collection(firestore, "audit"), {
         messageType: "INFO",
-        message: "Korisnik sa email " + email + " је zahtevao resetovanje lozinke.",
+        message: "Korisnik sa email " + auth.currentUser.email + " је zahtevao resetovanje lozinke.",
         date: serverTimestamp()
       });
       return "success";
