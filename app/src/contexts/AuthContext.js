@@ -81,7 +81,7 @@ export function AuthProvider({ children }) {
 
       // azuriranje polja last login time
       // provera da li je verifikovao email
-      if(auth && auth.currentUser.emailVerified == false) {
+      if(auth && auth.currentUser.emailVerified === false) {
         return JSON.stringify({"response": "Niste verifikovali email adresu!"});
       }
 
