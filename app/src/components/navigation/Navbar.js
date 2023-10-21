@@ -5,7 +5,7 @@ function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
-            <nav className="bg-gray-50">
+            <nav className="bg-gray-50 fixed top-0 w-full border-b-2 border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center">
@@ -180,22 +180,7 @@ function Navbar() {
                     )}
                 </Transition>
             </nav>
-
-            <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                </div>
-            </header>
-            <main>
-                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    {/* <!-- Replace with your content --> */}
-                    <div className="px-4 py-6 sm:px-0">
-                        <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-                    </div>
-                    {/* <!-- /End replace --> */}
-                </div>
-            </main>
-            
+            <hr className="h-px bg-gray-300 border-0"/>
         </div>
     );
 }

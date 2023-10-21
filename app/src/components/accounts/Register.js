@@ -16,6 +16,10 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // prevent user to create an account if already signed in
+    if(currentUser != null) {
+      navigate("/");
+    }
 
   }, [currentUser, navigate]);
 

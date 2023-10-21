@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import Navbar from "../navigation/Navbar";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +12,10 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
+    // prevent user to sign in if already signed in
+    if(currentUser != null) {
+      navigate("/");
+    }
   }, [currentUser, navigate]);
 
   // funkcija za hendl
