@@ -28,7 +28,7 @@ export default function Register() {
     }
 
     setLoading(true);
-    let res = JSON.parse(await register(email, password));
+    let res = JSON.parse(await register(email, password, ime, prezime, datum));
     setResponse(res["response"]);
     setLoading(false);
     // if (res && res["response"] === "OK") {

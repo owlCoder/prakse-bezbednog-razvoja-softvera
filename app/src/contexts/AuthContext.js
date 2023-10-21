@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  async function register(email, password) {
+  async function register(email, password, ime, prezime, datum) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(auth.currentUser);
@@ -27,9 +27,9 @@ export function AuthProvider({ children }) {
       await setDoc(doc(firestore, "users", auth.currentUser.uid), {
         uid: auth.currentUser.uid,
         email: email,
-        ime: "",
-        prezime: "",
-        datumRodjenja: "",
+        ime: ime,
+        prezime: prezime,
+        datumRodjenja: datum,
         photoBase64: "",
         kupljenePloceUids: [],
         prodatePloceUids: [],
