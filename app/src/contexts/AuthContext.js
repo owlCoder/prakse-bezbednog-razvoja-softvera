@@ -4,6 +4,7 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  getAuth,
 } from "firebase/auth";
 import { auth, firestore } from "../config/firebase";
 import {
@@ -11,6 +12,7 @@ import {
   collection,
   doc,
   setDoc,
+  getDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -32,6 +34,8 @@ export function AuthProvider({ children }) {
       // azuriranje polja last login time
       // provera da li je verifikovao email
       if (auth && auth.currentUser.emailVerified === false) {
+        await signOut();
+        setCurrentUser(null);
         return JSON.stringify({ response: "Niste verifikovali email adresu!" });
       }
 
@@ -92,10 +96,12 @@ export function AuthProvider({ children }) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(auth.currentUser);
+      let uid = auth.currentUser.uid;
+      await signOut();
 
       // kreiranje zapisa u firestore podataka o korisniku todo1
-      await setDoc(doc(firestore, "users", auth.currentUser.uid), {
-        uid: auth.currentUser.uid,
+      await setDoc(doc(firestore, "users", uid), {
+        uid: uid,
         email: email,
         firstName: firstName,
         lastName: lastName,
@@ -161,7 +167,7 @@ export function AuthProvider({ children }) {
       });
 
       await auth.signOut();
-
+      setCurrentUser(null);
       return { response: "success" };
     } catch (error) {
       console.log(error);

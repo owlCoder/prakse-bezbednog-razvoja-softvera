@@ -1,188 +1,271 @@
-import React, { useState } from "react";
-import { Transition } from "@headlessui/react";
+import React, { useState, Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
-    return (
-        <div>
-            <nav className="bg-gray-50 fixed top-0 w-full border-b-2 border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                        <div className="flex items-center">
-                            <div className="flex-shrink-0">
-                                <img
-                                    className="h-8 w-8"
-                                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                                    alt="Workflow"
-                                />
-                            </div>
-                            <div className="hidden md:block">
-                                <div className="ml-10 flex items-baseline space-x-4">
-                                    <a
-                                        href="#"
-                                        className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Dashboard
-                                    </a>
+  const links = ["Homepage", "Ads"];
+  const profileLinks = ["Account", "Reset password"];
+  const { currentUser, signOut } = useAuth();
+  const navigate = useNavigate();
 
-                                    <a
-                                        href="#"
-                                        className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Team
-                                    </a>
+  // greetins messages
+  var greetings = [
+    "Hello",
+    "Ciao",
+    "Welcome",
+    "Howdy",
+    "Greetings",
+    "Salut",
+    "Hola",
+    "Gday",
+    "Hey",
+  ];
 
-                                    <a
-                                        href="#"
-                                        className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Projects
-                                    </a>
+  async function handleSignOut(e) {
+    e.preventDefault();
+    await signOut();
+    navigate("/");
+  }
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <nav className="bg-gray-50 fixed top-0 w-full border-b-2 border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <img
+                  className="h-8 w-8"
+                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                  alt="Workflow"
+                />
+              </div>
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  {links.map((link, index) => (
+                    <a
+                      href={link.toLowerCase().replaceAll(" ", "-")}
+                      key={index}
+                      className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      {link}
+                    </a>
+                  ))}
 
-                                    <a
-                                        href="#"
-                                        className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Calendar
-                                    </a>
-
-                                    <a
-                                        href="#"
-                                        className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Reports
-                                    </a>
-
-                                    <div className="">
-                                        <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown divider 
-                                        <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                                        </svg>
-                                        </button>
-
-                                        <div id="dropdownDivider" className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
-                                                <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                                                </li>
-                                            </ul>
-                                            <div className="py-2">
-                                                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
+                  {/* if user is logged in show account menu  */}
+                  <div className="absolute right-4 text-base font-normal">
+                    {currentUser !== null ? (
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <div>
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                            {
+                              greetings[
+                                Math.floor(Math.random() * greetings.length)
+                              ]
+                            }
+                            , {currentUser.email}
+                          </Menu.Button>
                         </div>
-                        <div className="-mr-2 flex md:hidden">
-                            <button
-                                onClick={() => setIsOpen(!isOpen)}
-                                type="button"
-                                className="bg-gray-300 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                                aria-controls="mobile-menu"
-                                aria-expanded="false"
-                            >
-                                <span className="sr-only">Open main menu</span>
-                                {!isOpen ? (
-                                    <svg
-                                        className="block h-6 w-6"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        aria-hidden="true"
+
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="py-1">
+                              {profileLinks.map((link, index) => (
+                                <Menu.Item key={index}>
+                                  {({ active }) => (
+                                    <a
+                                      href={link
+                                        .toLowerCase()
+                                        .replaceAll(" ", "-")}
+                                      className={classNames(
+                                        active
+                                          ? "bg-gray-100 text-gray-900"
+                                          : "text-gray-700",
+                                        "block px-4 py-2 text-sm"
+                                      )}
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M4 6h16M4 12h16M4 18h16"
-                                        />
-                                    </svg>
-                                ) : (
-                                    <svg
-                                        className="block h-6 w-6"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        aria-hidden="true"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
+                                      {link}
+                                    </a>
+                                  )}
+                                </Menu.Item>
+                              ))}
+                            </div>
+                            <div className="py-1">
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <a
+                                    href="/"
+                                    onClick={handleSignOut}
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 text-red-700"
+                                        : "text-red-800 hover:text-red-700",
+                                      "block px-4 py-2 text-sm"
+                                    )}
+                                  >
+                                    Sign Out
+                                  </a>
                                 )}
-                            </button>
-                        </div>
-                    </div>
+                              </Menu.Item>
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
+                    ) : (
+                      <p>sdsa</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="-mr-2 flex md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                className="bg-gray-300 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                aria-controls="mobile-menu"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                {!isOpen ? (
+                  <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <Transition
+          show={isOpen}
+          enter="transition ease-out duration-100 transform"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-75 transform"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div className="md:hidden" id="mobile-menu">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {links.map((link, index) => (
+                <a
+                  href={link.toLowerCase().replaceAll(" ", "-")}
+                  key={index}
+                  className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  {link}
+                </a>
+              ))}
+
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Options
+                  </Menu.Button>
                 </div>
 
                 <Transition
-                    show={isOpen}
-                    enter="transition ease-out duration-100 transform"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="transition ease-in duration-75 transform"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
                 >
-                    {(ref) => (
-                        <div className="md:hidden" id="mobile-menu">
-                            <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                                <a
-                                    href="#"
-                                    className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Dashboard
-                                </a>
-
-                                <a
-                                    href="#"
-                                    className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Team
-                                </a>
-
-                                <a
-                                    href="#"
-                                    className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Projects
-                                </a>
-
-                                <a
-                                    href="#"
-                                    className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-                                >
-                                    Calendar
-                                </a>
-
-                                <a
-                                    href="#"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                                >
-                                    Reports
-                                </a>
-                            </div>
-                        </div>
-                    )}
+                  <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                      {profileLinks.map((link, index) => (
+                        <Menu.Item key={index}>
+                          {({ active }) => (
+                            <a
+                              href={link.toLowerCase().replaceAll(" ", "-")}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              {link}
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </div>
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="/"
+                            onClick={handleSignOut}
+                            className={classNames(
+                              active
+                                ? "bg-gray-100 text-red-700"
+                                : "text-red-800 hover:text-red-700",
+                              "block px-4 py-2 text-sm"
+                            )}
+                          >
+                            Sign Out
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </div>
+                  </Menu.Items>
                 </Transition>
-            </nav>
-            <hr className="h-px bg-gray-300 border-0"/>
-        </div>
-    );
+              </Menu>
+            </div>
+          </div>
+        </Transition>
+      </nav>
+      <hr className="h-px bg-gray-300 border-0" />
+    </div>
+  );
 }
 
 export default Navbar;
