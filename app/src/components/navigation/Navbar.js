@@ -195,6 +195,7 @@ function Navbar() {
                     {/* <!-- /End replace --> */}
                 </div>
             </main>
+            
         </div>
     );
 }
