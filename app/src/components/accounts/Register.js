@@ -7,6 +7,9 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [response, setResponse] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [ime, setIme] = useState("");
+  const [prezime, setPrezime] = useState("");
+  const [datum, setDatum] = useState("");
 
   const navigate = useNavigate();
   const { currentUser, register } = useAuth();
