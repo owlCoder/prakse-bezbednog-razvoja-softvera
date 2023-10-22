@@ -9,7 +9,7 @@ function classNames(...classes) {
 
 function Navbar() {
   const links = ["Homepage", "Ads"];
-  const profileLinks = ["Account", "Reset password"];
+  const profileLinks = ["Account Settings", "Dashboard"];
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -65,7 +65,7 @@ function Navbar() {
                         className="relative inline-block text-left"
                       >
                         <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                             {
                               greetings[
                                 Math.floor(Math.random() * greetings.length)
@@ -84,7 +84,7 @@ function Navbar() {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
                               {profileLinks.map((link, index) => (
                                 <Menu.Item key={index}>
@@ -95,9 +95,9 @@ function Navbar() {
                                         .replaceAll(" ", "-")}
                                       className={classNames(
                                         active
-                                          ? "bg-gray-100 text-gray-900"
+                                          ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
                                           : "text-gray-700",
-                                        "block px-4 py-2 text-sm"
+                                        "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
                                       )}
                                     >
                                       {link}
@@ -114,8 +114,8 @@ function Navbar() {
                                     onClick={handleSignOut}
                                     className={classNames(
                                       active
-                                        ? "bg-gray-100 text-red-700"
-                                        : "text-red-800 hover:text-red-700",
+                                        ? "bg-gray-100 dark:bg-gray-900 text-red-500"
+                                        : "text-red-500 hover:text-red-700",
                                       "block px-4 py-2 text-sm"
                                     )}
                                   >
