@@ -5,6 +5,15 @@ import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "../navigation/Navbar";
 
 export default function Profile() {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    if(currentUser === null) { // view data only if logged in
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
+
 
   return (
     
@@ -18,7 +27,7 @@ export default function Profile() {
             <div className="col-span-full xl:col-auto">
                 <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                        <img className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="/images/users/bonnie-green-2x.png" alt="Jese picture" />
+                        <img className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="https://source.unsplash.com/random" alt="" />
                         <div>
                             <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">Profile picture</h3>
                             <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -52,7 +61,7 @@ export default function Profile() {
                             </div>                                                                   
                             <div className="col-span-6 sm:col-span-3">
                                 <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Email" required />
+                                <input type="email" name="email" id="email" disabled value={currentUser.email} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Email" required />
                                 <div classNameName="col-span-6 sm:col-full">
                                     <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mt-6" type="submit">Save all</button>
                                 </div>
