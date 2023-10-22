@@ -7,19 +7,26 @@ import Navbar from "../navigation/Navbar";
 export default function Profile() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
+    // get user data from api
+    // if firestore firebase doc()
+    // collection("users").doc("BTQJxbKihzb4zaAMXnbyWpRd4UC3").getData();
+    console.log(currentUser);
+
     if(currentUser === null) { // view data only if logged in
       navigate("/login");
+
     }
   }, [currentUser, navigate]);
 
 
   return (
     
-    <div>
+    <div className="bg-gray-100 dark:bg-gray-900">
         <Navbar />
-        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 bg-gray-200 dark:bg-gray-900 mt-16">
+        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 bg-gray-100 dark:bg-gray-900 mt-16 md:w-4/5 md:mx-auto">
             <div className="mb-4 col-span-full xl:mb-2">
                 <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">User settings</h1>
             </div>
@@ -61,7 +68,7 @@ export default function Profile() {
                             </div>                                                                   
                             <div className="col-span-6 sm:col-span-3">
                                 <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email" disabled value={currentUser.email} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Email" required />
+                                <input type="email" name="email" id="email" disabled value={currentUser.email} className="shadow-sm bg-gray-50 border select-none border-gray-300 text-gray-400 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-300 dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Email" required />
                                 <div classNameName="col-span-6 sm:col-full">
                                     <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mt-6" type="submit">Save all</button>
                                 </div>

@@ -14,9 +14,5 @@
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
       }
-
-      body {
-        background-color: rgb(29, 36, 53);
-      }
     }
   }
