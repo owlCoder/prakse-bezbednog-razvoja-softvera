@@ -13,7 +13,6 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <Login />
     </main>
   );
 }
