@@ -34,7 +34,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
-      <nav className="bg-gray-50 fixed top-0 w-full border-b-2 border-gray-200 z-50">
+      <nav className="bg-gray-50 dark:bg-gray-950 dark:text-white dark:border-gray-700 fixed top-0 w-full border-b-2 border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -51,7 +51,7 @@ function Navbar() {
                     <a
                       href={link.toLowerCase().replaceAll(" ", "-")}
                       key={index}
-                      className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                      className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-700"
                     >
                       {link}
                     </a>
@@ -65,7 +65,7 @@ function Navbar() {
                         className="relative inline-block text-left"
                       >
                         <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                             {
                               greetings[
                                 Math.floor(Math.random() * greetings.length)
@@ -196,7 +196,7 @@ function Navbar() {
                 <a
                   href={link.toLowerCase().replaceAll(" ", "-")}
                   key={index}
-                  className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+                  className=" hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-700"
                 >
                   {link}
                 </a>
@@ -204,7 +204,7 @@ function Navbar() {
 
               <Menu as="div" className="relative inline-block text-left">
                 <div>
-                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-white">
                     Options
                   </Menu.Button>
                 </div>
