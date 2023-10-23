@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 router.get("/", function(req, res, next) {
-    res.send("API is working properly");
+    res.status(200).send(JSON.stringify({"data": [1, 2, 3, 4, 5, "dsds"]}));
 });
 
 module.exports = router;
