@@ -10,7 +10,7 @@ export default function Profile() {
     
     <div>
         <Navbar />
-        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 bg-gray-200 dark:bg-gray-900 mt-16">
+        <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 bg-gray-200 dark:bg-gray-900 mt-16 max-w-7xl mx-auto">
             <div className="mb-4 col-span-full xl:mb-2">
                 <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">User settings</h1>
             </div>
