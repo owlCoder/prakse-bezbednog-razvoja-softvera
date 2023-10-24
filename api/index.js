@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-
 import config from './config.js';
 
 // Import user API route into server

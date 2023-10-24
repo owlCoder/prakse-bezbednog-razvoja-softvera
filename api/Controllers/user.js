@@ -52,3 +52,48 @@ export const createUser = async (req, res, next) => {
       res.status(400).send(error.message);
     }
   };
+
+  // API to read particular user from users collection
+  export const getUserByUid = async (req, res, next) => {
+    const { uid } = req.body; // Assuming the UID is passed in the request body
+    const authenticatedUid = req.user.uid; // Assuming you have middleware that adds the authenticated user's UID to the request
+  
+    if (!uid) {
+      res.status(400).send('UID is missing in the request JSON.');
+      return;
+    }
+  
+    // Check if the authenticated user's UID matches the requested UID
+    if (authenticatedUid !== uid) {
+      res.status(403).send('Unauthorized: The requested UID does not match the authenticated user.');
+      return;
+    }
+  
+    try {
+      const userRef = doc(db, 'users', uid); // Assuming 'users' is the name of your collection
+  
+      const userDoc = await getDoc(userRef);
+  
+      if (!userDoc.exists()) {
+        res.status(404).send('User not found');
+      } else {
+        const userData = userDoc.data();
+        const user = new User(
+          uid,
+          userData.firstName,
+          userData.lastName,
+          userData.email,
+          userData.dateBirth,
+          userData.lastAccessDate,
+          userData.photoBase64
+        );
+  
+        res.status(200).send(user);
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+  
+  
+  
