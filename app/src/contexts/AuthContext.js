@@ -168,6 +168,7 @@ export function AuthProvider({ children }) {
 
       await auth.signOut();
       setCurrentUser(null);
+      localStorage.clear();
       return { response: "success" };
     } catch (error) {
       console.log(error);
