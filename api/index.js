@@ -1,6 +1,7 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccount.json');
+const path = require('path');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -29,6 +30,12 @@ const verifyToken = async (req, res, next) => {
     res.status(401).json({ error: 'Unauthorized' + error });
   }
 };
+
+app.get('/', (req, res) => {
+  // Use path.join to create an absolute path to the HTML file
+  const welcomePagePath = path.join(__dirname, 'public', 'index.html');
+  res.sendFile(welcomePagePath);
+});
 
 // Route to fetch user data from Firestore
 app.post('/api/user', verifyToken, async (req, res) => {
