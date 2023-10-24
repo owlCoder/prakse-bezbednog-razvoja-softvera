@@ -33,7 +33,7 @@ const verifyToken = async (req, res, next) => {
 
 app.get('/', (req, res) => {
   // Use path.join to create an absolute path to the HTML file
-  const welcomePagePath = path.join(__dirname, 'public', 'index.html');
+  const welcomePagePath = path.join(__dirname, 'static', 'index.html');
   res.sendFile(welcomePagePath);
 });
 
