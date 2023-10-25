@@ -180,11 +180,6 @@ export function AuthProvider({ children }) {
   // RESET PASSWORD FUNCTION
   async function resetPasswordEmail(email) {
     try {
-      if (auth && auth.currentUser.emailVerified === false) {
-        await signOut();
-        setCurrentUser(null);
-        return JSON.stringify({ response: "Niste verifikovali email adresu!" });
-      }
       await sendPasswordResetEmail(auth, email);
       await addDoc(collection(firestore, "audit"), {
         messageType: "INFO",
