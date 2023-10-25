@@ -1,4 +1,4 @@
-const admin = require('./firebase');
+const admin = require('../firebaseConfig');
 
 // Create a user
 const createUser = async (userData) => {

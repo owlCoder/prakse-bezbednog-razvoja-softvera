@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Import user controller
-const users = require('../controllers/userController');
+const users = require('./controllers/userController');
 
 // Export the app
 module.exports = app;
