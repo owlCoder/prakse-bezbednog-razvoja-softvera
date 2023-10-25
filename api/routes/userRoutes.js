@@ -1,14 +1,12 @@
 const { verifyToken } = require('../middleware/verify');
 const express = require('express');
 const router = express.Router();
-
-router.get('/lmao', async (req, res) => {
-  return res.status(200).send("test test test");
-});
+const users = require('../controllers/userController');
 
 // User route to get user by UID
 router.post('/user', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
+  const { uid } = req.body;
 
   // Check if the request contains the 'uid' field in the body
   if (!uid) {
@@ -22,9 +20,11 @@ router.post('/user', verifyToken, async (req, res) => {
 
   // Call controller method for user data fetch
   try {
-    return users.createUser(req.body);
+    let data = await users.getUser(uid);
+    return res.status(200).json(data);
   }
   catch(error) {
+    console.log(error)
     return res.status(401).json({ error: error });
   }
 });

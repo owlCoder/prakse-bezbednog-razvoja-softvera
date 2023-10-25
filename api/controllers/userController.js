@@ -14,7 +14,7 @@ const getUser = async (uid) => {
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      res.status(404).json({ error: 'User not found' });
+      return json({ error: 'User not found' });
     } else {
       const userData = userDoc.data();
       res.status(200).json(userData);

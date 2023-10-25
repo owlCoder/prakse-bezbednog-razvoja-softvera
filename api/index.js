@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const app = express();
 const path = require('path');
 
@@ -10,6 +11,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+// Enable CORS policy
+app.use(cors());
 
 // Routes for users
 const userRoutes = require('./routes/userRoutes'); // Import the userRoutes
