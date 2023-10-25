@@ -198,7 +198,7 @@ export function AuthProvider({ children }) {
 
       return JSON.stringify({
         code: "500",
-        response: error.message,
+        response: "Invalid Email has been entered.",
       });
     }
   }

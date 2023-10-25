@@ -89,11 +89,11 @@ export default function Login() {
                 account</a></p>
 
               {/* Back Button */}
-              <div
-                  className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5 transition duration-150"
-                >
-                <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
-              </div>
+              <a href="/">
+                <div className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5      transition duration-150">
+                  <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
+                </div>
+              </a>
 
             </form>
           </div>

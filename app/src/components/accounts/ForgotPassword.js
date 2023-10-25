@@ -10,7 +10,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
 
@@ -55,7 +55,7 @@ export default function ForgotPassword() {
 
             {/* Error Message */}
             <div>
-              <h4 className="text-red-700 dark:text-red-400 mt-4 mb-5">{response}</h4>
+              {error === "200" ?  <h4 className="text-green-700 dark:text-green-400 mt-4 mb-5">{response}</h4> :  <h4 className="text-red-700 dark:text-red-400 mt-4 mb-5">{response}</h4>}
             </div>
 
             {/* Reset Password */}
@@ -73,11 +73,11 @@ export default function ForgotPassword() {
           <p className="mt-8">Back to <a href="/login" className="text-blue-500 hover:text-blue-700 font-semibold">Log In</a></p>
 
           {/* Back Button */}
-          <div
-            className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5 transition duration-150"
-          >
-            <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
-          </div>
+          <a href="/">
+            <div className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5      transition duration-150">
+              <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
+            </div>
+          </a>
 
         </div>
       </div>
