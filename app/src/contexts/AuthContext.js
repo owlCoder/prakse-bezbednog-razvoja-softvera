@@ -31,6 +31,7 @@ export function AuthProvider({ children }) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
+
       // azuriranje polja last login time
       // provera da li je verifikovao email
       if (auth && auth.currentUser.emailVerified === false) {
@@ -85,7 +86,7 @@ export function AuthProvider({ children }) {
         });
 
         return JSON.stringify({
-          response: "Desila se nepoznata greška. Pokušajte ponovo kasnije.",
+          response: "Desila se nepoznata greška. Pokušajte ponovo kasnije." + error.message,
         });
       }
     }
@@ -168,6 +169,7 @@ export function AuthProvider({ children }) {
 
       await auth.signOut();
       setCurrentUser(null);
+      localStorage.clear();
       return { response: "success" };
     } catch (error) {
       console.log(error);

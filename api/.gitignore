@@ -46,7 +46,6 @@ dist/
 
 # Gatsby
 .cache/
-public/
 
 # IntelliJ
 .idea/
