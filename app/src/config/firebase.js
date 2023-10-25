@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  apiKey: 'AIzaSyDlOj_1Z0eCE-Jb4q92hEewpAus0fNwRrA',
+  authDomain: 'oibis-ftn.firebaseapp.com',
+  projectId: 'oibis-ftn',
+  storageBucket: 'oibis-ftn.appspot.com',
+  messagingSenderId: '1049634728195',
+  appId: '1:1049634728195:web:aec8a402e8cacd3d8ee136',
+  measurementId: 'V5TPZVDY4N'
 }; 
 
 const app = initializeApp(firebaseConfig);
