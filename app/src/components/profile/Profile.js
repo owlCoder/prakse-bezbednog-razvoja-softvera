@@ -13,12 +13,12 @@ export default function Profile() {
     // get user data from api
     // if firestore firebase doc()
     // collection("users").doc("BTQJxbKihzb4zaAMXnbyWpRd4UC3").getData();
-    console.log(currentUser);
-
     if(currentUser === null) { // view data only if logged in
       navigate("/login");
-
     }
+
+    // get user data from api
+    currentUser.getIdToken()
   }, [currentUser, navigate]);
 
 
