@@ -14,4 +14,4 @@ app.use(bodyParser.json())
 const users = require('../controllers/userController');
 
 // Export the app
-exports default app;
+module.exports = app;
