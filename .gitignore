@@ -57,40 +57,6 @@ public/
 # Log files
 logs/
 
-# Sensitive or environment-specific files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # Editor directories
 .idea/
 .vscode/
-
-# Node.js generated files
-node_modules/
-dist/
-logs/
-
-# Yarn
-.yarn-error.log
-.yarn-integrity
-.pnp.*
-
-# npm package locks
-npm-debug.log
-package-lock.json
-
-# Nuxt.js
-.nuxt/
-dist/
-
-# Yarn Integrity file
-.yarn-integrity
-
-# Mac and Windows files
-.DS_Store
-Thumbs.db
-
-# ESLint cache
-.eslintcache
