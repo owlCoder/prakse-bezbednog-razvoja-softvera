@@ -18,14 +18,10 @@ export default function ForgotPassword() {
   // funkcija za hendl
   async function handleFormSubmit(e) {
     e.preventDefault();
-
     setLoading(true);
     let res = JSON.parse(await resetPasswordEmail(email));
     setResponse(res["response"]);
     setLoading(false);
-    if (res && res["response"] === "OK") {
-      navigate("/");
-    }
   }
 
   return (

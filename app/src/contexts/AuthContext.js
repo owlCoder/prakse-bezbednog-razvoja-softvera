@@ -184,12 +184,11 @@ export function AuthProvider({ children }) {
       await addDoc(collection(firestore, "audit"), {
         messageType: "INFO",
         message:
-          "Korisnik sa email " +
-          auth.currentUser.email +
+          "Korisnik sa email " + email +
           " је zahtevao resetovanje lozinke.",
         date: serverTimestamp(),
       });
-      return "success";
+      return JSON.stringify({ response: "Password reset email has been sent." });
     } catch (error) {
       await addDoc(collection(firestore, "audit"), {
         messageType: "ERROR",
@@ -197,9 +196,9 @@ export function AuthProvider({ children }) {
         date: serverTimestamp(),
       });
 
-      return {
-        error: error.message,
-      };
+      return JSON.stringify({
+        response: error.message,
+      });
     }
   }
 
