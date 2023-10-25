@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from 'axios';
 
@@ -13,25 +13,25 @@ export default function Profile() {
   
     const fetchData = async (token, uid) => {
       try {
-        const response = await axios.post(
-          'http://localhost:5000/api/user',
-          {
-            uid: uid,
+        var options = {
+          method: 'POST',
+          url: 'http://localhost:5000/api/user',
+          headers: {
+            Accept: '*/*',
+            Authorization: `${token}`,
+            'Content-Type': 'application/json',
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Send the Firebase ID token in the Authorization header
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+          data: { uid: uid },
+        };
+  
+        const response = await axios.request(options);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
   
-    const getToken = async () => {
+    const getToken = useCallback(async () => {
       try {
         const token = await currentUser.getIdToken();
         setFirebaseIdToken(token);
@@ -39,6 +39,22 @@ export default function Profile() {
       } catch (error) {
         console.error('Error getting Firebase ID token:', error);
         return null;
+      }
+    }, [currentUser]);
+  
+    const fetchDataAndToken = async () => {
+      const token = await getToken();
+      if (token) {
+        await fetchData(token, currentUser.uid);
+      }
+    };
+  
+    const loadData = async () => {
+      await fetchDataAndToken();
+  
+      // Now, you can work with `data` as you wish
+      if (currentUser === null || (data && data.code !== 200)) {
+        navigate('/login');
       }
     };
   
@@ -48,15 +64,7 @@ export default function Profile() {
         return; // Exit early if not logged in
       }
   
-      const fetchDataAndToken = async () => {
-        const token = await getToken();
-        if (token) {
-            console.log(token);
-          await fetchData(token, currentUser.uid);
-        }
-      };
-  
-      fetchDataAndToken(); // Call the function to fetch data and token
+      loadData(); // Call the function to fetch data and token
     }, [currentUser, navigate]);
 
   return (
@@ -97,7 +105,7 @@ export default function Profile() {
                         <div className="grid grid-cols-6 gap-6">
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="first-name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                                <input type="text" name="first-name" id="first-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="First Name" required />
+                                <input type="text" name="first-name" value={data.payload.firstName} id="first-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="First Name" required />
                             </div>
                             <div className="col-span-6 sm:col-span-3">
                                 <label htmlFor="last-name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
@@ -202,7 +210,7 @@ export default function Profile() {
                                         </p>
                                     </div>
                                     <div className="inline-flex items-center">
-                                        <a href="#" className="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Revoke</a>
+                                        <a href="4" className="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Revoke</a>
                                     </div>
                                 </div>
                             </li>

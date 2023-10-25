@@ -20,7 +20,7 @@ router.post('/user', verifyToken, async (req, res) => {
 
   // Call controller method for user data fetch
   try {
-    let data = await users.getUser(uid);
+    let data = await users.getUserByUid(uid);
     return res.status(200).json(data);
   }
   catch(error) {

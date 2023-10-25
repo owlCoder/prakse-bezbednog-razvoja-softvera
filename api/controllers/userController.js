@@ -7,20 +7,20 @@ const createUser = async (userData) => {
 };
 
 // Read user information
-const getUser = async (uid) => {
+const getUserByUid = async (uid) => {
   // Read user by uid
   try {
     const userRef = admin.firestore().collection('users').doc(uid);
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      return json({ error: 'User not found' });
+      return JSON.stringify({ code: 404, payload: 'User not found' });
     } else {
       const userData = userDoc.data();
-      res.status(200).json(userData);
+      return JSON.stringify({code: 200, payload: userData });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return JSON.stringify({code: 500, payload: "Internal Server Error" });
   }
 };
 
@@ -34,4 +34,4 @@ const deleteUser = async (uid) => {
   // Your delete user logic here
 };
 
-module.exports = { createUser, getUser, updateUser, deleteUser };
+module.exports = { createUser, getUserByUid, updateUser, deleteUser };
