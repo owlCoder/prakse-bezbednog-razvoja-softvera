@@ -10,12 +10,19 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [date, setDate] = useState("");
+  const [maxRegDate, setMaxRegDate] = useState("");
 
   const navigate = useNavigate();
   const { currentUser, register } = useAuth();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+
+    var currentDate = new Date();
+    var allowedYear = currentDate.getFullYear() - 8;
+    var formattedDate = `${allowedYear}-01-01`;
+    setMaxRegDate(formattedDate);
+
   }, [currentUser, navigate]);
 
   // funkcija za hendl
@@ -72,7 +79,7 @@ export default function Register() {
             {/* Date */}
             <div className="mt-4">
               <label className="block">Date of birth</label>
-              <input type="date" name="date" id="date" onChange={(e) => setDate(e.target.value)} placeholder="Enter Date of Birth" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
+              <input type="date" max={maxRegDate} name="date" id="date" onChange={(e) => setDate(e.target.value)} placeholder="Enter Date of Birth" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
             </div>
 
             {/* Mail */}
@@ -115,11 +122,11 @@ export default function Register() {
           <p className="mt-8">Already have an account? <a href="/login" className="text-blue-500 hover:text-blue-700 font-semibold">Log In</a></p>
 
           {/* Back Button */}
-          <div
-              className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5 transition duration-150"
-            >
-            <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
+          <a href="/">
+            <div className="group absolute top-5 left-4 flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full md:bg-white md:top-4 hover:cursor-pointer hover:-translate-y-0.5      transition duration-150">
+              <a href="/" className="text-gray-900 text-5xl -mt-3 -ml-1 font-normal">‹</a>
             </div>
+          </a>
 
         </div>
       </div>
