@@ -10,6 +10,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
 
@@ -21,6 +22,7 @@ export default function ForgotPassword() {
     setLoading(true);
     let res = JSON.parse(await resetPasswordEmail(email));
     setResponse(res["response"]);
+    setError(res["code"]);
     setLoading(false);
   }
 

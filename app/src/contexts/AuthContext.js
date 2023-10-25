@@ -188,7 +188,7 @@ export function AuthProvider({ children }) {
           " је zahtevao resetovanje lozinke.",
         date: serverTimestamp(),
       });
-      return JSON.stringify({ response: "Password reset email has been sent." });
+      return JSON.stringify({ code: "200", response: "Password reset email has been sent." });
     } catch (error) {
       await addDoc(collection(firestore, "audit"), {
         messageType: "ERROR",
@@ -197,6 +197,7 @@ export function AuthProvider({ children }) {
       });
 
       return JSON.stringify({
+        code: "500",
         response: error.message,
       });
     }
