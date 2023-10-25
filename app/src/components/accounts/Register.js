@@ -45,7 +45,7 @@ export default function Register() {
 
   return (
 
-    <section className="flex flex-col md:flex-row h-screen items-center bg-white dark:bg-gray-900 text-slate-600 dark:text-slate-100">
+    <section className="flex flex-col md:flex-row h-screen items-center min-h-full bg-white dark:bg-gray-900 text-slate-600 dark:text-slate-100">
 
       {/* Image */}
       <div className="bg-white dark:bg-gray-900 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
@@ -59,7 +59,7 @@ export default function Register() {
         <div className="w-full h-100">
 
           {/* Content Title */}
-          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Create an account</h1>
+          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-3">Create an account</h1>
 
           {/* Form */}
           <form className="mt-6" onSubmit={handleFormSubmit}>
