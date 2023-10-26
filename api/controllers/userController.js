@@ -52,7 +52,6 @@ const updateProfilePicture = async (uid, base64) => {
 // Update user information
 const updateUser = async (uid, firstName, lastName, date) => {
   // Your update user logic here
-  // Your update user logic here
   try {
     const docRef = admin.firestore().collection('users').doc(uid);
     const userDoc = await docRef.get();
@@ -78,6 +77,20 @@ const updateUser = async (uid, firstName, lastName, date) => {
 // Delete a user
 const deleteUser = async (uid) => {
   // Your delete user logic here
+  try {
+    const userRef = admin.firestore().collection('users').doc(uid);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return JSON.stringify({ code: 404, payload: 'User not found' });
+    } else {
+      await userRef.delete(); // delete user in firestore
+      await admin.auth().deleteUser(uid); // delete user in auth collection
+      return JSON.stringify({ code: 200, payload: userData });
+    }
+  } catch (error) {
+    return JSON.stringify({ code: 500, payload: "Internal Server Error" });
+  } 
 };
 
 module.exports = { createUser, getUserByUid, updateProfilePicture, updateUser, deleteUser };
