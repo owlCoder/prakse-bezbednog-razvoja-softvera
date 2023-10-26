@@ -35,7 +35,7 @@ const updateProfilePicture = async (uid, base64) => {
       return JSON.stringify({ code: 404, payload: 'User not found' });
     } else {
       docRef
-        .set({ photoBase64: base64 })
+        .update({ photoBase64: base64 })
         .then(() => {
           return JSON.stringify({code: 200, payload: "OK" });
         })
@@ -50,8 +50,29 @@ const updateProfilePicture = async (uid, base64) => {
 };
 
 // Update user information
-const updateUser = async (uid, base64) => {
+const updateUser = async (uid, firstName, lastName, date) => {
   // Your update user logic here
+  // Your update user logic here
+  try {
+    const docRef = admin.firestore().collection('users').doc(uid);
+    const userDoc = await docRef.get();
+
+    if (!userDoc.exists) {
+      return JSON.stringify({ code: 404, payload: 'User not found' });
+    } else {
+      docRef
+        .update({ firstName: firstName, lastName: lastName, date: date })
+        .then(() => {
+          return JSON.stringify({code: 200, payload: "OK" });
+        })
+        .catch((error) => {
+          return JSON.stringify({code: 400, payload: "Profile data can not be updated. Try again later!" });
+        });
+    }
+  } catch (error) {
+    console.log(error.message);
+    return JSON.stringify({ code: 500, payload: "Internal Server Error" });
+  }
 };
 
 // Delete a user

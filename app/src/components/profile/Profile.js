@@ -51,7 +51,7 @@ export default function Profile() {
         if(selectedImage != null) {
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post('http://localhost:5000/api/updatePicture', {
+                await axios.post('http://localhost:5000/api/updatePicture', {
                     uid: currentUser.uid,
                     photoBase64: `${selectedImage}`,
                 }, {
@@ -80,7 +80,26 @@ export default function Profile() {
         setIsEditing(true);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        try {
+            const token = await currentUser.getIdToken();
+            await axios.post('http://localhost:5000/api/updateUser', {
+                uid: currentUser.uid,
+                firstName: `${firstName}`,
+                lastName:  `${lastName}`,
+                date:      `${date}`,
+            }, {
+                headers: {
+                    Authorization: `${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            setSelectedImage(null);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
         setIsEditing(false);
         // Here, you can add code to save the edited values using an API request.
         // You may also want to add validation and error handling.
@@ -238,7 +257,7 @@ export default function Profile() {
                                     <div className="col-span-6 sm:col-span-3">
                                         <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthday</label>
                                         {isEditing ? (
-                                            <input type="date" name="birthday" value={date} onChange={handleChangeDate} id="birthday" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required />
+                                            <input type="date" name="birthday" value={date} onChange={handleChangeDate} min="1950-01-01" max="2021-01-01" id="birthday" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required />
                                         ) : (
                                             <p className="text-gray-500 dark:text-gray-400">{date}</p>
                                         )}
