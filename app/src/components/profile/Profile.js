@@ -82,7 +82,7 @@ export default function Profile() {
             width: '50px',
             height: '50px',
             border: '6px solid transparent',
-            borderTop: '6px solid white',
+            borderTop: '6px solid #124191',
             borderRadius: '50%',
             animation: 'spin 2s linear infinite',
           }}
