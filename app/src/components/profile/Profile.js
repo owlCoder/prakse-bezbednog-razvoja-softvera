@@ -2,13 +2,15 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from 'axios';
-
+import ReactDOM from 'react-dom';
 import Navbar from "../navigation/Navbar";
+import { ModernSpinner } from '../spinner/modernSpinner.js';
 
 export default function Profile() {
     const navigate = useNavigate();
     const { currentUser, resetPasswordEmail } = useAuth();
     const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -39,6 +41,7 @@ export default function Profile() {
     };
 
     useEffect(() => {
+        setLoading(true);
         const fetchData = async () => {
             if (!currentUser) {
                 navigate('/login');
@@ -57,9 +60,7 @@ export default function Profile() {
                 });
 
                 setData(response.data);
-                setFirstName(JSON.parse(response.data).payload.firstName);
-                setLastName(JSON.parse(response.data).payload.lastName);
-                setDate(JSON.parse(response.data).payload.date);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -68,7 +69,27 @@ export default function Profile() {
         fetchData();
     }, [currentUser, navigate]);
 
-    return (data != null && currentUser) ? (
+    return (loading === true ? (<div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',}}
+        className='bg-white dark:bg-gray-900'
+      >
+        <div
+          style={{
+            width: '50px',
+            height: '50px',
+            border: '6px solid transparent',
+            borderTop: '6px solid white',
+            borderRadius: '50%',
+            animation: 'spin 2s linear infinite',
+          }}
+        ></div>
+      </div>) : (
+    
+    (data != null && currentUser) ? (
         <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
             <Navbar />
             <div className="grid grid-cols-1 px-4 pt-8 xl:grid-cols-3 xl:gap-4 bg-gray-100 dark:bg-gray-900 mt-16 md:w-4/5 md:mx-auto">
@@ -177,9 +198,7 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
-    ) : (<div></div>)
+    ) : ( <div></div>)))
 }
