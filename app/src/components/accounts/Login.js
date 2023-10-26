@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import ImagePicker from '../../components/randImg/randomImage.js'
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ export default function Login() {
 
         {/* Image */}
         <div className="bg-white dark:bg-gray-900 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
-          <img src="https://source.unsplash.com/random" alt="" className="w-full h-full object-cover" />
+          <ImagePicker />
         </div>
 
         {/* Content */}

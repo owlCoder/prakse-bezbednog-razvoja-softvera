@@ -133,13 +133,13 @@ function Navbar() {
                           href="/login"
                           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Prijava
+                          Login
                         </a>
                         <a
                           href="/register"
                           className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Registracija
+                          Create an account
                         </a>
                       </div>
                     )}
@@ -288,13 +288,13 @@ function Navbar() {
                           href="/login"
                           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Prijava
+                          Login
                         </a>
                         <a
                           href="/register"
                           className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Registracija
+                          Create an account
                         </a>
                       </div>
                     )}

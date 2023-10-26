@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "eBoard",
+  "version": "3.235.12",
+  "name": "eBoard PWA",
   "icons": [
     {
       "src": "favicon.ico",
