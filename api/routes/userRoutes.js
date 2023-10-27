@@ -15,7 +15,7 @@ function Check(uid, auth_uid) {
 }
 
 // User route to create a new user
-router.post('/createUser', verifyToken, async (req, res) => {
+router.post('/create', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
   const { uid, email, firstName, lastName, date } = req.body;
   const reqData = { uid: uid, email: email, firstName: firstName, lastName: lastName, date: date };
@@ -29,7 +29,7 @@ router.post('/createUser', verifyToken, async (req, res) => {
 });
 
 // User route to get user by UID
-router.post('/user', verifyToken, async (req, res) => {
+router.post('/getById', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
   const { uid } = req.body;
 
@@ -38,6 +38,19 @@ router.post('/user', verifyToken, async (req, res) => {
 
   // Call controller method for user data fetch
   let data = await users.getUserByUid(uid);
+  return res.status(200).json(data);
+});
+
+// User route to get all users
+router.post('/get', verifyToken, async (req, res) => {
+  const auth_uid = req.user.uid; // property access
+  const { uid } = req.body;
+
+  if(Check(uid, auth_uid) !== 200) 
+    return res.status(400).json({ code: 400, payload: "Invalid request body" });
+
+  // Call controller method for users data fetch
+  let data = await users.getUsers();
   return res.status(200).json(data);
 });
 
@@ -69,7 +82,7 @@ router.post('/updatePicture', verifyToken, async (req, res) => {
 });
 
 // Update user profile
-router.post('/updateUser', verifyToken, async (req, res) => {
+router.post('/update', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
   const { uid } = req.body;
   const { firstName, lastName, date } = req.body;
@@ -96,7 +109,7 @@ router.post('/updateUser', verifyToken, async (req, res) => {
 });
 
 // Delete user account
-router.post('/deleteUser', verifyToken, async (req, res) => {
+router.post('/delete', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
   const { uid } = req.body;
 

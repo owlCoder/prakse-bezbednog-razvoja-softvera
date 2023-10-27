@@ -15,12 +15,13 @@ app.use(bodyParser.json())
 // Enable CORS policy
 app.use(cors());
 
-// Routes for users
 const userRoutes = require('./routes/userRoutes'); // Import the userRoutes
+const auditRoutes = require('./routes/auditRoutes'); // Import the auditRoutes
 
 /// ROUTES
 // Use the userRoutes in your app
-app.use('/api', userRoutes); // Define a base path for user routes, e.g., '/api/users'
+app.use('/api/user',  userRoutes);  // Define a base path for user routes, e.g., '/api/user'
+app.use('/api/audit', auditRoutes); // Define a base path for audit routes, e.g., '/api/audit'
 
 
 // Default route to show static API3 page
