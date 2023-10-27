@@ -21,9 +21,9 @@ export default function ForgotPassword() {
   async function handleFormSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    let res = JSON.parse(await resetPasswordEmail(email));
-    setResponse(res["response"]);
-    setError(res["code"]);
+    let res = await resetPasswordEmail(email);
+    setResponse(res.response);
+    setError(res.code);
     setLoading(false);
   }
 

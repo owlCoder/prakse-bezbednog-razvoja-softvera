@@ -314,22 +314,7 @@ console.log(auth.currentUser)
   {
       try
       {
-          var token = await auth.currentUser.getIdToken();
           await sendPasswordResetEmail(auth, email);
-          await axios.post(
-              global.APIEndpoint + "/api/audit/create",
-              {
-                  messageType: "INFO",
-                  message: "User [email: " + email + "] has request a password reset"
-              },
-              {
-                  headers:
-                  {
-                      Authorization: `${token}`,
-                      "Content-Type": "application/json",
-                  },
-              }
-          );
           return {
               code: 200,
               response: "Password reset email has been sent."
@@ -337,24 +322,9 @@ console.log(auth.currentUser)
       }
       catch (error)
       {
-          await axios.post(
-              global.APIEndpoint + "/api/audit/create",
-              {
-                  messageType: "ERROR",
-                  message: error.message
-              },
-              {
-                  headers:
-                  {
-                      Authorization: `${token}`,
-                      "Content-Type": "application/json",
-                  },
-              }
-          );
-
           return {
               code: 400,
-              response: "Invalid Email has been entered.",
+              response: "Invalid email has been entered.",
           };
       }
   }
