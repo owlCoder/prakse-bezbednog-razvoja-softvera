@@ -3,33 +3,25 @@ var cors = require('cors');
 const app = express();
 const path = require('path');
 
-// Configure app settings
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser'); // Configure app settings
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json()); // parse application/json
+app.use(cors()); // Enable CORS policy
 
-// parse application/json
-app.use(bodyParser.json())
-
-// Enable CORS policy
-app.use(cors());
-
-const userRoutes = require('./routes/userRoutes'); // Import the userRoutes
-const auditRoutes = require('./routes/auditRoutes'); // Import the auditRoutes
+const userRoutes = require('./routes/userRoutes');   // Import the users routes
+const auditRoutes = require('./routes/auditRoutes'); // Import the audits routes
+const orderRoutes = require('./routes/orderRoutes'); // Import the orders routes
+const productRoutes = require('./routes/productRoutes'); // Import the products routes
 
 /// ROUTES
-// Use the userRoutes in your app
 app.use('/api/user',  userRoutes);  // Define a base path for user routes, e.g., '/api/user'
 app.use('/api/audit', auditRoutes); // Define a base path for audit routes, e.g., '/api/audit'
+app.use('/api/order', orderRoutes); // Define a base path for order routes, e.g., '/api/order'
+app.use('/api/product', productRoutes); // Define a base path for product routes, e.g., '/api/product'
 
-
-// Default route to show static API3 page
-app.get(['/', '/api'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+app.get(['/', '/api'], (req, res) => { // Default route to show static API3 page
+  res.sendFile(path.join(__dirname, 'static', 'index.html')); 
 });
 
-// create a server listener
-app.listen(5000, () => {
-  console.log(`Server is running on port 5000`);
-});
+app.listen(5000, () => { }); // create a server listener
