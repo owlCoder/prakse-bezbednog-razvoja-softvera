@@ -3,10 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import Navbar from "../navigation/Navbar";
+import imageCompression from 'browser-image-compression';
 
 export default function Profile() {
     const navigate = useNavigate();
-    const { currentUser, resetPasswordEmail, signOut } = useAuth();
+    const { currentUser, resetPasswordEmailUser, signOut } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -79,18 +80,32 @@ export default function Profile() {
     };
 
     // Function to check if user selected new picture from own library
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const base64String = event.target.result;
+            try {
+              const options = {
+                maxSizeMB: 1, // Maximum size after compression (1MB in this example)
+                maxWidthOrHeight: 800, // Maximum width or height after compression
+              };
+      
+              const compressedFile = await imageCompression(file, options);
+      
+              const reader = new FileReader();
+      
+              reader.onload = (event) => {
+                const base64String = event.target.result; // This is the base64 string of the compressed image.
                 setSelectedImage(base64String);
+      
                 if (imageRef.current) {
-                    imageRef.current.src = base64String;
+                  imageRef.current.src = base64String;
                 }
-            };
-            reader.readAsDataURL(file);
+              };
+      
+              reader.readAsDataURL(compressedFile);
+            } catch (error) {
+              console.error('Error compressing image:', error);
+            }
         } else {
             // no image has been selected
             setSelectedImage(null);
@@ -106,7 +121,7 @@ export default function Profile() {
             try {
                 const token = await currentUser.getIdToken();
                 await axios.post(
-                    global.APIEndpoint + "/api/updatePicture",
+                    global.APIEndpoint + "/api/user/updatePicture",
                     {
                         uid: currentUser.uid,
                         photoBase64: `${selectedImage}`,
@@ -127,7 +142,7 @@ export default function Profile() {
     };
 
     const handlePasswordReset = () => {
-        resetPasswordEmail(currentUser.email);
+        resetPasswordEmailUser(currentUser.email);
         setModalText("Email has been sent");
         setModalDesc("Please check your email for further instructions.");
         setShowModal(true);
@@ -145,7 +160,7 @@ export default function Profile() {
         try {
             const token = await currentUser.getIdToken();
             await axios.post(
-                global.APIEndpoint + "/api/updateUser",
+                global.APIEndpoint + "/api/user/update",
                 {
                     uid: currentUser.uid,
                     firstName: `${firstName}`,
@@ -185,7 +200,7 @@ export default function Profile() {
             try {
                 const token = await currentUser.getIdToken();
                 const response = await axios.post(
-                    global.APIEndpoint + "/api/user",
+                    global.APIEndpoint + "/api/user/getById",
                     {
                         uid: currentUser.uid,
                     },
@@ -198,10 +213,10 @@ export default function Profile() {
                 );
 
                 setData(response.data);
-                setFirstName(JSON.parse(response.data).payload.firstName);
-                setLastName(JSON.parse(response.data).payload.lastName);
-                setDate(JSON.parse(response.data).payload.date);
-                setProfilePicture(JSON.parse(response.data).payload.photoBase64);
+                setFirstName(response.data.payload.firstName);
+                setLastName(response.data.payload.lastName);
+                setDate(response.data.payload.date);
+                setProfilePicture(response.data.payload.photoBase64);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -292,7 +307,7 @@ export default function Profile() {
                             <img
                                 ref={imageRef}
                                 className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
-                                src={JSON.parse(data).payload.photoBase64}
+                                src={data.payload.photoBase64}
                                 alt=""
                             />
                             <div>

@@ -29,6 +29,7 @@ export default function Login() {
     let res = await login(email, password);
     setResponse(res.response);
     setLoading(false);
+    
     if (res && res["response"] === "OK") {
       navigate("/");
     }
