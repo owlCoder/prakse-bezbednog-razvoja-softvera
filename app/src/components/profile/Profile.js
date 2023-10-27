@@ -46,7 +46,7 @@ export default function Profile() {
         try {
             const token = await currentUser.getIdToken();
             await axios.post(
-                "http://localhost:5000/api/deleteUser",
+                global.APIEndpoint + "/api/deleteUser",
                 {
                     uid: currentUser.uid,
                 },
@@ -106,7 +106,7 @@ export default function Profile() {
             try {
                 const token = await currentUser.getIdToken();
                 await axios.post(
-                    "http://localhost:5000/api/updatePicture",
+                    global.APIEndpoint + "/api/updatePicture",
                     {
                         uid: currentUser.uid,
                         photoBase64: `${selectedImage}`,
@@ -145,7 +145,7 @@ export default function Profile() {
         try {
             const token = await currentUser.getIdToken();
             await axios.post(
-                "http://localhost:5000/api/updateUser",
+                global.APIEndpoint + "/api/updateUser",
                 {
                     uid: currentUser.uid,
                     firstName: `${firstName}`,
@@ -185,7 +185,7 @@ export default function Profile() {
             try {
                 const token = await currentUser.getIdToken();
                 const response = await axios.post(
-                    "http://localhost:5000/api/user",
+                    global.APIEndpoint + "/api/user",
                     {
                         uid: currentUser.uid,
                     },

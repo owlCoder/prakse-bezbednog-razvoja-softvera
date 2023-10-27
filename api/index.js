@@ -23,8 +23,6 @@ const userRoutes = require('./routes/userRoutes'); // Import the userRoutes
 app.use('/api', userRoutes); // Define a base path for user routes, e.g., '/api/users'
 
 
-
-
 // Default route to show static API3 page
 app.get(['/', '/api'], (req, res) => {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));

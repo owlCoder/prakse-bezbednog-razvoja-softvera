@@ -15,6 +15,7 @@ import {
   getDoc,
   serverTimestamp,
 } from "firebase/firestore";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -98,59 +99,49 @@ export function AuthProvider({ children }) {
       await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(auth.currentUser);
       let uid = auth.currentUser.uid;
-      await signOut();
+      var token = await auth.currentUser.getIdToken();
 
-      // kreiranje zapisa u firestore podataka o korisniku todo1
-      await setDoc(doc(firestore, "users", uid), {
-        uid: uid,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        date: date,
-        photoBase64: "",
-        kupljenePloceUids: [],
-        prodatePloceUids: [],
-        postavljeniOglasiUids: [],
-        role: "base",
-        lastAccessDate: serverTimestamp(),
-      });
+      // call api to create a new user in firestore
+      const response = await axios.post(
+        global.APIEndpoint + "/api/createUser",
+        { uid: uid, email: email, firstName: firstName, lastName: lastName, date: date },
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // todo2 upis u audit INFO Korisnik sa UID se registrovao u sistem
-      await addDoc(collection(firestore, "audit"), {
-        messageType: "INFO",
-        message: "Korisnik sa email " + email + " je registrovan na sistem.",
-        date: serverTimestamp(),
-      });
+      await signOut(); // sign out user, to make verify email possible
 
-      return JSON.stringify({
-        response: "Verifikacioni email je poslat na Vašu e-adresu.",
-      });
+      if (response.status === 200)
+        return { response: "A verification email has been sent to your email address." };
+      else
+        return { response: response.data.payload };
+
     } catch (error) {
-      // todo 3 upisati u audit preko api call neuspesna registracija
-      // e sad da se ne bi preteralo sa api call mozda jedan uopsten audit message
-      // tipa samo neuspsna registracija bez detalja sta kako ili sa detaljima?
-      if (error.code === "auth/weak-password") {
-        return JSON.stringify({
-          response: "Lozinka mora biti minimalne dužine 6!",
-        });
-      } else if (error.code === "auth/email-already-in-use") {
-        return JSON.stringify({
-          response: "Email je zauzet od strane drugog korisnika!",
-        });
-      } else if (error.code === "auth/invalid-email") {
-        return JSON.stringify({ response: "Email nije u validnom obliku!" });
-      } else if (error.code === "auth/operation-not-allowed") {
-        return JSON.stringify({ response: "Registracija nije moguća!" });
-      } else {
-        await addDoc(collection(firestore, "audit"), {
-          messageType: "ERROR",
-          message: error.message,
-          date: serverTimestamp(),
-        });
+      if (error.code === "auth/weak-password")
+        return { response: "The password must have a minimum length of 6" };
+      else if (error.code === "auth/email-already-in-use")
+        return { response: "The email is taken by another user" };
+      else if (error.code === "auth/invalid-email")
+        return { response: "The email is not in a valid format" };
+      else if (error.code === "auth/operation-not-allowed")
+        return { response: "Registration is temporary unavailable" };
+      else {
 
-        return JSON.stringify({
-          response: "Desila se nepoznata greška. Pokušajte ponovo kasnije.",
-        });
+        // await axios.post(
+        //   global.APIEndpoint + "/api/createAudit",
+        //   { messageType: "ERROR", message: error.message, date: serverTimestamp() },
+        //   {
+        //     headers: {
+        //       Authorization: `${token}`,
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
+        return { response: "An unknown error has occurred. Try again later" };
       }
     }
   }

@@ -26,7 +26,6 @@ export default function Register() {
 
   }, [currentUser, navigate]);
 
-  // funkcija za hendl
   async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -35,13 +34,11 @@ export default function Register() {
     }
 
     setLoading(true);
-    let res = JSON.parse(await register(email, password, firstName, lastName, date));
-    setResponse(res["response"]);
+    let res = await register(email, password, firstName, lastName, date);
+    setResponse(res.response);
     setLoading(false);
+
     return false;
-    // if (res && res["response"] === "OK") {
-    //   navigate("/");
-    // }
   }
 
   return (
@@ -99,7 +96,7 @@ export default function Register() {
             {/* Confirm Password */}
             <div className="mt-4">
               <label className="block">Confirm Password</label>
-              <input type="password" name="password" id="password" placeholder="Repeat Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
+              <input type="password" name="password2" id="password2" placeholder="Repeat Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
                 focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={(e) => setConfirmPassword(e.target.value)} required />
             </div>
             
