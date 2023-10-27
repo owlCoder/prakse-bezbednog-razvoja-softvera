@@ -46,7 +46,7 @@ export default function Profile() {
         try {
             const token = await currentUser.getIdToken();
             await axios.post(
-                global.APIEndpoint + "/api/deleteUser",
+                global.APIEndpoint + "/api/user/delete",
                 {
                     uid: currentUser.uid,
                 },

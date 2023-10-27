@@ -14,5 +14,14 @@ function Check(uid, auth_uid) {
   return 200; // uids are fine
 }
 
+// User route to create a new audit
+router.post('/create', verifyToken, async (req, res) => {
+    const { messageType, message } = req.body;
+
+    // Call controller method to create an audit
+    let data = await audits.createAduit({ messageType, message });
+    return res.status(data.code).json(data.payload);
+  });
+  
 
 module.exports = router;

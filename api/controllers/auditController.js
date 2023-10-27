@@ -5,7 +5,7 @@ const createAduit = async (data) => {
         await admin.firestore().collection("audits").add({
             messageType: data.messageType,
             message: data.message,
-            date: data.date
+            date: admin.firestore.FieldValue.serverTimestamp()
         }
         );
 

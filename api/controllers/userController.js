@@ -28,7 +28,7 @@ const createUser = async (data) => {
   } catch (error) {
     await admin.firestore().collection("audits").add({
       messageType: "ERROR",
-      message: "User (email) " + data.email + " couldn't be registed in system [" + `${error.message}` + "]",
+      message: "User [email: " + data.email + "] couldn't be registed in system [" + `${error.message}` + "]",
       date: admin.firestore.FieldValue.serverTimestamp(),
     }
   );
@@ -104,7 +104,7 @@ const updateUser = async (uid, firstName, lastName, date) => {
           return {code: 200, payload: "OK" };
         })
         .catch((error) => {
-          return {code: 400, payload: "Profile data can not be updated. Try again later!" };
+          return {code: 400, payload: "Profile data can't be updated. Try again later!" };
         });
     }
   } catch (error) {

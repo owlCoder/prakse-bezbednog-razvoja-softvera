@@ -26,8 +26,8 @@ export default function Login() {
     e.preventDefault();
 
     setLoading(true);
-    let res = JSON.parse(await login(email, password));
-    setResponse(res["response"]);
+    let res = await login(email, password);
+    setResponse(res.response);
     setLoading(false);
     if (res && res["response"] === "OK") {
       navigate("/");
