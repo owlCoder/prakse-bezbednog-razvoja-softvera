@@ -17,7 +17,6 @@ export default function ForgotPassword() {
 
   }, [currentUser, navigate]);
 
-  // funkcija za hendl
   async function handleFormSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -82,7 +81,6 @@ export default function ForgotPassword() {
 
         </div>
       </div>
-
     </section>
   );
 }

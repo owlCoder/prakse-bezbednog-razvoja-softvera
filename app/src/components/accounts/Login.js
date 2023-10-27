@@ -16,8 +16,6 @@ export default function Login() {
   }, [currentUser, navigate]);
 
   const handleGoBack = () => {
-    // You can navigate back to the homepage using your preferred routing method
-    // Replace this with your actual routing logic
     navigate('/');
   };
 

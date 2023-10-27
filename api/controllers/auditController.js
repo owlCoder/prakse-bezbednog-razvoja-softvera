@@ -15,7 +15,7 @@ const createAduit = async (data) => {
     }
 };
 
-const readAduits = async (data) => {
+const readAduits = async () => {
     try {
         const auditRef = admin.firestore().collection('audits');
         const auditsSnapshot = await auditRef.get();

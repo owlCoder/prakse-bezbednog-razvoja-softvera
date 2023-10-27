@@ -11,14 +11,14 @@ app.use(cors()); // Enable CORS policy
 
 const userRoutes = require('./routes/userRoutes');   // Import the users routes
 const auditRoutes = require('./routes/auditRoutes'); // Import the audits routes
-// const orderRoutes = require('./routes/orderRoutes'); // Import the orders routes
-// const productRoutes = require('./routes/productRoutes'); // Import the products routes
+const orderRoutes = require('./routes/orderRoutes'); // Import the orders routes
+const productRoutes = require('./routes/productRoutes'); // Import the products routes
 
 /// ROUTES
 app.use('/api/user',  userRoutes);  // Define a base path for user routes, e.g., '/api/user'
 app.use('/api/audit', auditRoutes); // Define a base path for audit routes, e.g., '/api/audit'
-// app.use('/api/order', orderRoutes); // Define a base path for order routes, e.g., '/api/order'
-// app.use('/api/product', productRoutes); // Define a base path for product routes, e.g., '/api/product'
+app.use('/api/order', orderRoutes); // Define a base path for order routes, e.g., '/api/order'
+app.use('/api/product', productRoutes); // Define a base path for product routes, e.g., '/api/product'
 
 app.get(['/', '/api'], (req, res) => { // Default route to show static API3 page
   res.sendFile(path.join(__dirname, 'static', 'index.html')); 
