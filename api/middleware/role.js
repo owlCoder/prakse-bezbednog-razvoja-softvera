@@ -24,4 +24,20 @@ const checkRole = async (role, collectionName, reqPerm) => {
     }
 };
 
-module.exports = { checkRole };
+const getUserRole = async (uid) => {
+    try {
+        const userDoc = await admin.firestore().collection('users').doc(uid).get();
+
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const userRole = userData.role;
+            return userRole;
+        } else {
+            return null; // User not found or user has no role field
+        }
+    } catch (error) {
+        return null; // An error occurred
+    }
+};
+
+module.exports = { checkRole, getUserRole };

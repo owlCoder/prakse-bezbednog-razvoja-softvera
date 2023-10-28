@@ -14,8 +14,9 @@ router.post('/create', verifyToken, async (req, res) => {
 
 // Route to read all audits
 router.post('/get', verifyToken, async (req, res) => {
+    const { uid } = req.body;
     // Call controller method to read the audits
-    let data = await audits.readAudits();
+    let data = await audits.readAudits(uid);
     return res.status(data.code).json(data.payload);
 });
 

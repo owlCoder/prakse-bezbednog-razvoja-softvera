@@ -1,5 +1,5 @@
 const admin = require('../firebaseConfig');
-const { checkRole } = require('../middleware/role');
+const { checkRole, getUserRole } = require('../middleware/role');
 
 const createAduit = async (data) => {
   try {
@@ -18,11 +18,18 @@ const createAduit = async (data) => {
 
 const readAudits = async (uid) => {
   try {
-    
-    let req = await checkRole("admin", "audits", "update");
+    // RBAC
+    let role = await getUserRole(uid);
+
+    if(role == null) {
+      return { code: 403, payload: "You don't have permission to view this data" };
+    }
+
+    let req = await checkRole(role, "audits", "read");
     if (req === false) {
       return { code: 403, payload: "You don't have permission to view this data" };
     }
+    // END OF RBAC
 
     const auditRef = admin.firestore().collection('audits');
     const auditsSnapshot = await auditRef.get();
