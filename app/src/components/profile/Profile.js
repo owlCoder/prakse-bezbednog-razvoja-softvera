@@ -466,7 +466,7 @@ export default function Profile() {
                                             required
                                         />
                                     ) : (
-                                        <p className="text-gray-500 dark:text-gray-400">{date}</p>
+                                        <p className="text-gray-500 dark:text-gray-400">{new Intl.DateTimeFormat("en-GB").format(new Date(date)).toString().replaceAll("/", ".")}</p>
                                     )}
                                 </div>
                                 <div className="col-span-6 sm:col-span-3">
