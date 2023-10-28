@@ -13,6 +13,7 @@ import Error401Page from "./components/errorPages/error401";
 import Error403Page from "./components/errorPages/error403";
 import Error404Page from "./components/errorPages/error404";
 import Error500Page from "./components/errorPages/error500";
+import Dashboard from "./components/admin/dashboard";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/account-settings" element={<Profile />} />
+
+          <Route exact path="/oib-admin" element={<Dashboard /> } />
 
           <Route exact path="/400" element={<Error400Page />} />
           <Route exact path="/401" element={<Error401Page />} />

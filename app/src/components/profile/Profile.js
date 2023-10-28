@@ -228,7 +228,6 @@ export default function Profile() {
                 setDate(response.data.payload.date);
                 setProfilePicture(response.data.payload.photoBase64);
                 setLoading(false);
-
                 if(response.status !== 200) 
                     navigate('/' + response.status.toString());
             } catch (error) {

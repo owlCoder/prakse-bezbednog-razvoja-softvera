@@ -14,6 +14,7 @@ const createUser = async (data) => {
         soldUids: [],
         productsUids: [],
         role: "user",
+        disabled: false
       }
     );
 

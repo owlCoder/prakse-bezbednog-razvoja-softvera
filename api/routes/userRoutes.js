@@ -39,7 +39,7 @@ router.post('/create', verifyToken, async (req, res) => {
 
   // Call controller method to create an user
   let data = await users.createUser(reqData);
-  return res.status(data.code).json(data.payload);
+  return res.status(data.code).json({ code: data.code, payload: data.payload });
 });
 
 // User route to get user by UID
@@ -70,16 +70,12 @@ router.post('/getById', verifyToken, async (req, res) => {
 
 // User route to get all users
 router.post('/get', verifyToken, async (req, res) => {
-  const auth_uid = req.user.uid; // property access
   const { uid } = req.body;
-
-  if (Check(uid, auth_uid) !== 200)
-    return res.status(400).json({ code: 400, payload: "Invalid request body" });
 
   // RBAC
   let role = await getUserRole(uid);
 
-  if (role == null) {
+  if (role == null || role != "admin") {
     return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
   }
 
@@ -102,12 +98,12 @@ router.post('/updatePicture', verifyToken, async (req, res) => {
 
   // Check if the request contains the 'uid' field in the body
   if (!uid) {
-    return res.status(400).json({ error: "Missing 'uid' field in the request body." });
+    return res.status(400).json({ code: data.code, payload: "Missing 'uid' field in the request body." });
   }
 
   // Check if the authenticated user matches the requested user's UID
   if (uid !== auth_uid) {
-    return res.status(403).json({ error: "Unauthorized." });
+    return res.status(403).json({ code: data.code, payload: "Unauthorized." });
   }
 
   // RBAC
@@ -129,8 +125,7 @@ router.post('/updatePicture', verifyToken, async (req, res) => {
     return res.status(200).json(data);
   }
   catch (error) {
-    console.log(error)
-    return res.status(401).json({ error: error });
+    return res.status(401).json({ code: data.code, payload: error });
   }
 });
 
@@ -142,12 +137,12 @@ router.post('/update', verifyToken, async (req, res) => {
 
   // Check if the request contains the 'uid' field in the body
   if (!uid) {
-    return res.status(400).json({ error: "Missing 'uid' field in the request body." });
+    return res.status(400).json({ code: 400, payload: "Missing 'uid' field in the request body." });
   }
 
   // Check if the authenticated user matches the requested user's UID
   if (uid !== auth_uid) {
-    return res.status(403).json({ error: "Unauthorized." });
+    return res.status(403).json({ code: 403, payload: "Unauthorized." });
   }
 
   // RBAC
@@ -169,8 +164,7 @@ router.post('/update', verifyToken, async (req, res) => {
     return res.status(200).json(data);
   }
   catch (error) {
-    console.log(error)
-    return res.status(401).json({ error: error });
+    return res.status(401).json({ code: data.code, payload: error });
   }
 });
 
@@ -181,12 +175,12 @@ router.post('/delete', verifyToken, async (req, res) => {
 
   // Check if the request contains the 'uid' field in the body
   if (!uid) {
-    return res.status(400).json({ error: "Missing 'uid' field in the request body." });
+    return res.status(400).json({ code: data.code, payload: "Missing 'uid' field in the request body." });
   }
 
   // Check if the authenticated user matches the requested user's UID
   if (uid !== auth_uid) {
-    return res.status(403).json({ error: "Unauthorized." });
+    return res.status(403).json({ code: data.code, payload: "Unauthorized." });
   }
 
   // RBAC
@@ -209,7 +203,7 @@ router.post('/delete', verifyToken, async (req, res) => {
   }
   catch (error) {
     console.log(error)
-    return res.status(401).json({ error: error });
+    return res.status(401).json({ code: data.code, payload: error });
   }
 });
 

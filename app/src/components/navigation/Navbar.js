@@ -1,17 +1,19 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Navbar() {
-  const links = ["Homepage", "Ads"];
-  const profileLinks = ["Account Settings", "Dashboard"];
+  const links = ["Homepage"];
+  const profileLinks = ["Account Settings"];
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
+  const [admin, setAdmin] = useState(false);
 
   // greetings messages
   var greetings = [
@@ -33,6 +35,43 @@ function Navbar() {
   }
 
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        if (!currentUser) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const token = await currentUser.getIdToken();
+            const response = await axios.post(
+                global.APIEndpoint + "/api/user/getById",
+                {
+                    uid: currentUser.uid,
+                },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+          
+            if(response.data != null) {
+              if(response.data.payload.role === "admin")
+                setAdmin(true);
+            }
+
+            if(response.status !== 200) 
+                navigate('/' + response.status.toString());
+        } catch (error) {
+            navigate('/403')
+        }
+    };
+
+    fetchData();
+}, [currentUser, navigate]);
 
   return (
     <div>
@@ -106,6 +145,24 @@ function Navbar() {
                                 </Menu.Item>
                               ))}
                             </div>
+                            {admin && (
+                            <div className="py-1">
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <a
+                                      href="/oib-admin"
+                                      className={classNames(
+                                        active
+                                          ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
+                                          : "text-gray-700",
+                                        "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
+                                      )}
+                                    >
+                                      Dashboard
+                                    </a>
+                                  )}
+                                </Menu.Item>
+                            </div>)}
                             <div className="py-1">
                               <Menu.Item>
                                 {({ active }) => (

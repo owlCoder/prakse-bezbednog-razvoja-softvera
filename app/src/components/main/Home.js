@@ -33,7 +33,7 @@ export default function Home() {
             <div className="flex flex-row items-center space-y-2 md:space-y-0 space-x-2">
               <input type="number" className="text-center border border-strong w-16 h-12 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="0"/>
               <div className="">
-                <a href="/" class="p-3 px-8 rounded-md shadow-lg duration-200 hover:opacity-80 border border-strong">
+                <a href="/" className="p-3 px-8 rounded-md shadow-lg duration-200 hover:opacity-80 border border-strong">
                   Add to cart
                 </a>
               </div>
@@ -66,7 +66,7 @@ export default function Home() {
             <div className="flex flex-row items-center space-y-2 md:space-y-0 space-x-2">
               <input type="number" className="text-center border border-strong w-16 h-12 rounded-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" placeholder="0"/>
               <div className="">
-                <a href="/" class="p-3 px-8 rounded-md shadow-lg duration-200 hover:opacity-80 border border-strong">
+                <a href="/" className="p-3 px-8 rounded-md shadow-lg duration-200 hover:opacity-80 border border-strong">
                   Add to cart
                 </a>
               </div>

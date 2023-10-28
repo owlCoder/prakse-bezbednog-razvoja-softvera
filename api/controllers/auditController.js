@@ -16,21 +16,8 @@ const createAduit = async (data) => {
   }
 };
 
-const readAudits = async (uid) => {
+const readAudits = async () => {
   try {
-    // RBAC
-    let role = await getUserRole(uid);
-
-    if(role == null) {
-      return { code: 403, payload: "You don't have permission to view this data" };
-    }
-
-    let req = await checkRole(role, "audits", "read");
-    if (req === false) {
-      return { code: 403, payload: "You don't have permission to view this data" };
-    }
-    // END OF RBAC
-
     const auditRef = admin.firestore().collection('audits');
     const auditsSnapshot = await auditRef.get();
     const auditsData = [];
