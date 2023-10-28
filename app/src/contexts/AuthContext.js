@@ -164,7 +164,7 @@ export function AuthProvider({ children }) {
           email: email,
           firstName: firstName,
           lastName: lastName,
-          date: date
+          date: date,
         },
         {
           headers:

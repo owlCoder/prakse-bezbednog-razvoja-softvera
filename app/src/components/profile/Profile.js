@@ -46,7 +46,7 @@ export default function Profile() {
         // Handle the account deletion logic here
         try {
             const token = await currentUser.getIdToken();
-            await axios.post(
+            const response = await axios.post(
                 global.APIEndpoint + "/api/user/delete",
                 {
                     uid: currentUser.uid,
@@ -59,17 +59,17 @@ export default function Profile() {
                 }
             );
 
+            if(response.status !== 200) 
+                navigate('/' + response.status.toString());
+
             // Close the modal after successful deletion
             setIsModalVisible(false);
 
             // show info modal that account is deleted
             setModalText("Account has been deleted");
-            setModalDesc(
-                "Account and all data has been removed. You'll be logged out now."
-            );
+            setModalDesc("Account and all data has been removed. You'll be logged out now.");
             setShowModal(true);
 
-            ///////////////////////////// MYB not neeeded!!!! ///////////////////////
             // log out
             setTimeout(() => {
                 signOut();
@@ -120,7 +120,7 @@ export default function Profile() {
         if (selectedImage != null) {
             try {
                 const token = await currentUser.getIdToken();
-                await axios.post(
+                const response = await axios.post(
                     global.APIEndpoint + "/api/user/updatePicture",
                     {
                         uid: currentUser.uid,
@@ -133,6 +133,13 @@ export default function Profile() {
                         },
                     }
                 );
+
+                if(response.status !== 200) 
+                    navigate('/' + response.status.toString());
+
+                    setModalText("Profile picture");
+                    setModalDesc("Profile picture has been updated");
+                    setShowModal(true);
 
                 setSelectedImage(null);
             } catch (error) {
@@ -159,7 +166,7 @@ export default function Profile() {
     const handleSave = async () => {
         try {
             const token = await currentUser.getIdToken();
-            await axios.post(
+            const response = await axios.post(
                 global.APIEndpoint + "/api/user/update",
                 {
                     uid: currentUser.uid,
@@ -175,13 +182,16 @@ export default function Profile() {
                 }
             );
 
+            if(response.status !== 200) 
+                navigate('/' + response.status.toString());
+
             setSelectedImage(null);
 
             setModalText("Information updated");
             setModalDesc("Profile information has been saved.");
             setShowModal(true);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            navigate('400');
         }
 
         setIsEditing(false);
@@ -218,8 +228,11 @@ export default function Profile() {
                 setDate(response.data.payload.date);
                 setProfilePicture(response.data.payload.photoBase64);
                 setLoading(false);
+
+                if(response.status !== 200) 
+                    navigate('/' + response.status.toString());
             } catch (error) {
-                console.error("Error fetching data:", error);
+                navigate('/403')
             }
         };
 

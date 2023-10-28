@@ -5,6 +5,7 @@ import App from "./App";
 
 // Global variable to access base API endpoint
 global.APIEndpoint = "http://localhost:5000";
+// global.APIEndpoint = "http://172.16.178.152:5000";
 // global.APIEndpoint = "https://oib-api3.vercel.app/"
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
