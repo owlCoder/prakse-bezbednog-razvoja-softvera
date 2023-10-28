@@ -48,7 +48,7 @@ export function AuthProvider({ children }) {
       }
       else if (auth != null && auth.currentUser.emailVerified === true) {
         const token = await auth.currentUser.getIdToken();
-console.log(token)
+
         // log succesfull login
         await axios.post(
           global.APIEndpoint + "/api/audit/create",
