@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import ImagePicker from '../../components/randImg/randomImage.js'
+import ImagePicker from '../randImg/randomImage.jsx'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
