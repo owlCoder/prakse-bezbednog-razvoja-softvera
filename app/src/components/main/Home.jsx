@@ -9,7 +9,7 @@ export default function Home() {
   const [data, setData] = useState([]);
 
   return (
-    <main className="dark:bg-gray-900 bg-gray-100 dark:text-white h-screen"> 
+    <main className="dark:bg-gray-900 bg-gray-100 dark:text-white min-h-screen"> 
       {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <div></div>}
       <Navbar />
       <section>
