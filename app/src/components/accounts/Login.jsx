@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import ImagePicker from '../randImg/randomImage.jsx'
+import ImagePicker from '../randImg/randomImage'
 
 export default function Login() {
   const [email, setEmail] = useState("");
