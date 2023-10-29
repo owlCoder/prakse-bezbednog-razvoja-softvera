@@ -1,9 +1,10 @@
 import React from "react";
 
 export const Popup = ({ data, closePopup }) => {
+
   return (
     
-    <div className="fixed inset-0 flex items-center justify-center min-h-screen text-black backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter my-16">
+    <div className="fixed inset-0 flex items-center justify-center min-h-screen text-black backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
         {/* Card Container */}
         <div className="relative flex flex-col p-6 m-3 space-y-10 bg-white rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 mb-16">
             
@@ -36,7 +37,7 @@ export const Popup = ({ data, closePopup }) => {
                     
                     {/* Price Container */}
                     <div className="flex flex-col mb-4 space-y-3 text-center md:text-left">                
-                        <p className="text-4xl font-bold">$599</p>
+                        <p className="text-4xl font-bold">${data.val}</p>
                         <p className="text-sm font-light text-gray-400">
                         Lorem ipsum dolor sit amet.
                         </p>
@@ -50,7 +51,7 @@ export const Popup = ({ data, closePopup }) => {
                 </div>
 
                 {/* Button */}
-                <div className="flex md:flex-row space-y-6 flex-col items-center space-y-2 md:space-y-0 space-x-2">
+                <div className="flex md:flex-row space-y-6 flex-col items-center md:space-y-0 space-x-2">
                     <div className="">
                         <a href="/" className="p-3 px-8 rounded-md shadow-lg duration-200 hover:opacity-80 border border-strong">
                             Add to cart
