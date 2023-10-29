@@ -196,8 +196,6 @@ export default function Profile() {
         }
 
         setIsEditing(false);
-        // Here, you can add code to save the edited values using an API request.
-        // You may also want to add validation and error handling.
     };
 
     useEffect(() => {
