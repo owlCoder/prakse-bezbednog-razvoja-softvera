@@ -68,6 +68,32 @@ router.post('/getById', verifyToken, async (req, res) => {
   return res.status(200).json(data);
 });
 
+// User route to get user ROLE by UID
+router.post('/getRoleByUid', verifyToken, async (req, res) => {
+  const auth_uid = req.user.uid; // property access
+  const { uid } = req.body;
+
+  if (Check(uid, auth_uid) !== 200)
+    return res.status(400).json({ code: 400, payload: "Invalid request body" });
+
+  // RBAC
+  let role = await getUserRole(uid);
+
+  if (role == null) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+
+  let reqs = await checkRole(role, "users", "read");
+  if (reqs === false) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+  else
+  // END OF RBAC
+
+  // Call controller method for user data fetch
+  return res.status(200).json({ code: 200, payload: role });
+});
+
 // User route to get all users
 router.post('/get', verifyToken, async (req, res) => {
   const { uid } = req.body;

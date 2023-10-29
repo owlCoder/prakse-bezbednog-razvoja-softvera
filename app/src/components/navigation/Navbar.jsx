@@ -3,6 +3,9 @@ import { Menu, Transition } from "@headlessui/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { RiSettingsLine } from 'react-icons/ri';
+import { LuLayoutDashboard } from 'react-icons/lu';
+import { BiSolidExit } from 'react-icons/bi';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -15,19 +18,6 @@ function Navbar() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
 
-  // greetings messages
-  var greetings = [
-    "Hello",
-    "Ciao",
-    "Welcome",
-    "Howdy",
-    "Greetings",
-    "Salut",
-    "Hola",
-    "Gday",
-    "Hey",
-  ];
-
   async function handleSignOut(e) {
     e.preventDefault();
     await signOut();
@@ -38,40 +28,39 @@ function Navbar() {
 
   useEffect(() => {
     const fetchData = async () => {
-        if (!currentUser) {
-            navigate("/login");
-            return;
+      if (!currentUser) {
+        return;
+      }
+
+      try {
+        const token = await currentUser.getIdToken();
+        const response = await axios.post(
+          global.APIEndpoint + "/api/user/getRoleByUid",
+          {
+            uid: currentUser.uid,
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.data != null) {
+          if (response.data.payload === "admin")
+            setAdmin(true);
         }
 
-        try {
-            const token = await currentUser.getIdToken();
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/getById",
-                {
-                    uid: currentUser.uid,
-                },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-          
-            if(response.data != null) {
-              if(response.data.payload.role === "admin")
-                setAdmin(true);
-            }
-
-            if(response.status !== 200) 
-                navigate('/' + response.status.toString());
-        } catch (error) {
-            navigate('/403')
-        }
+        if (response.status !== 200)
+          navigate('/403' + response.status.toString());
+      } catch (error) {
+        navigate('/403')
+      }
     };
 
     fetchData();
-}, [currentUser, navigate]);
+  }, [currentUser, navigate]);
 
   return (
     <div>
@@ -104,11 +93,9 @@ function Navbar() {
                         className="relative inline-block text-left"
                       >
                         <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold bg-primary-800 dark:bg-primary-900 text-white">
                             {
-                              greetings[
-                                Math.floor(Math.random() * greetings.length)
-                              ]
+                              "Welcome"
                             }
                             , {currentUser.email}
                           </Menu.Button>
@@ -125,13 +112,10 @@ function Navbar() {
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
-                              {profileLinks.map((link, index) => (
-                                <Menu.Item key={index}>
+                                <Menu.Item>
                                   {({ active }) => (
                                     <a
-                                      href={link
-                                        .toLowerCase()
-                                        .replaceAll(" ", "-")}
+                                      href="/account-settings"
                                       className={classNames(
                                         active
                                           ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
@@ -139,14 +123,13 @@ function Navbar() {
                                         "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
                                       )}
                                     >
-                                      {link}
+                                     <RiSettingsLine className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Account Settings
                                     </a>
                                   )}
                                 </Menu.Item>
-                              ))}
                             </div>
                             {admin && (
-                            <div className="py-1">
+                              <div className="py-1">
                                 <Menu.Item>
                                   {({ active }) => (
                                     <a
@@ -158,11 +141,11 @@ function Navbar() {
                                         "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
                                       )}
                                     >
-                                      Dashboard
+                                      <LuLayoutDashboard className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Dashboard
                                     </a>
                                   )}
                                 </Menu.Item>
-                            </div>)}
+                              </div>)}
                             <div className="py-1">
                               <Menu.Item>
                                 {({ active }) => (
@@ -176,7 +159,7 @@ function Navbar() {
                                       "block px-4 py-2 text-sm"
                                     )}
                                   >
-                                    Sign Out
+                                    <BiSolidExit className="icon inline mr-2 text-red-500" fontSize="1.2rem" /> Sign Out
                                   </a>
                                 )}
                               </Menu.Item>
@@ -271,90 +254,88 @@ function Navbar() {
                   {link}
                 </a>
               ))}
-             {currentUser !== null ? (
-                      <Menu
-                        as="div"
-                        className="relative inline-block text-left"
-                      >
-                        <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            {
-                              greetings[
-                                Math.floor(Math.random() * greetings.length)
-                              ]
-                            }
-                            , {currentUser.email}
-                          </Menu.Button>
-                        </div>
+              {currentUser !== null ? (
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left"
+                >
+                  <div>
+                    <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                      {
+                        "Welcome"
+                      }
+                      , {currentUser.email}
+                    </Menu.Button>
+                  </div>
 
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute flex flex-col right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="py-1">
-                              {profileLinks.map((link, index) => (
-                                <Menu.Item key={index}>
-                                  {({ active }) => (
-                                    <a
-                                      href={link
-                                        .toLowerCase()
-                                        .replaceAll(" ", "-")}
-                                      className={classNames(
-                                        active
-                                          ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                          : "text-gray-700",
-                                        "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                                      )}
-                                    >
-                                      {link}
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              ))}
-                            </div>
-                            <div className="py-1">
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <a
-                                    href="/"
-                                    onClick={handleSignOut}
-                                    className={classNames(
-                                      active
-                                        ? "bg-gray-100 dark:bg-gray-900 text-red-500"
-                                        : "text-red-500 hover:text-red-700",
-                                      "block px-4 py-2 text-sm"
-                                    )}
-                                  >
-                                    Sign Out
-                                  </a>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute flex flex-col right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="py-1">
+                        {profileLinks.map((link, index) => (
+                          <Menu.Item key={index}>
+                            {({ active }) => (
+                              <a
+                                href={link
+                                  .toLowerCase()
+                                  .replaceAll(" ", "-")}
+                                className={classNames(
+                                  active
+                                    ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
+                                    : "text-gray-700",
+                                  "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
                                 )}
-                              </Menu.Item>
-                            </div>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    ) : (
-                      <div className="space-x-4 py-1">
-                        <a
-                          href="/login"
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                        >
-                          Login
-                        </a>
-                        <a
-                          href="/register"
-                          className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
-                        >
-                          Create an account
-                        </a>
+                              >
+                                {link}
+                              </a>
+                            )}
+                          </Menu.Item>
+                        ))}
                       </div>
-                    )}
+                      <div className="py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="/"
+                              onClick={handleSignOut}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 dark:bg-gray-900 text-red-500"
+                                  : "text-red-500 hover:text-red-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Sign Out
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              ) : (
+                <div className="space-x-4 py-1">
+                  <a
+                    href="/login"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Login
+                  </a>
+                  <a
+                    href="/register"
+                    className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Create an account
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </Transition>
