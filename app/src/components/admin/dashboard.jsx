@@ -49,7 +49,7 @@ export default function Dashboard() {
     return loading === true ? (
         <LoadingSpinner />
     ) : currentUser ? (
-        <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
+        <div className="bg-gray-100 dark:bg-gray-900 min-h-screen pb-5">
             <Navbar />
             <div className="bg-gray-100 dark:bg-gray-900 min-h-screen mt-20">
                 <Tabs /> {/* Render the Tabs component here */}

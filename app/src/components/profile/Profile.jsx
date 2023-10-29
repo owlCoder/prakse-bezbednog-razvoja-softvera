@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import Navbar from "../navigation/Navbar";
 import imageCompression from 'browser-image-compression';
+import LoadingSpinner from "../loading/loading";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -239,26 +240,7 @@ export default function Profile() {
     }, [currentUser, navigate]);
 
     return loading === true ? (
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "100vh",
-            }}
-            className="bg-white dark:bg-gray-900"
-        >
-            <div
-                style={{
-                    width: "50px",
-                    height: "50px",
-                    border: "6px solid transparent",
-                    borderTop: "6px solid #124191",
-                    borderRadius: "50%",
-                    animation: "spin 2s linear infinite",
-                }}
-            ></div>
-        </div>
+        <LoadingSpinner />
     ) : data != null && currentUser ? (
         <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
             <Navbar />
