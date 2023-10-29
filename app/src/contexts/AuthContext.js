@@ -114,7 +114,7 @@ export function AuthProvider({ children }) {
           global.APIEndpoint + "/api/audit/create",
           {
             messageType: "WARNING",
-            message: "User [email: " + email + "] tried to access the system with another account"
+            message: "Another user [using email: " + email + "] tried to access the system with another account"
           },
           {
             headers:

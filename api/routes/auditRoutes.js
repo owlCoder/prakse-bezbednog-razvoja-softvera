@@ -5,7 +5,7 @@ const audits = require('../controllers/auditController');
 const { checkRole, getUserRole } = require('../middleware/role');
 
 // Route to create a new audit
-router.post('/create', verifyToken, async (req, res) => {
+router.post('/create', async (req, res) => {
     const { messageType, message } = req.body;
 
     // Call controller method to create an audit

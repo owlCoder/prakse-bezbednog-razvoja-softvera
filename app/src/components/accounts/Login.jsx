@@ -28,7 +28,7 @@ export default function Login() {
     setResponse(res.response);
     setLoading(false);
     
-    if (res && res["response"] === "OK") {
+    if (res && res.code === 200) {
       navigate("/");
     }
   }

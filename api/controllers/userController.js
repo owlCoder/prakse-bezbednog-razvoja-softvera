@@ -19,10 +19,10 @@ const createUser = async (data) => {
     );
 
     await admin.firestore().collection("audits").add({
-        messageType: "INFO",
-        message: "User [email: " + data.email + "] is now registered in system",
-        date: admin.firestore.FieldValue.serverTimestamp(),
-      }
+      messageType: "INFO",
+      message: "User [email: " + data.email + "] is now registered in system",
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    }
     );
 
     return { code: 200, payload: "User has been created" };
@@ -32,7 +32,7 @@ const createUser = async (data) => {
       message: "User [email: " + data.email + "] couldn't be registed in system [" + `${error.message}` + "]",
       date: admin.firestore.FieldValue.serverTimestamp(),
     }
-  );
+    );
     return { code: 400, payload: "User can't be created" };
   }
 };
@@ -65,6 +65,11 @@ const getUsers = async () => {
 
     return { code: 200, payload: usersData };
   } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: error.message,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
     return { code: 500, payload: "Internal Server Error" };
   }
 };
@@ -80,7 +85,7 @@ const updateProfilePicture = async (uid, base64) => {
       docRef
         .update({ photoBase64: base64 })
         .then(() => {
-          return {code: 200, payload: "OK" };
+          return { code: 200, payload: "OK" };
         })
         .catch((error) => {
           return { code: 400, payload: "Profile picture can not be updated. Try again later!" };
@@ -102,13 +107,18 @@ const updateUser = async (uid, firstName, lastName, date) => {
       docRef
         .update({ firstName: firstName, lastName: lastName, date: date })
         .then(() => {
-          return {code: 200, payload: "OK" };
+          return { code: 200, payload: "OK" };
         })
         .catch((error) => {
-          return {code: 400, payload: "Profile data can't be updated. Try again later!" };
+          return { code: 400, payload: "Profile data can't be updated. Try again later!" };
         });
     }
   } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: error.message,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
     return { code: 500, payload: "Internal Server Error" };
   }
 };
@@ -126,8 +136,13 @@ const deleteUser = async (uid) => {
       return { code: 200, payload: userData };
     }
   } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: error.message,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
     return { code: 500, payload: "Internal Server Error" };
-  } 
+  }
 };
 
 module.exports = { createUser, getUserByUid, getUsers, updateProfilePicture, updateUser, deleteUser };
