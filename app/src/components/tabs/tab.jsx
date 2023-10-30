@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import { FaUsers, FaShoppingCart, FaBoxOpen, FaClipboardList } from "react-icons/fa";
+import UsersTab from "../admin/userTab";
 import AuditLog from "../admin/auditTab";
 
 // Create separate components for tab content
-const UsersTabContent = () => {
-  return (
-    <div className="p-4 bg-white dark:bg-slate-400 rounded-lg shadow-lg mx-6 mt-4">
-      Users Content Goes Here
-    </div>
-  );
-};
-
 const ProductsTabContent = () => {
   return (
     <div className="p-4 bg-white dark:bg-slate-400 rounded-lg shadow-lg mx-6 mt-4">
@@ -29,10 +22,10 @@ const OrdersTabContent = () => {
 
 
 const Tabs = () => {
-  const [activeTab, setActiveTab] = useState("audit");
+  const [activeTab, setActiveTab] = useState("users");
 
   const tabItems = [
-    { id: "users", label: "Users", icon: <FaUsers className="inline mr-2" />, content: <UsersTabContent /> },
+    { id: "users", label: "Users", icon: <FaUsers className="inline mr-2" />, content: <UsersTab /> },
     { id: "products", label: "Products", icon: <FaBoxOpen className="inline mr-2" />, content: <ProductsTabContent /> },
     { id: "orders", label: "Orders", icon: <FaShoppingCart className="inline mr-2" />, content: <OrdersTabContent /> },
     { id: "audit", label: "Audit", icon: <FaClipboardList className="inline mr-2" />, content: <AuditLog /> },
