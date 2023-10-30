@@ -244,7 +244,7 @@ export default function Profile() {
             <Navbar />
             {/* Modal for account deletion */}
             {isModalVisible && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
                     <div className="bg-white dark:bg-gray-900 w-96 rounded-lg p-6 shadow-lg transition-opacity duration-300">
                         <h2 className="text-xl font-semibold text-red-600 dark:text-red-700 mb-4">
                             Delete Account
@@ -272,7 +272,7 @@ export default function Profile() {
             )}
             {/* Modal for password reset */}
             {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
                     <div className="bg-white w-96 rounded-lg p-6 shadow-lg dark:bg-gray-900 transition-opacity duration-300">
                         <h2 className="text-xl font-semibold mb-4 dark:text-white">
                             {modalText}
