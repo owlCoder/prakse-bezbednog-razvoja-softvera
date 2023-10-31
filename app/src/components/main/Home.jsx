@@ -26,7 +26,7 @@ export default function Home() {
         </div>
 
         {/* Items Container */}
-        <div className="dark:bg-gray-800 flex flex-col p-6 m-3  bg-white rounded-2xl md:rounded-none shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
+        <div className="dark:bg-gray-700 flex flex-col p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
 
           {/* Grid Container */}
           <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mx-auto">
