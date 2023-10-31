@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const users = require('../controllers/userController');
 const { checkRole, getUserRole } = require('../middleware/role');
+const admin = require('../firebaseConfig');
 
 // Method to check uids validaty
 function Check(uid, auth_uid) {
@@ -40,6 +41,37 @@ router.post('/create', verifyToken, async (req, res) => {
   // Call controller method to create an user
   let data = await users.createUser(reqData);
   return res.status(data.code).json({ code: data.code, payload: data.payload });
+});
+
+// Admin route to create a new user in FIREBASE AUTH base & FireStore base
+router.post('/newAccount', verifyToken, async (req, res) => {
+  const { uid, userProperties, userData } = req.body;
+
+  // RBAC
+  let role = await getUserRole(uid);
+
+  if (role == null) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+
+  let reqs = await checkRole(role, "users", "write");
+  if (reqs === false) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+  // END OF RBAC
+
+  try {
+    // create user in firebase auth db
+    const userRecord = await admin.auth().createUser(userProperties);
+    userData.uid = userRecord.uid; // save new user uid
+
+    // Call controller method to create an user
+    let data = await users.createUser(userData);
+    return res.status(data.code).json({ code: data.code, payload: data.payload });
+  }
+  catch (error) {
+    return res.status(400).json({ code: 400, payload: error.message });
+  }
 });
 
 // User route to get user by UID
@@ -88,10 +120,10 @@ router.post('/getRoleByUid', verifyToken, async (req, res) => {
     return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
   }
   else
-  // END OF RBAC
+    // END OF RBAC
 
-  // Call controller method for user data fetch
-  return res.status(200).json({ code: 200, payload: role });
+    // Call controller method for user data fetch
+    return res.status(200).json({ code: 200, payload: role });
 });
 
 // User route to get all users

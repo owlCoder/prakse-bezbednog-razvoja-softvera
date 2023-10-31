@@ -15,6 +15,7 @@ const UsersTab = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showCreateAccountModal, setShowCreateAccountModal] = useState(false); // State for showing the create account modal
     const [newAccountData, setNewAccountData] = useState({});
+    const [error, setError] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -109,9 +110,11 @@ const UsersTab = () => {
     const toggleCreateAccountModal = () => {
         setShowCreateAccountModal(!showCreateAccountModal);
 
-        if(showCreateAccountModal === false) {
+        if (showCreateAccountModal === false) {
             setNewAccountData([]);
         }
+
+        setError("");
     };
 
     // Function to handle input changes for creating a new account
@@ -124,14 +127,53 @@ const UsersTab = () => {
     };
 
     // Function to handle the creation of a new account (you can implement this logic)
-    const handleCreateAccount = () => {
-        // Add logic to create a new account, e.g., make an API request
-        // ...
-        // After successful account creation, you can close the modal
-        //toggleCreateAccountModal();
-        alert("Implement.")
+    const handleCreateAccount = async () => {
+        const userProperties = {
+            email: newAccountData.email,
+            emailVerified: true, // account created by an admin is trusted by admin
+            password: newAccountData.password,
+            displayName: newAccountData.firstName + ' ' + newAccountData.lastName,
+            disabled: false
+        };
 
-        console.log(newAccountData)
+        const userData = {
+            uid: "",
+            email: newAccountData.email,
+            firstName: newAccountData.firstName,
+            lastName: newAccountData.lastName,
+            date: newAccountData.birthday,
+        };
+
+        try {
+            const token = await currentUser.getIdToken();
+
+            // call api to register a new user
+            const response = await axios.post(
+                global.APIEndpoint + "/api/user/newAccount",
+                {
+                    uid: currentUser.uid,
+                    userProperties: userProperties,
+                    userData: userData
+                },
+                {
+                    headers:
+                    {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            // check api's reponse
+            if (response.data.code !== 200)
+                setError(response.data.payload);
+            else {
+                setError("AC");
+            }
+        }
+        catch (error) {
+            setError(error.response.data.payload)
+        }
     };
 
 
@@ -168,7 +210,7 @@ const UsersTab = () => {
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
                                         Create a new account
                                     </h3>
-                                    <form className="mt-6">
+                                    <div className="mt-6">
                                         <div className="mb-4">
                                             <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                 First Name
@@ -235,6 +277,9 @@ const UsersTab = () => {
                                                 />
                                             </div>
                                         </div>
+                                        <div className='ml-1 text-center'>
+                                            {error === "AC" ? <span className='text-green-600'>User account has been created</span> : <span className='text-red-600'>{error}</span>}
+                                        </div>
                                         {/* Add similar input fields for other account details, e.g., lastName, email, password */}
                                         <div className="mt-6">
                                             <button
@@ -251,7 +296,7 @@ const UsersTab = () => {
                                                 Cancel
                                             </button>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
