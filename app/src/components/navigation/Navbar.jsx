@@ -48,7 +48,7 @@ function Navbar() {
         );
 
         if (response.data != null) {
-          if (response.data === "admin")
+          if (response.data.payload === "admin")
             setAdmin(true);
         }
 
