@@ -4,6 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { AiOutlineUserAdd } from 'react-icons/ai';
+import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
 
 const UsersTab = () => {
     const navigate = useNavigate();
@@ -308,6 +310,7 @@ const UsersTab = () => {
                         className="new-ad-button"
                         style={{fontSize: 16, fontWeight: '500'}}
                     >
+                        <AiOutlineUserAdd className="plus-icon" />
                         Create new account
                     </button>
                 </div>
@@ -432,10 +435,11 @@ const UsersTab = () => {
                                 <td className="px-6 py-4">
                                     <div className="flex flex-wrap gap-2">
                                         {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                        <button className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900">Edit</button>
-                                        <button className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900">Delete</button>
-                                        <button className="px-4 py-2 bg-yellow-800 text-white rounded hover:bg-yellow-900">Reset Password</button>
-                                        <button className="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-900">Change Role</button>
+                                        <button className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
+                                        <button className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                    <button className="px-4 py-2 bg-yellow-800 text-white rounded hover:bg-yellow-900"><FaKey className="plus-icon inline" /> Reset the password</button>
                                     </div>
                                 </td>
                             </tr>
