@@ -53,7 +53,7 @@ export default function Login() {
             Log In
           </h1>
 
-          {currentUser ? (
+          {loading === false && currentUser ? (
             // Show this message when the user is already logged in
             <div>
               <p className="mt-6 text-green-500 font-semibold text-xl">
