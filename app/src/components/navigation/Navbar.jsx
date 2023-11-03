@@ -12,7 +12,7 @@ function classNames(...classes) {
 }
 
 function Navbar() {
-  const links = ["Homepage", "Store"];
+  const links = ["Homepage"];
   const profileLinks = ["Account Settings"];
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
