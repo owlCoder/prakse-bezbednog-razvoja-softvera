@@ -36,6 +36,22 @@
   background-color: #004294; /* Even darker shade on hover */
 }
 
+.new-account-button {
+  display: flex;
+  align-items: center;
+  background-color: #0056b3; /* Darker blue */
+  color: #fff;
+  font-weight: 600;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.4rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.new-account-button:hover {
+  background-color: #004294; /* Even darker shade on hover */
+}
+
 .plus-icon {
   margin-right: 0.3rem;
 }

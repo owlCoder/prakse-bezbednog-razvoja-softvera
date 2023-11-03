@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
-import { AiOutlineUserAdd } from 'react-icons/ai';
+import { AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
 import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
 
 const UsersTab = () => {
@@ -201,14 +201,14 @@ const UsersTab = () => {
                 />
                 {/* Create Account Modal */}
                 {showCreateAccountModal && (
-                    <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div className="fixed inset-0bg-opacity-75 transition-opacity" aria-hidden="true" />
                             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
                                 &#8203;
                             </span>
-                            <div className="inline-block align-bottom bg-white dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div className="inline-block align-bottom dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div className="bg-slate-50 dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
                                         Create a new account
                                     </h3>
@@ -223,7 +223,7 @@ const UsersTab = () => {
                                                 value={newAccountData.firstName || ''}
                                                 onChange={handleNewAccountInputChange}
                                                 required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -236,7 +236,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.lastName || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -249,7 +249,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.birthday || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -262,7 +262,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.email || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                             <div className="mb-4 mt-4">
                                                 <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
@@ -275,7 +275,7 @@ const UsersTab = () => {
                                                     required
                                                     value={newAccountData.password || ''}
                                                     onChange={handleNewAccountInputChange}
-                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                 />
                                             </div>
                                         </div>
@@ -286,15 +286,17 @@ const UsersTab = () => {
                                         <div className="mt-6">
                                             <button
                                                 onClick={handleCreateAccount}
-                                                className="px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+                                                className="px-4 py-2 bg-sky-800 text-white font-medium hover:bg-sky-700 rounded-lg"
                                             >
+                                                <AiOutlineUserAdd className="plus-icon inline -mt-1" />
                                                 Create Account
                                             </button>
 
                                             <button
                                                 onClick={toggleCreateAccountModal}
-                                                className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-800 ml-4"
+                                                className="px-4 py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900 ml-4"
                                             >
+                                                 <AiOutlineClose className="plus-icon inline -mt-0.5" />
                                                 Cancel
                                             </button>
                                         </div>
@@ -307,7 +309,7 @@ const UsersTab = () => {
                 <div className="mb-6 mt-2">
                     <button
                         onClick={toggleCreateAccountModal}
-                        className="new-ad-button"
+                        className="new-account-button"
                         style={{fontSize: 16, fontWeight: '500'}}
                     >
                         <AiOutlineUserAdd className="plus-icon" />

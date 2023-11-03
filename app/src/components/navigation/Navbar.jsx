@@ -6,9 +6,10 @@ import axios from "axios";
 import { RiSettingsLine } from 'react-icons/ri';
 import { LuLayoutDashboard, LuBarChartBig } from 'react-icons/lu';
 import { BiSolidExit } from 'react-icons/bi';
-import { AiOutlinePlus } from "react-icons/ai"; // Import the plus icon from React Icons
+import { AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai"; // Import the plus icon from React Icons
 import { FaUser } from "react-icons/fa";
 import { BiSolidDownArrow } from 'react-icons/bi';
+import { VscAccount } from 'react-icons/vsc';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -203,13 +204,13 @@ function Navbar() {
                           href="/login"
                           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Login
+                           <VscAccount className="plus-icon inline -mt-0.5" /> Login
                         </a>
                         <a
                           href="/register"
                           className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Create an account
+                          <AiOutlineUserAdd className="plus-icon inline -mt-0.5" /> Create an account
                         </a>
                       </div>
                     )}
