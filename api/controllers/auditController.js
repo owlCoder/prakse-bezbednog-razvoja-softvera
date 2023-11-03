@@ -1,7 +1,6 @@
 const admin = require('../firebaseConfig');
-const { checkRole, getUserRole } = require('../middleware/role');
 
-const createAduit = async (data) => {
+const createAudit = async (data) => {
   try {
     await admin.firestore().collection("audits").add({
       messageType: data.messageType,
@@ -32,4 +31,4 @@ const readAudits = async () => {
   }
 };
 
-module.exports = { createAduit, readAudits };
+module.exports = { createAudit, readAudits };

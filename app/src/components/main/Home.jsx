@@ -1,6 +1,6 @@
 import Navbar from "../navigation/Navbar";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Popup } from "./Popup";
 import Item from "../product/Item"; 
 

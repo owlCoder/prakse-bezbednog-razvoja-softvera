@@ -9,7 +9,7 @@ router.post('/create', async (req, res) => {
     const { messageType, message } = req.body;
 
     // Call controller method to create an audit
-    let data = await audits.createAduit({ messageType, message });
+    let data = await audits.createAudit({ messageType, message });
     return res.status(data.code).json({ code: data.code, payload: data.payload });
 });
 

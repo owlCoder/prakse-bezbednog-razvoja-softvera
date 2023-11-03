@@ -305,9 +305,10 @@ const UsersTab = () => {
                 <div className="mb-6 mt-2">
                     <button
                         onClick={toggleCreateAccountModal}
-                        className="px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+                        className="new-ad-button uppercase"
+                        style={{fontSize: 16, fontWeight: '500'}}
                     >
-                        Create an account
+                        Create new account
                     </button>
                 </div>
                 <table className="w-full text-md text-left text-black dark:text-white">
@@ -419,7 +420,7 @@ const UsersTab = () => {
                                     {user.role.toUpperCase()}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {!user.disabled ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
+                                    {!currentUser.disabled ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
 
