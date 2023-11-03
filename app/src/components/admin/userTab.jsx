@@ -305,7 +305,7 @@ const UsersTab = () => {
                 <div className="mb-6 mt-2">
                     <button
                         onClick={toggleCreateAccountModal}
-                        className="new-ad-button uppercase"
+                        className="new-ad-button"
                         style={{fontSize: 16, fontWeight: '500'}}
                     >
                         Create new account
