@@ -452,11 +452,11 @@ const UsersTab = () => {
                                 <td className="px-6 py-4">
                                     <div className="flex flex-wrap gap-2">
                                         {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                        <button className="px-4 py-2 mr-2 bg-blue-800 text-white rounded hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
-                                        <button className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                        <button className="px-4 py-2 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
+                                        <button className="px-4 py-2 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mt-4">
-                                        <button className="px-5 py-2 bg-sky-700 text-white rounded hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
+                                        <button className="px-5 py-2 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
                                     </div>
                                 </td>
                             </tr>
