@@ -7,23 +7,8 @@ import {
 } from "react-icons/fa";
 import UsersTab from "../admin/userTab";
 import AuditLog from "../admin/auditTab";
-
-// Create separate components for tab content
-const ProductsTabContent = () => {
-  return (
-    <div className="p-4 bg-white dark:bg-slate-400 rounded-lg shadow-lg mx-6 mt-4">
-      Products Content Goes Here
-    </div>
-  );
-};
-
-const OrdersTabContent = () => {
-  return (
-    <div className="p-4 bg-white dark:bg-slate-400 rounded-lg shadow-lg mx-6 mt-4">
-      Orders Content Goes Here
-    </div>
-  );
-};
+import OrdersTab from "../admin/OrdersTab";
+import ProductsTab from "../admin/ProductsTab";
 
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState("users");
@@ -51,10 +36,10 @@ const Tabs = () => {
         setTabContent(<UsersTab />);
         break;
       case "products":
-        setTabContent(<ProductsTabContent />);
+        setTabContent(<ProductsTab />);
         break;
       case "orders":
-        setTabContent(<OrdersTabContent />);
+        setTabContent(<OrdersTab />);
         break;
       case "audit":
         setTabContent(<AuditLog />);
