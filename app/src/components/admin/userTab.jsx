@@ -296,7 +296,7 @@ const UsersTab = () => {
                                                 onClick={toggleCreateAccountModal}
                                                 className="px-4 py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900 ml-4"
                                             >
-                                                 <AiOutlineClose className="plus-icon inline -mt-0.5" />
+                                                <AiOutlineClose className="plus-icon inline -mt-0.5" />
                                                 Cancel
                                             </button>
                                         </div>
@@ -310,7 +310,7 @@ const UsersTab = () => {
                     <button
                         onClick={toggleCreateAccountModal}
                         className="new-account-button"
-                        style={{fontSize: 16, fontWeight: '500'}}
+                        style={{ fontSize: 16, fontWeight: '500' }}
                     >
                         <AiOutlineUserAdd className="plus-icon" />
                         Create new account
@@ -319,6 +319,12 @@ const UsersTab = () => {
                 <table className="w-full text-md text-left text-black dark:text-white">
                     <thead className="text-md text-white uppercase bg-primary-900 opacity-80">
                         <tr>
+                        <th
+                                scope="col"
+                                className="px-6 py-3"
+                            >
+                                Profile Picture{' '}
+                            </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 cursor-pointer"
@@ -391,7 +397,7 @@ const UsersTab = () => {
                             </th>
                             <th
                                 scope="col"
-                                className="px-6 py-3 cursor-pointer"
+                                className="px-1 py-3 cursor-pointer"
                                 onClick={() => handleSortBy('enabled')}
                             >
                                 Account Status{' '}
@@ -404,7 +410,7 @@ const UsersTab = () => {
                                 ) : <div></div>}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Actions
+                                Account Administration
                             </th>
                         </tr>
                     </thead>
@@ -414,6 +420,15 @@ const UsersTab = () => {
                                 className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
                                 key={user.uid}
                             >
+                                 <td className="px-6 py-4 font-medium">
+                                    <div className="flex-shrink-0 flex items-center">
+                                        <img
+                                            className="h-16 w-16"
+                                            src={user.photoBase64}
+                                            alt="pi"
+                                        />
+                                    </div>
+                                </td>
                                 <td className="px-6 py-4">{user.firstName}</td>
                                 <td className="px-6 py-4">{user.lastName}</td>
                                 <td className="px-6 py-4">{user.email}</td>
@@ -425,23 +440,23 @@ const UsersTab = () => {
                                     {user.role.toUpperCase()}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {!currentUser.disabled ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
+                                    {!currentUser.disabled ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                    </svg><span>&nbsp;&nbsp;Enabled</span></div>
 
-                                        : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6">
+                                        : <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6 inline -mt-0.5">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                        </svg>
+                                        </svg><span>&nbsp;&nbsp;Disabled</span></div>
                                     }
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex flex-wrap gap-2">
                                         {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                        <button className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
+                                        <button className="px-4 py-2 mr-2 bg-blue-800 text-white rounded hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
                                         <button className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mt-4">
-                                    <button className="px-4 py-2 bg-yellow-800 text-white rounded hover:bg-yellow-900"><FaKey className="plus-icon inline" /> Reset the password</button>
+                                        <button className="px-5 py-2 bg-sky-700 text-white rounded hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
                                     </div>
                                 </td>
                             </tr>
