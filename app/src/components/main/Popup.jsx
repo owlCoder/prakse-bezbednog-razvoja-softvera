@@ -4,11 +4,19 @@ export const Popup = ({ data, closePopup }) => {
 
     const [counter, setCounter] = useState(0);
 
+    const handleClick = (button) => {
+        if(button.target.id == 'minus' && counter > 0)
+            setCounter(counter - 1);        
+        else if(button.target.id == 'plus')
+            setCounter(counter + 1);
+        
+    };
+
   return (
     
-    <div className="fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
+    <div className="z-60 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
         {/* Card Container */}
-        <div className="relative flex flex-col p-6 m-3 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 mb-16">
+        <div className="relative flex flex-col p-6 m-3 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 mb-16">
             
             {/* Close Button Inside Card Container */}
             <button className="absolute top-6 right-9 p-2 hover:text-gray-500" onClick={closePopup}>
@@ -56,33 +64,26 @@ export const Popup = ({ data, closePopup }) => {
 
                 {/* Button & Number Input */}
                 <div className="flex items-center justify-start space-x-5">
-                    <button className="h-10 text-white text-sm bg-primary-700 hover:bg-primary-800 focus-ring-4 focus-ring-primary-300 font-medium rounded-lg px-9 py-1.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus-ring-primary-800" type="button">
-                        Buy
-                    </button>
-
+                   
                     {/* Number Input */}
                     <div class="custom-number-input h-10 w-32">
                         <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
-                            <button className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
-                                <span className="m-auto text-2xl font-thin">−</span>
+                            <button id="minus" onClick={handleClick} className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                                <span className="m-auto text-2xl font-thin">-</span>
                             </button>
-                            <input type="number" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  " name="custom-input-number"/>
-                            <button data-action="increment" className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                            <input type="number" value={counter} className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  " name="custom-input-number"/>
+                            <button id="plus" onClick={handleClick} data-action="increment" className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
                                 <span className="m-auto text-2xl font-thin">+</span>
                             </button>
                         </div>
                     </div>
 
-                </div>
-                
+                    <button className="h-10 text-white text-sm bg-primary-700 hover:bg-primary-800 focus-ring-4 focus-ring-primary-300 font-medium rounded-lg px-9 py-1.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus-ring-primary-800" type="button">
+                        Buy
+                    </button>
 
-                {/* Stock */}
-                <div className="flex items-center space-x-3 group md:items-start">
-                    <div className="w-3 h-3 bg-green-400 rounded-full group-hover:animate-ping">
-                    </div>
-                    <div className="text-sm">50+ pcs. in stock</div>
-                </div>
 
+                </div>
 
             </div>
         </div>

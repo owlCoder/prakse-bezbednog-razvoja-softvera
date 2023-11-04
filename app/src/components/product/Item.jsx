@@ -24,12 +24,6 @@ export default function Item ({data, openPopup}) {
                 </div>
             </div>
 
-            {/* Stock */}
-            <div className="flex items-center space-x-3 group md:items-start">
-                <div className="w-3 h-3 bg-green-400 rounded-full group-hover:animate-ping"></div>
-                <div className="text-sm">50+ pcs. in stock</div>
-            </div>
-
             {/* Button */}
             <div>
                 <a href="#" onClick={handleButtonClick} className="flex justify-between p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
