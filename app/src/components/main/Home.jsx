@@ -45,7 +45,7 @@ export default function Home() {
         <div className="flex justify-center items-center flex-col md:flex-row md:space-x-12 md:space-y-0 space-y-12 mx-10"> 
 
           {/* Card */}
-          <div className="relative rounded-2xl overflow-hidden">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
             
             {/* Image div */}
             <div className="bg-blue-500">
@@ -72,7 +72,7 @@ export default function Home() {
           </div> 
 
           {/* Card */}
-          <div className="relative rounded-2xl overflow-hidden">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
             
             {/* Image div */}
             <div className="bg-blue-500">
@@ -99,7 +99,7 @@ export default function Home() {
           </div> 
 
           {/* Card */}
-          <div className="relative rounded-2xl overflow-hidden">
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl">
             
             {/* Image div */}
             <div className="bg-blue-500">
