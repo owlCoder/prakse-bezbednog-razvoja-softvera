@@ -9,7 +9,7 @@ import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
 
 const UsersTab = () => {
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
+    const { currentUser, resetPasswordEmailUser } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState('firstName');
@@ -18,6 +18,15 @@ const UsersTab = () => {
     const [showCreateAccountModal, setShowCreateAccountModal] = useState(false); // State for showing the create account modal
     const [newAccountData, setNewAccountData] = useState({});
     const [error, setError] = useState("");
+
+    // info modal
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState("");
+    const [modalDesc, setModalDesc] = useState("");
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [uidToDelete, setUid] = useState(null);
+    const [refresh, setRefresh] = useState(false); // refresh users table after CRUD operations
 
     useEffect(() => {
         setLoading(true);
@@ -53,7 +62,7 @@ const UsersTab = () => {
         };
 
         fetchData();
-    }, [currentUser, navigate]);
+    }, [currentUser, navigate, refresh]);
 
     const handleSortBy = (key) => {
         if (key === 'enabled') {
@@ -128,6 +137,62 @@ const UsersTab = () => {
         });
     };
 
+     // Modal handle functions
+     const handleGotItClick = () => {
+        setShowModal(false);
+    };
+
+    // Function to handle the "Delete Account" button click
+    const handleDeleteAccountClick = async () => {
+        if(uidToDelete == null) return;
+
+        // Handle the account deletion logic here
+        try {
+            const token = await currentUser.getIdToken();
+            const response = await axios.post(
+                global.APIEndpoint + "/api/user/delete/guid",
+                {
+                    uid: uidToDelete,
+                },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if(response.status !== 200) 
+                navigate('/' + response.status.toString());
+
+            // Close the modal after successful deletion
+            setIsModalVisible(false);
+
+            // show info modal that account is deleted
+            setModalText("Account has been deleted");
+            setModalDesc("Account and all data has been removed. User will be logged out soon.");
+            setShowModal(true);
+            setRefresh(!refresh);
+        } catch (error) {
+            setModalText("Account has not been deleted");
+            setModalDesc("Account can't be deleted right now. Try again later.");
+            setShowModal(true);
+        }
+    };
+
+    const handleDeleteAccount = (uid) => {
+        setUid(uid);
+        setIsModalVisible(true);
+    };
+
+    // reset password action
+    const handlePasswordReset = (email) => {
+        resetPasswordEmailUser(email);
+        setModalText("Email has been sent");
+        setModalDesc("Notify user to check email for further instructions.");
+        setShowModal(true);
+    };
+
     // Function to handle the creation of a new account (you can implement this logic)
     const handleCreateAccount = async () => {
         const userProperties = {
@@ -171,6 +236,10 @@ const UsersTab = () => {
                 setError(response.data.payload);
             else {
                 setError("AC");
+                setTimeout(() => {
+                    setShowCreateAccountModal(false);
+                    setRefresh(!refresh);
+                }, 3000); // Delay in milliseconds (e.g., 2000ms = 2 seconds)
             }
         }
         catch (error) {
@@ -182,6 +251,7 @@ const UsersTab = () => {
     return loading === true ? (
         <LoadingSpinner />
     ) : data !== null ? (
+        
         <div className="p-4 bg-white dark:bg-slate-800 bg-opacity-60 rounded-lg shadow-lg mx-6 my-4">
             <p className="text-gray-700 dark:text-gray-200 mb-6 ml-1 my-2 text-center font-medium" style={{ fontSize: 17.5 }}>
                 As an admin, you have access to powerful tools and features to manage user profiles.
@@ -189,6 +259,49 @@ const UsersTab = () => {
                 you need. You can also take various actions on user profiles, such as editing details,
                 deleting accounts, resetting passwords, and changing user roles. <br />
             </p>
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                    <div className="bg-white w-96 rounded-lg p-6 shadow-lg dark:bg-gray-900 transition-opacity duration-300">
+                        <h2 className="text-xl font-semibold mb-4 dark:text-white">
+                            {modalText}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400">{modalDesc}</p>
+                        <button
+                            onClick={handleGotItClick}
+                            className="bg-blue-500 text-white font-semibold px-4 py-2 rounded mt-4 hover:bg-blue-600"
+                        >
+                            Got it
+                        </button>
+                    </div>
+                </div>
+            )}
+            {isModalVisible && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                    <div className="bg-white dark:bg-gray-900 w-96 rounded-lg p-6 shadow-lg transition-opacity duration-300">
+                        <h2 className="text-xl font-semibold text-red-600 dark:text-red-700 mb-4">
+                            Delete Account
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Are you sure you want to delete user account? This action cannot
+                            be undone.
+                        </p>
+                        <div className="flex justify-end mt-5">
+                            <button
+                                onClick={handleDeleteAccountClick}
+                                className="bg-red-500 dark:bg-rose-700 text-white font-semibold px-4 py-2 rounded mr-4 hover:bg-rose-800"
+                            >
+                                I agree to delete account
+                            </button>
+                            <button
+                                onClick={() => { setIsModalVisible(false); setUid(null); }}
+                                className="bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded hover-bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-2">
                 {/* Search Bar */}
                 <input
@@ -416,6 +529,7 @@ const UsersTab = () => {
                     </thead>
                     <tbody>
                         {sortedData.map((user) => (
+                            user.uid !== currentUser.uid ? (
                             <tr
                                 className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
                                 key={user.uid}
@@ -453,13 +567,13 @@ const UsersTab = () => {
                                     <div className="flex flex-wrap gap-2">
                                         {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
                                         <button className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
-                                        <button className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                        <button onClick={() => handleDeleteAccount(user.uid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mt-4">
-                                        <button className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
+                                        <button onClick={() => handlePasswordReset(user.email)} className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr>) : (<div></div>)
                         ))}
                     </tbody>
                 </table>

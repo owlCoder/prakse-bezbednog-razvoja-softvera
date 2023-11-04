@@ -260,7 +260,39 @@ router.post('/delete', verifyToken, async (req, res) => {
     return res.status(200).json(data);
   }
   catch (error) {
-    console.log(error)
+    return res.status(401).json({ code: data.code, payload: error });
+  }
+});
+
+// Delete user account by an admin
+router.post('/delete/guid', verifyToken, async (req, res) => {
+  const auth_uid = req.user.uid; // property access
+  const { uid } = req.body;
+
+  // Check if the request contains the 'uid' field in the body
+  if (!uid) {
+    return res.status(400).json({ code: data.code, payload: "Missing 'uid' field in the request body." });
+  }
+
+  // RBAC
+  let role = await getUserRole(uid);
+
+  if (role == null) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+
+  let reqs = await checkRole(role, "users", "delete");
+  if (reqs === false) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+  // END OF RBAC
+
+  // Call controller method for user data fetch
+  try {
+    let data = await users.deleteUser(uid);
+    return res.status(200).json(data);
+  }
+  catch (error) {
     return res.status(401).json({ code: data.code, payload: error });
   }
 });

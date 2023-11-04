@@ -498,7 +498,7 @@ export default function Profile() {
                                 will send you a an email with magic link to change a password.
                             </p>
                             <button
-                                onClick={handlePasswordReset} // Add a function to send the password reset email
+                                onClick={handlePasswordReset}
                                 className="text-white bg-primary-700 text-sm focus-ring-4 focus-ring-primary-300 font-medium rounded-lg hover:bg-primary-800 px-5 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus-ring-primary-800"
                             >
                                 Request password change

@@ -18,7 +18,7 @@ export default function Home() {
     <main className="dark:bg-gray-900 bg-gray-100 dark:text-white min-h-screen pb-2"> 
       {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <div></div>}
       <Navbar />
-
+      <HeroSection />
       <section>
         {/* Heading */}
         <div className="flex flex-col items-center space-y-3 text-center p-2 mt-16 bg-gray-700">
