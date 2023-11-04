@@ -4,19 +4,24 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { RiSettingsLine } from 'react-icons/ri';
-import { LuLayoutDashboard } from 'react-icons/lu';
+import { LuLayoutDashboard, LuBarChartBig } from 'react-icons/lu';
 import { BiSolidExit } from 'react-icons/bi';
+import { AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai"; // Import the plus icon from React Icons
+import { FaUser } from "react-icons/fa";
+import { BiSolidDownArrow } from 'react-icons/bi';
+import { VscAccount } from 'react-icons/vsc';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 function Navbar() {
-  const links = ["Homepage"];
+  const links = ["Homepage", "Store"];
   const profileLinks = ["Account Settings"];
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(false);
+  const [user, setUser] = useState(false);
 
   async function handleSignOut(e) {
     e.preventDefault();
@@ -50,6 +55,8 @@ function Navbar() {
         if (response.data != null) {
           if (response.data.payload === "admin")
             setAdmin(true);
+          if (response.data.payload === "user")
+            setUser(true);
         }
 
         if (response.status !== 200)
@@ -68,12 +75,13 @@ function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 flex items-center">
                 <img
-                  className="h-8 w-8"
-                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                  className="h-8 w-13"
+                  src="/logo512.png"
                   alt="Workflow"
                 />
+                <div className="inline font-medium text-slate-950 dark:text-white">eBordy</div>
               </div>
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
@@ -86,6 +94,13 @@ function Navbar() {
                       {link}
                     </a>
                   ))}
+                  {user && (
+                    <a href="/new" className="new-ad-button">
+                      <AiOutlinePlus className="plus-icon" />
+                      New product&nbsp;
+                    </a>
+
+                  )}
                   <div className="absolute right-4 text-base font-normal">
                     {currentUser !== null ? (
                       <Menu
@@ -93,11 +108,9 @@ function Navbar() {
                         className="relative inline-block text-left"
                       >
                         <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold bg-primary-800 dark:bg-primary-900 text-white">
-                            {
-                              "Welcome"
-                            }
-                            , {currentUser.email}
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold bg-primary-800 dark:bg-primary-900 hover:bg-blue-800 text-white">
+                            <FaUser className="plus-icon inline mt-1" />
+                            Welcome, {currentUser.email} <BiSolidDownArrow className="plus-icon inline mt-1.5" style={{ fontSize: 10 }} />
                           </Menu.Button>
                         </div>
 
@@ -112,21 +125,21 @@ function Navbar() {
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none">
                             <div className="py-1">
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="/account-settings"
-                                      className={classNames(
-                                        active
-                                          ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                          : "text-gray-700",
-                                        "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                                      )}
-                                    >
-                                     <RiSettingsLine className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Account Settings
-                                    </a>
-                                  )}
-                                </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <a
+                                    href="/account-settings"
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
+                                        : "text-gray-700",
+                                      "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
+                                    )}
+                                  >
+                                    <RiSettingsLine className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Account Settings
+                                  </a>
+                                )}
+                              </Menu.Item>
                             </div>
                             {admin && (
                               <div className="py-1">
@@ -142,6 +155,24 @@ function Navbar() {
                                       )}
                                     >
                                       <LuLayoutDashboard className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Dashboard
+                                    </a>
+                                  )}
+                                </Menu.Item>
+                              </div>)}
+                            {user && (
+                              <div className="py-1">
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <a
+                                      href="/orders-history"
+                                      className={classNames(
+                                        active
+                                          ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
+                                          : "text-gray-700",
+                                        "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
+                                      )}
+                                    >
+                                      <LuBarChartBig className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Products & Orders
                                     </a>
                                   )}
                                 </Menu.Item>
@@ -173,13 +204,13 @@ function Navbar() {
                           href="/login"
                           className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Login
+                           <VscAccount className="plus-icon inline -mt-0.5" /> Login
                         </a>
                         <a
                           href="/register"
                           className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                          Create an account
+                          <AiOutlineUserAdd className="plus-icon inline -mt-0.5" /> Create an account
                         </a>
                       </div>
                     )}

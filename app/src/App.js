@@ -6,6 +6,8 @@ import Profile from "./components/profile/Profile";
 import ForgotPassword from "./components/accounts/ForgotPassword";
 // @ts-ignore
 import Home from './components/main/Home';
+import Store from './components/shop/Store';
+import New from "./components/shop/New";
 
 // Error pages
 import Error400Page from "./components/errorPages/error400";
@@ -14,6 +16,7 @@ import Error403Page from "./components/errorPages/error403";
 import Error404Page from "./components/errorPages/error404";
 import Error500Page from "./components/errorPages/error500";
 import Dashboard from "./components/admin/dashboard";
+import Orders from "./components/shop/Orders";
 
 function App() {
   return (
@@ -26,9 +29,10 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/account-settings" element={<Profile />} />
-
           <Route exact path="/oib-admin" element={<Dashboard /> } />
-
+          <Route exact path="/store" element={<Store /> } />
+          <Route exact path="/orders-history" element={<Orders /> } />
+          <Route exact path="/new" element={<New /> } />
           <Route exact path="/400" element={<Error400Page />} />
           <Route exact path="/401" element={<Error401Page />} />
           <Route exact path="/403" element={<Error403Page />} />

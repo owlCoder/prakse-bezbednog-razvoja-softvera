@@ -4,6 +4,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
+import { AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
+import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
 
 const UsersTab = () => {
     const navigate = useNavigate();
@@ -199,14 +201,14 @@ const UsersTab = () => {
                 />
                 {/* Create Account Modal */}
                 {showCreateAccountModal && (
-                    <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div className="fixed inset-0bg-opacity-75 transition-opacity" aria-hidden="true" />
                             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
                                 &#8203;
                             </span>
-                            <div className="inline-block align-bottom bg-white dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div className="inline-block align-bottom dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div className="bg-slate-50 dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
                                         Create a new account
                                     </h3>
@@ -221,7 +223,7 @@ const UsersTab = () => {
                                                 value={newAccountData.firstName || ''}
                                                 onChange={handleNewAccountInputChange}
                                                 required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -234,7 +236,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.lastName || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -247,7 +249,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.birthday || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
                                         <div className="mb-4">
@@ -260,7 +262,7 @@ const UsersTab = () => {
                                                 required
                                                 value={newAccountData.email || ''}
                                                 onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                             <div className="mb-4 mt-4">
                                                 <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
@@ -273,7 +275,7 @@ const UsersTab = () => {
                                                     required
                                                     value={newAccountData.password || ''}
                                                     onChange={handleNewAccountInputChange}
-                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl outline-none"
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                 />
                                             </div>
                                         </div>
@@ -284,15 +286,17 @@ const UsersTab = () => {
                                         <div className="mt-6">
                                             <button
                                                 onClick={handleCreateAccount}
-                                                className="px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+                                                className="px-4 py-2 bg-sky-800 text-white font-medium hover:bg-sky-700 rounded-lg"
                                             >
+                                                <AiOutlineUserAdd className="plus-icon inline -mt-1" />
                                                 Create Account
                                             </button>
 
                                             <button
                                                 onClick={toggleCreateAccountModal}
-                                                className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-800 ml-4"
+                                                className="px-4 py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900 ml-4"
                                             >
+                                                <AiOutlineClose className="plus-icon inline -mt-0.5" />
                                                 Cancel
                                             </button>
                                         </div>
@@ -305,14 +309,22 @@ const UsersTab = () => {
                 <div className="mb-6 mt-2">
                     <button
                         onClick={toggleCreateAccountModal}
-                        className="px-4 py-2 bg-emerald-900 text-white rounded hover:bg-emerald-800"
+                        className="new-account-button"
+                        style={{ fontSize: 16, fontWeight: '500' }}
                     >
-                        Create an account
+                        <AiOutlineUserAdd className="plus-icon" />
+                        Create new account
                     </button>
                 </div>
                 <table className="w-full text-md text-left text-black dark:text-white">
                     <thead className="text-md text-white uppercase bg-primary-900 opacity-80">
                         <tr>
+                        <th
+                                scope="col"
+                                className="px-6 py-3"
+                            >
+                                Profile Picture{' '}
+                            </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 cursor-pointer"
@@ -385,7 +397,7 @@ const UsersTab = () => {
                             </th>
                             <th
                                 scope="col"
-                                className="px-6 py-3 cursor-pointer"
+                                className="px-1 py-3 cursor-pointer"
                                 onClick={() => handleSortBy('enabled')}
                             >
                                 Account Status{' '}
@@ -398,7 +410,7 @@ const UsersTab = () => {
                                 ) : <div></div>}
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Actions
+                                Account Administration
                             </th>
                         </tr>
                     </thead>
@@ -408,6 +420,15 @@ const UsersTab = () => {
                                 className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
                                 key={user.uid}
                             >
+                                 <td className="px-6 py-4 font-medium">
+                                    <div className="flex-shrink-0 flex items-center">
+                                        <img
+                                            className="h-16 w-16"
+                                            src={user.photoBase64}
+                                            alt="pi"
+                                        />
+                                    </div>
+                                </td>
                                 <td className="px-6 py-4">{user.firstName}</td>
                                 <td className="px-6 py-4">{user.lastName}</td>
                                 <td className="px-6 py-4">{user.email}</td>
@@ -419,22 +440,23 @@ const UsersTab = () => {
                                     {user.role.toUpperCase()}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {!user.disabled ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6">
+                                    {!currentUser.disabled ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                    </svg><span>&nbsp;&nbsp;Enabled</span></div>
 
-                                        : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6">
+                                        : <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6 inline -mt-0.5">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                        </svg>
+                                        </svg><span>&nbsp;&nbsp;Disabled</span></div>
                                     }
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex flex-wrap gap-2">
                                         {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                        <button className="px-4 py-2 bg-blue-800 text-white rounded hover:bg-blue-900">Edit</button>
-                                        <button className="px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900">Delete</button>
-                                        <button className="px-4 py-2 bg-yellow-800 text-white rounded hover:bg-yellow-900">Reset Password</button>
-                                        <button className="px-4 py-2 bg-green-800 text-white rounded hover:bg-green-900">Change Role</button>
+                                        <button className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
+                                        <button className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <button className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
                                     </div>
                                 </td>
                             </tr>
