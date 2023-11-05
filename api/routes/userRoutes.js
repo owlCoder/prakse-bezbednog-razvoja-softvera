@@ -144,7 +144,7 @@ router.post('/get', verifyToken, async (req, res) => {
   // END OF RBAC
 
   // Call controller method for users data fetch
-  let data = await users.getUsers();
+  let data = await users.getUsers(uid);
   return res.status(200).json(data);
 });
 

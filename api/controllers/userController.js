@@ -53,7 +53,7 @@ const getUserByUid = async (uid) => {
   }
 };
 
-const getUsers = async () => {
+const getUsers = async (uid) => {
   try {
     const userRef = admin.firestore().collection('users');
     const usersSnapshot = await userRef.get();
@@ -61,6 +61,12 @@ const getUsers = async () => {
 
     usersSnapshot.forEach((doc) => {
       usersData.push(doc.data());
+    });
+
+    await admin.firestore().collection("audits").add({
+      messageType: "INFO",
+      message: "Administrator (uid: " + uid + ") has been accessed to users collection",
+      date: admin.firestore.FieldValue.serverTimestamp(),
     });
 
     return { code: 200, payload: usersData };
@@ -133,6 +139,11 @@ const deleteUser = async (uid) => {
     } else {
       await userRef.delete(); // delete user in firestore
       await admin.auth().deleteUser(uid); // delete user in auth collection
+      await admin.firestore().collection("audits").add({
+        messageType: "INFO",
+        message: "User account (uid: " + uid + ") has been deleted",
+        date: admin.firestore.FieldValue.serverTimestamp(),
+      });
       return { code: 200, payload: userData };
     }
   } catch (error) {

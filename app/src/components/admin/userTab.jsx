@@ -32,6 +32,9 @@ const UsersTab = () => {
     const [uidToDelete, setUid] = useState(null);
     const [refresh, setRefresh] = useState(false); // refresh users table after CRUD operations
 
+    // available roles
+    const [roles, setRoles] = useState(null);
+
     useEffect(() => {
         setLoading(true);
 
@@ -57,6 +60,30 @@ const UsersTab = () => {
                 );
 
                 setData(response.data.payload);
+
+                // fetch roles from firestore
+                try {
+                    const token = await currentUser.getIdToken();
+                    const response = await axios.post(
+                        global.APIEndpoint + '/api/role/get', // Adjust the API endpoint for fetching user data
+                        {
+                            uid: currentUser.uid,
+                        },
+                        {
+                            headers: {
+                                Authorization: `${token}`,
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
+
+                    setRoles(response.data.payload);
+
+                    if (response.status !== 200) navigate('/' + response.status.toString());
+                } catch (error) {
+                    navigate('/403');
+                }
+
                 setLoading(false);
 
                 if (response.status !== 200) navigate('/' + response.status.toString());
@@ -450,7 +477,7 @@ const UsersTab = () => {
                 )}
                 {showEditAccountModal && (
                     <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="flex mt-12 md:mt-0 items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div className="fixed inset-0bg-opacity-75 transition-opacity" aria-hidden="true" />
                             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
                                 &#8203;
@@ -462,28 +489,84 @@ const UsersTab = () => {
                                     </h3>
                                     <div className="mt-6">
                                         <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                First Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="firstName"
-                                                value={editData.firstName || ''}
-                                                onChange={handleEditAccountInputChange}
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
+                                            <div className="flex space-x-4">
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        First Name
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="firstName"
+                                                        value={editData.firstName || ''}
+                                                        onChange={handleEditAccountInputChange}
+                                                        required
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    />
+                                                </div>
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Last Name
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="lastName"
+                                                        required
+                                                        value={editData.lastName || ''}
+                                                        onChange={handleEditAccountInputChange}
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="mb-4">
+                                            <div className="flex space-x-4">
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Account Role
+                                                    </label>
+                                                    <select
+                                                        id="status"
+                                                        name="status"
+                                                        required
+                                                        onChange={handleEditAccount}
+                                                        value={editData.disabled === true ? "disabled" : "enabled" || "enabled"}
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    >
+                                                        {roles.map((role) => (
+                                                            <option key={role} value={role}>{role}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Account Status
+                                                    </label>
+                                                    <select
+                                                        id="role"
+                                                        name="role"
+                                                        required
+                                                        onChange={handleEditAccount}
+                                                        value={editData.role}
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    >
+                                                        <option value="enabled">Enabled</option>
+                                                        <option value="disabled">Disabled</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="mb-4">
                                             <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Last Name
+                                                Email
                                             </label>
                                             <input
-                                                type="text"
-                                                name="lastName"
+                                                type="email"
+                                                name="email"
                                                 required
-                                                value={editData.lastName || ''}
-                                                onChange={handleEditAccountInputChange}
+                                                value={editData.email || ''}
+                                                onChange={handleNewAccountInputChange}
                                                 className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
                                         </div>
@@ -499,35 +582,6 @@ const UsersTab = () => {
                                                 onChange={handleEditAccountInputChange}
                                                 className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
-                                        </div>
-                                        <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                value={editData.email || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
-                                            <div className="mb-4 mt-4">
-                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                    Account Status
-                                                </label>
-                                                <select
-                                                    id="status"
-                                                    name="status"
-                                                    required
-                                                    onChange={handleEditAccount}
-                                                    value={editData.disabled === true ? "disabled" : "enabled" || "enabled"}
-                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                                >
-                                                    <option value="enabled">Enabled</option>
-                                                    <option value="disabled">Disabled</option>
-                                                </select>
-                                            </div>
                                         </div>
                                         <div className='ml-1 text-center'>
                                             {error === "AC" ? <span className='text-green-600'>Modifications have been saved</span> : <span className='text-red-600'>{error}</span>}
@@ -710,7 +764,7 @@ const UsersTab = () => {
                                             <button onClick={() => handlePasswordReset(user.email)} className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
                                         </div>
                                     </td>
-                                </tr>) : (<div></div>)
+                                </tr>) : (<></>)
                         ))}
                     </tbody>
                 </table>
