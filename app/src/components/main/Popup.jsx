@@ -14,7 +14,7 @@ export const Popup = ({ data, closePopup }) => {
 
   return (
     
-    <div className="z-60 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
+    <div className="z-50 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
         {/* Card Container */}
         <div className="relative flex flex-col p-6 m-3 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 mb-16">
             
