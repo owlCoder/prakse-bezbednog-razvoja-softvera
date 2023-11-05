@@ -18,6 +18,10 @@ import Error500Page from "./components/errorPages/error500";
 import Dashboard from "./components/admin/dashboard";
 import Orders from "./components/shop/Orders";
 
+// Legal
+import PrivacyPolicy from "./components/legal/Privacy";
+import TermsOfService from "./components/legal/ToS";
+
 function App() {
   return (
     <AuthProvider>
@@ -38,6 +42,8 @@ function App() {
           <Route exact path="/403" element={<Error403Page />} />
           <Route exact path="/404" element={<Error404Page />} />
           <Route exact path="/500" element={<Error500Page />} />
+          <Route exact path="/legal/privacy-policy" element={<PrivacyPolicy />} />
+          <Route exact path="/legal/terms-conditions" element={<TermsOfService />} />
         </Routes>
       </Router>
     </AuthProvider>

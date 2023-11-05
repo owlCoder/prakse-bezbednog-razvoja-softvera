@@ -87,7 +87,7 @@ function Navbar() {
                 <div className="ml-10 flex items-baseline space-x-4">
                   {links.map((link, index) => (
                     <a
-                      href={link.toLowerCase().replaceAll(" ", "-")}
+                      href={"/" + link.toLowerCase().replaceAll(" ", "-")}
                       key={index}
                       className="hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-800"
                     >
