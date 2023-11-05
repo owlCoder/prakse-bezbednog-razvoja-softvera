@@ -23,7 +23,7 @@ export default function Home() {
 
       <HeroSection />
 
-      <section className="mt-40 mb-20">
+      <section className="mt-20 md:mt-40 mb-20">
 
         {/* !-- Section Container */}
         <div className="flex justify-center items-center flex-col md:flex-row md:space-x-12 md:space-y-0 space-y-12 mx-10">
@@ -55,7 +55,7 @@ export default function Home() {
       */}
 
       {/* Footer */}
-      <section className="mt-20 mb-10">
+      <section className="mt-20 mb-1">
         <Footer />
       </section>
     </main>
