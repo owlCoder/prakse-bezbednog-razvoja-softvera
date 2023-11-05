@@ -4,12 +4,12 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
-import { AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineUserAdd, AiOutlineClose, AiFillCheckCircle } from 'react-icons/ai';
 import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
 
 const UsersTab = () => {
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
+    const { currentUser, resetPasswordEmailUser } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState('firstName');
@@ -18,6 +18,19 @@ const UsersTab = () => {
     const [showCreateAccountModal, setShowCreateAccountModal] = useState(false); // State for showing the create account modal
     const [newAccountData, setNewAccountData] = useState({});
     const [error, setError] = useState("");
+
+    // info modal
+    const [showModal, setShowModal] = useState(false);
+    const [modalText, setModalText] = useState("");
+    const [modalDesc, setModalDesc] = useState("");
+
+    // edit modal
+    const [showEditAccountModal, setShowEditAccountModal] = useState(false);
+    const [editData, setEditData] = useState({});
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [uidToDelete, setUid] = useState(null);
+    const [refresh, setRefresh] = useState(false); // refresh users table after CRUD operations
 
     useEffect(() => {
         setLoading(true);
@@ -53,7 +66,7 @@ const UsersTab = () => {
         };
 
         fetchData();
-    }, [currentUser, navigate]);
+    }, [currentUser, navigate, refresh]);
 
     const handleSortBy = (key) => {
         if (key === 'enabled') {
@@ -119,6 +132,12 @@ const UsersTab = () => {
         setError("");
     };
 
+    // Function to toggle the "Edit Account" modal
+    const toggleEditAccountModal = () => {
+        setShowEditAccountModal(!showEditAccountModal);
+        setError("");
+    };
+
     // Function to handle input changes for creating a new account
     const handleNewAccountInputChange = (e) => {
         const { name, value } = e.target;
@@ -126,6 +145,76 @@ const UsersTab = () => {
             ...newAccountData,
             [name]: value,
         });
+    };
+
+    // Function to handle input changes for creating a new account
+    const handleEditAccountInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditData({
+            ...editData,
+            [name]: value,
+        });
+    };
+
+    // Modal handle functions
+    const handleGotItClick = () => {
+        setShowModal(false);
+    };
+
+    // Function to handle the "Delete Account" button click
+    const handleDeleteAccountClick = async () => {
+        if (uidToDelete == null) return;
+
+        // Handle the account deletion logic here
+        try {
+            const token = await currentUser.getIdToken();
+            const response = await axios.post(
+                global.APIEndpoint + "/api/user/delete/guid",
+                {
+                    uid: uidToDelete,
+                },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (response.status !== 200)
+                navigate('/' + response.status.toString());
+
+            // Close the modal after successful deletion
+            setIsModalVisible(false);
+
+            // show info modal that account is deleted
+            setModalText("Account has been deleted");
+            setModalDesc("Account and all data has been removed. User will be logged out soon.");
+            setShowModal(true);
+            setRefresh(!refresh);
+        } catch (error) {
+            setModalText("Account has not been deleted");
+            setModalDesc("Account can't be deleted right now. Try again later.");
+            setShowModal(true);
+        }
+    };
+
+    const handleDeleteAccount = (uid) => {
+        setUid(uid);
+        setIsModalVisible(true);
+    };
+
+    const handleEditAccount = (user) => {
+        setEditData(user);
+        setShowEditAccountModal(true);
+    };
+
+    // reset password action
+    const handlePasswordReset = (email) => {
+        resetPasswordEmailUser(email);
+        setModalText("Email has been sent");
+        setModalDesc("Notify user to check email for further instructions.");
+        setShowModal(true);
     };
 
     // Function to handle the creation of a new account (you can implement this logic)
@@ -171,6 +260,10 @@ const UsersTab = () => {
                 setError(response.data.payload);
             else {
                 setError("AC");
+                setTimeout(() => {
+                    setShowCreateAccountModal(false);
+                    setRefresh(!refresh);
+                }, 3000); // Delay in milliseconds (e.g., 2000ms = 2 seconds)
             }
         }
         catch (error) {
@@ -179,9 +272,15 @@ const UsersTab = () => {
     };
 
 
+    // Function to handle edit data of account
+    const saveDataEdit = async () => {
+
+    };
+
     return loading === true ? (
         <LoadingSpinner />
     ) : data !== null ? (
+
         <div className="p-4 bg-white dark:bg-slate-800 bg-opacity-60 rounded-lg shadow-lg mx-6 my-4">
             <p className="text-gray-700 dark:text-gray-200 mb-6 ml-1 my-2 text-center font-medium" style={{ fontSize: 17.5 }}>
                 As an admin, you have access to powerful tools and features to manage user profiles.
@@ -189,6 +288,49 @@ const UsersTab = () => {
                 you need. You can also take various actions on user profiles, such as editing details,
                 deleting accounts, resetting passwords, and changing user roles. <br />
             </p>
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                    <div className="bg-white w-96 rounded-lg p-6 shadow-lg dark:bg-gray-900 transition-opacity duration-300">
+                        <h2 className="text-xl font-semibold mb-4 dark:text-white">
+                            {modalText}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400">{modalDesc}</p>
+                        <button
+                            onClick={handleGotItClick}
+                            className="bg-blue-500 text-white font-semibold px-4 py-2 rounded mt-4 hover:bg-blue-600"
+                        >
+                            Got it
+                        </button>
+                    </div>
+                </div>
+            )}
+            {isModalVisible && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
+                    <div className="bg-white dark:bg-gray-900 w-96 rounded-lg p-6 shadow-lg transition-opacity duration-300">
+                        <h2 className="text-xl font-semibold text-red-600 dark:text-red-700 mb-4">
+                            Delete Account
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Are you sure you want to delete user account? This action cannot
+                            be undone.
+                        </p>
+                        <div className="flex justify-end mt-5">
+                            <button
+                                onClick={handleDeleteAccountClick}
+                                className="bg-red-500 dark:bg-rose-700 text-white font-semibold px-4 py-2 rounded mr-4 hover:bg-rose-800"
+                            >
+                                I agree to delete account
+                            </button>
+                            <button
+                                onClick={() => { setIsModalVisible(false); setUid(null); }}
+                                className="bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded hover-bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-2">
                 {/* Search Bar */}
                 <input
@@ -306,6 +448,114 @@ const UsersTab = () => {
                         </div>
                     </div>
                 )}
+                {showEditAccountModal && (
+                    <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div className="fixed inset-0bg-opacity-75 transition-opacity" aria-hidden="true" />
+                            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+                                &#8203;
+                            </span>
+                            <div className="inline-block align-bottom dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div className="bg-slate-50 dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
+                                        Edit account
+                                    </h3>
+                                    <div className="mt-6">
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                First Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="firstName"
+                                                value={editData.firstName || ''}
+                                                onChange={handleEditAccountInputChange}
+                                                required
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                            />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                Last Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                required
+                                                value={editData.lastName || ''}
+                                                onChange={handleEditAccountInputChange}
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                            />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                Birthday
+                                            </label>
+                                            <input
+                                                type="date"
+                                                name="date"
+                                                required
+                                                value={editData.date || ''}
+                                                onChange={handleEditAccountInputChange}
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                            />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                Email
+                                            </label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                required
+                                                value={editData.email || ''}
+                                                onChange={handleNewAccountInputChange}
+                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                            />
+                                            <div className="mb-4 mt-4">
+                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                    Account Status
+                                                </label>
+                                                <select
+                                                    id="status"
+                                                    name="status"
+                                                    required
+                                                    onChange={handleEditAccount}
+                                                    value={editData.disabled === true ? "disabled" : "enabled" || "enabled"}
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                >
+                                                    <option value="enabled">Enabled</option>
+                                                    <option value="disabled">Disabled</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='ml-1 text-center'>
+                                            {error === "AC" ? <span className='text-green-600'>Modifications have been saved</span> : <span className='text-red-600'>{error}</span>}
+                                        </div>
+                                        {/* Add similar input fields for other account details, e.g., lastName, email, password */}
+                                        <div className="mt-6">
+                                            <button
+                                                onClick={saveDataEdit}
+                                                className="px-4 py-2 bg-sky-800 text-white font-medium hover:bg-sky-700 rounded-lg"
+                                            >
+                                                <AiFillCheckCircle className="plus-icon inline -mt-1" />
+                                                Save Data
+                                            </button>
+
+                                            <button
+                                                onClick={toggleEditAccountModal}
+                                                className="px-4 py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900 ml-4"
+                                            >
+                                                <AiOutlineClose className="plus-icon inline -mt-0.5" />
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div className="mb-6 mt-2">
                     <button
                         onClick={toggleCreateAccountModal}
@@ -319,7 +569,7 @@ const UsersTab = () => {
                 <table className="w-full text-md text-left text-black dark:text-white">
                     <thead className="text-md text-white uppercase bg-primary-900 opacity-80">
                         <tr>
-                        <th
+                            <th
                                 scope="col"
                                 className="px-6 py-3"
                             >
@@ -416,50 +666,51 @@ const UsersTab = () => {
                     </thead>
                     <tbody>
                         {sortedData.map((user) => (
-                            <tr
-                                className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
-                                key={user.uid}
-                            >
-                                 <td className="px-6 py-4 font-medium">
-                                    <div className="flex-shrink-0 flex items-center">
-                                        <img
-                                            className="h-16 w-16"
-                                            src={user.photoBase64}
-                                            alt="pi"
-                                        />
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4">{user.firstName}</td>
-                                <td className="px-6 py-4">{user.lastName}</td>
-                                <td className="px-6 py-4">{user.email}</td>
-                                <td className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    {/* Date */}
-                                    {new Date(user.date).toLocaleDateString('en-GB').replace(/\//g, '.')}
-                                </td>
-                                <td className="px-6 py-4 font-medium">
-                                    {user.role.toUpperCase()}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {!currentUser.disabled ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg><span>&nbsp;&nbsp;Enabled</span></div>
+                            user.uid !== currentUser.uid ? (
+                                <tr
+                                    className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
+                                    key={user.uid}
+                                >
+                                    <td className="px-6 py-4 font-medium">
+                                        <div className="flex-shrink-0 flex items-center">
+                                            <img
+                                                className="h-16 w-16"
+                                                src={user.photoBase64}
+                                                alt="pi"
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">{user.firstName}</td>
+                                    <td className="px-6 py-4">{user.lastName}</td>
+                                    <td className="px-6 py-4">{user.email}</td>
+                                    <td className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                        {/* Date */}
+                                        {new Date(user.date).toLocaleDateString('en-GB').replace(/\//g, '.')}
+                                    </td>
+                                    <td className="px-6 py-4 font-medium">
+                                        {user.role.toUpperCase()}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {!user.disabled ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg><span>&nbsp;&nbsp;Enabled</span></div>
 
-                                        : <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6 inline -mt-0.5">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                        </svg><span>&nbsp;&nbsp;Disabled</span></div>
-                                    }
-                                </td>
-                                <td className="px-6 py-4">
-                                    <div className="flex flex-wrap gap-2">
-                                        {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                        <button className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
-                                        <button className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        <button className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
-                                    </div>
-                                </td>
-                            </tr>
+                                            : <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6 inline -mt-0.5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg><span>&nbsp;&nbsp;Disabled</span></div>
+                                        }
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex flex-wrap gap-2">
+                                            {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
+                                            <button onClick={() => handleEditAccount(user)} className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
+                                            <button onClick={() => handleDeleteAccount(user.uid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2 mt-4">
+                                            <button onClick={() => handlePasswordReset(user.email)} className="px-5 py-1.5 bg-sky-700 text-white rounded-lg hover:bg-sky-800"><FaKey className="plus-icon inline" /> Reset the password</button>
+                                        </div>
+                                    </td>
+                                </tr>) : (<div></div>)
                         ))}
                     </tbody>
                 </table>
