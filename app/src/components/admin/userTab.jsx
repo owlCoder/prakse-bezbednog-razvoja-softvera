@@ -127,25 +127,29 @@ const UsersTab = () => {
 
         if (sortBy === 'enabled') {
             sortedData = sortedData.sort((a, b) => {
-                if (ascDesc) {
-                    return a.disabled - b.disabled;
-                } else {
-                    return b.disabled - a.disabled;
-                }
+              // Convert 'true' to 1 and 'false' to 0
+              const valueA = a.disabled ? 1 : 0;
+              const valueB = b.disabled ? 1 : 0;
+          
+              if (ascDesc) {
+                return valueA - valueB;
+              } else {
+                return valueB - valueA;
+              }
             });
-        } else {
+          } else {
             sortedData = sortedData.sort((a, b) => {
-                if (sortBy === 'date') {
-                    const dateA = new Date(a.date);
-                    const dateB = new Date(b.date);
-                    return ascDesc ? dateA - dateB : dateB - dateA;
-                } else {
-                    return ascDesc
-                        ? a[sortBy].localeCompare(b[sortBy]) // Ascending
-                        : b[sortBy].localeCompare(a[sortBy]); // Descending
-                }
+              if (sortBy === 'date') {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return ascDesc ? dateA - dateB : dateB - dateA;
+              } else {
+                return ascDesc
+                  ? a[sortBy].localeCompare(b[sortBy]) // Ascending
+                  : b[sortBy].localeCompare(a[sortBy]); // Descending
+              }
             });
-        }
+          }          
     }
 
     // Function to toggle the "Create Account" modal
@@ -181,6 +185,13 @@ const UsersTab = () => {
             ...editData,
             [name]: value,
         });
+
+        if(name === "disabled") {
+            setEditData({
+                ...editData,
+                [name]: (value === "enabled" ? false : true),
+            });
+        }
     };
 
     // Modal handle functions
@@ -234,6 +245,7 @@ const UsersTab = () => {
     const handleEditAccount = (user) => {
         setEditData(user);
         setShowEditAccountModal(true);
+        console.log(user)
     };
 
     // reset password action
@@ -301,7 +313,7 @@ const UsersTab = () => {
 
     // Function to handle edit data of account
     const saveDataEdit = async () => {
-
+        console.log(editData);
     };
 
     return loading === true ? (
@@ -531,15 +543,15 @@ const UsersTab = () => {
                                                         Account Role
                                                     </label>
                                                     <select
-                                                        id="status"
-                                                        name="status"
+                                                        id="role"
+                                                        name="role"
                                                         required
-                                                        onChange={handleEditAccount}
-                                                        value={editData.disabled === true ? "disabled" : "enabled" || "enabled"}
+                                                        onChange={handleEditAccountInputChange}
+                                                        value={editData.role || 'user'}
                                                         className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                     >
                                                         {roles.map((role) => (
-                                                            <option key={role} value={role}>{role}</option>
+                                                            <option value={role}>{role}</option>
                                                         ))}
                                                     </select>
                                                 </div>
@@ -548,11 +560,11 @@ const UsersTab = () => {
                                                         Account Status
                                                     </label>
                                                     <select
-                                                        id="role"
-                                                        name="role"
+                                                        id="disabled"
+                                                        name="disabled"
                                                         required
-                                                        onChange={handleEditAccount}
-                                                        value={editData.role}
+                                                        onChange={handleEditAccountInputChange}
+                                                        value={editData.disabled || 'enabled'}
                                                         className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                     >
                                                         <option value="enabled">Enabled</option>
