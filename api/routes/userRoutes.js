@@ -226,6 +226,38 @@ router.post('/update', verifyToken, async (req, res) => {
   }
 });
 
+// Update user profile by an admin
+router.post('/update/admin', verifyToken, async (req, res) => {
+  const { uid, data } = req.body;
+
+  // Check if the request contains the 'uid' field in the body
+  if (!uid) {
+    return res.status(400).json({ code: 400, payload: "Missing 'uid' field in the request body." });
+  }
+
+  // RBAC
+  let role = await getUserRole(uid);
+
+  if (role == null) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+
+  let reqs = await checkRole(role, "users", "update");
+  if (reqs === false) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+  // END OF RBAC
+
+  // Call controller method for user data fetch
+  try {
+    let response = await users.updateUserAdmin(data);
+    return res.status(200).json(response);
+  }
+  catch (error) {
+    return res.status(401).json({ code: data.code, payload: error });
+  }
+});
+
 // Delete user account
 router.post('/delete', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access

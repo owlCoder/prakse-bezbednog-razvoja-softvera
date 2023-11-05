@@ -307,7 +307,7 @@ export default function Profile() {
                                     Profile picture
                                 </h3>
                                 <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                                    JPG or PNG. Max file size of 800K
+                                    JPG or PNG. Max file size of 800Kb
                                 </div>
                                 <div className="flex items-center space-x-4">
                                     <div className="mr-2">
