@@ -5,9 +5,9 @@ export const Popup = ({ data, closePopup }) => {
     const [counter, setCounter] = useState(0);
 
     const handleClick = (button) => {
-        if(button.target.id == 'minus' && counter > 0)
+        if(button.target.id === 'minus' && counter > 0)
             setCounter(counter - 1);        
-        else if(button.target.id == 'plus')
+        else if(button.target.id === 'plus')
             setCounter(counter + 1);
         
     };

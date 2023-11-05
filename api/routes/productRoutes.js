@@ -14,5 +14,26 @@ function Check(uid, auth_uid) {
   return 200; // uids are fine
 }
 
+// User route to get all users
+router.post('/get', verifyToken, async (req, res) => {
+  const { uid } = req.body;
+
+  // RBAC
+  let role = await getUserRole(uid);
+
+  if (role == null || role != "admin") {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+
+  let reqs = await checkRole(role, "users", "read");
+  if (reqs === false) {
+    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+  }
+  // END OF RBAC
+
+  // Call controller method for users data fetch
+  let data = await users.getUsers(uid);
+  return res.status(200).json(data);
+});
 
 module.exports = router;
