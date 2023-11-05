@@ -140,6 +140,11 @@ const updateUserAdmin = async (data) => {
       docRef
         .update({ firstName: data.firstName, lastName: data.lastName, date: data.date, role: data.role, disabled: data.disabled, photoBase64: data.photoBase64 })
         .then(() => {
+
+          // Change the user's account
+          admin.auth().updateUser(data.uid, {
+            disabled: data.disabled,
+          });
           return { code: 200, payload: "OK" };
         })
         .catch((error) => {
