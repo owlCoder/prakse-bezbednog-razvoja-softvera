@@ -382,28 +382,43 @@ const UsersTab = () => {
                                         Create a new account
                                     </h3>
                                     <div className="mt-6">
-                                        <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                First Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="firstName"
-                                                value={newAccountData.firstName || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
+                                        <div className="mb-4 flex space-x-4">
+                                            <div className="w-1/2">
+                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                    First Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="firstName"
+                                                    value={newAccountData.firstName || ''}
+                                                    onChange={handleNewAccountInputChange}
+                                                    required
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                />
+                                            </div>
+                                            <div className="w-1/2">
+                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                    Last Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="lastName"
+                                                    required
+                                                    value={newAccountData.lastName || ''}
+                                                    onChange={handleNewAccountInputChange}
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="mb-4">
+                                        <div className='mb-4'>
                                             <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Last Name
+                                                Email
                                             </label>
                                             <input
-                                                type="text"
-                                                name="lastName"
+                                                type="email"
+                                                name="email"
                                                 required
-                                                value={newAccountData.lastName || ''}
+                                                value={newAccountData.email || ''}
                                                 onChange={handleNewAccountInputChange}
                                                 className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
@@ -422,17 +437,6 @@ const UsersTab = () => {
                                             />
                                         </div>
                                         <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                value={newAccountData.email || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
                                             <div className="mb-4 mt-4">
                                                 <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                     Password
