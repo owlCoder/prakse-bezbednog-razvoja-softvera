@@ -33,7 +33,7 @@ function Store() {
 
     return loading === true ? (
         <LoadingSpinner />
-    ) : currentUser ? (
+    ) : (
         <div className="bg-gray-100 dark:bg-slate-800 dark:text-white min-h-screen pb-5">
             {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <div></div>}
             <Navbar />
@@ -66,9 +66,7 @@ function Store() {
 
             </div>
         </div>
-    ) : (
-        <div></div>
-    );
+    )
 }
 
 export default Store;
