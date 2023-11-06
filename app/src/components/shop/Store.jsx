@@ -23,11 +23,7 @@ function Store() {
 
         useEffect(() => {
             setLoading(true);
-            const fetchData = async () => {
-                if (!currentUser) {
-                    navigate("/login");
-                    return;
-                }
+            const fetchData = async () => {                
 
                 setLoading(false);
             };
