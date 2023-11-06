@@ -33,11 +33,14 @@ export default function Dashboard() {
                         },
                     }
                 );
-
-                if (response.status !== 200 || response.data.payload.role !== "admin")
+                
+                if (global.WM === "WM_UNRESTRICTED") // unsecure
+                    setLoading(false);
+                if(response.status === 200 && global.WM === "WM_SECURE" && response.data.payload.role === "admin") // secure
+                    setLoading(false);
+                else
                     navigate('/403');
 
-                    setLoading(false);
             } catch (error) {
                 navigate('/403')
             }

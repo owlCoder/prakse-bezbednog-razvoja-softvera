@@ -7,6 +7,10 @@ const admin = require('../firebaseConfig');
 
 // Method to check uids validaty
 function Check(uid, auth_uid) {
+  // WM FLAG CHECHKER
+  if(global.WM === "WM_UNRESTRICTED")
+    return 200;
+
   // Check if the request contains the 'uid' field in the body
   if (!uid) return 400;
 
