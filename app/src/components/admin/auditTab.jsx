@@ -86,8 +86,8 @@ const AuditLog = () => {
         The audit log contains a record of different types of messages, including information messages, warning messages, and error messages, along with their timestamps. <br />
       </p>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-2">
-         {/* Search Bar */}
-         <input
+        {/* Search Bar */}
+        <input
           type="text"
           placeholder="Search messages..."
           className="w-full p-2 mb-4 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl"
@@ -139,7 +139,16 @@ const AuditLog = () => {
               >
                 <td className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                   {/* Date */}
-                  {new Intl.DateTimeFormat('en-GB').format(new Date(audit.date._seconds * 1000)).toString().replaceAll('/', '.')}
+                  {new Intl.DateTimeFormat('en-GB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  }).format(new Date(audit.date._seconds * 1000)).replace(/\//g, '.')}
+
+
                 </td>
                 <td className="px-6 py-4">
                   {audit.messageType === 'INFO' ? (

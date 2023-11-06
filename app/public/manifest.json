@@ -1,7 +1,7 @@
 {
   "short_name": "eBoardy 1.44",
-  "version": "1.44",
   "name": "eBoardy PWA",
+  "lang": "en",
   "icons": [
     {
       "src": "favicon.ico",

@@ -129,6 +129,38 @@ const updateUser = async (uid, firstName, lastName, date) => {
   }
 };
 
+const updateUserAdmin = async (data) => {
+  try {
+    const docRef = admin.firestore().collection('users').doc(data.uid);
+    const userDoc = await docRef.get();
+
+    if (!userDoc.exists) {
+      return { code: 404, payload: 'User not found' };
+    } else {
+      docRef
+        .update({ firstName: data.firstName, lastName: data.lastName, date: data.date, role: data.role, disabled: data.disabled, photoBase64: data.photoBase64 })
+        .then(() => {
+
+          // Change the user's account
+          admin.auth().updateUser(data.uid, {
+            disabled: data.disabled,
+          });
+          return { code: 200, payload: "OK" };
+        })
+        .catch((error) => {
+          return { code: 400, payload: "Profile data can't be updated. Try again later!" };
+        });
+    }
+  } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: error.message,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
+    return { code: 500, payload: "Internal Server Error" };
+  }
+};
+
 const deleteUser = async (uid) => {
   try {
     const userRef = admin.firestore().collection('users').doc(uid);
@@ -156,4 +188,4 @@ const deleteUser = async (uid) => {
   }
 };
 
-module.exports = { createUser, getUserByUid, getUsers, updateProfilePicture, updateUser, deleteUser };
+module.exports = { createUser, getUserByUid, getUsers, updateProfilePicture, updateUser, updateUserAdmin, deleteUser };

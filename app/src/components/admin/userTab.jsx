@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
@@ -6,6 +6,9 @@ import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import { AiOutlineUserAdd, AiOutlineClose, AiFillCheckCircle } from 'react-icons/ai';
 import { FaUserEdit, FaUserMinus, FaKey } from 'react-icons/fa';
+import { CiImageOff } from 'react-icons/ci';
+import { BsFillFileEarmarkImageFill } from 'react-icons/bs';
+import imageCompression from 'browser-image-compression';
 
 const UsersTab = () => {
     const navigate = useNavigate();
@@ -31,6 +34,10 @@ const UsersTab = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [uidToDelete, setUid] = useState(null);
     const [refresh, setRefresh] = useState(false); // refresh users table after CRUD operations
+
+    // profile picture
+    const imageRef = useRef(null);
+    const [oldImage, setOldImage] = useState(null);
 
     // available roles
     const [roles, setRoles] = useState(null);
@@ -95,6 +102,43 @@ const UsersTab = () => {
         fetchData();
     }, [currentUser, navigate, refresh]);
 
+    // Function to check if user selected new picture from own library
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const options = {
+                    maxSizeMB: 1, // Maximum size after compression (1MB in this example)
+                    maxWidthOrHeight: 800, // Maximum width or height after compression
+                };
+
+                const compressedFile = await imageCompression(file, options);
+
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    const base64String = event.target.result; // This is the base64 string of the compressed image.
+                    editData.photoBase64 = base64String;
+
+                    if (imageRef.current) {
+                        imageRef.current.src = base64String;
+                    }
+                };
+
+                reader.readAsDataURL(compressedFile);
+            } catch (error) {
+                console.error('Error compressing image:', error);
+            }
+        } else {
+            // no image has been selected
+            if (imageRef.current) {
+                imageRef.current.src = oldImage;
+                editData.photoBase64 = oldImage;
+            }
+        }
+    };
+
+    // sorting
     const handleSortBy = (key) => {
         if (key === 'enabled') {
             if (key === sortBy) {
@@ -127,10 +171,14 @@ const UsersTab = () => {
 
         if (sortBy === 'enabled') {
             sortedData = sortedData.sort((a, b) => {
+                // Convert 'true' to 1 and 'false' to 0
+                const valueA = a.disabled ? 1 : 0;
+                const valueB = b.disabled ? 1 : 0;
+
                 if (ascDesc) {
-                    return a.disabled - b.disabled;
+                    return valueA - valueB;
                 } else {
-                    return b.disabled - a.disabled;
+                    return valueB - valueA;
                 }
             });
         } else {
@@ -232,8 +280,10 @@ const UsersTab = () => {
     };
 
     const handleEditAccount = (user) => {
-        setEditData(user);
+        setEditData({ ...user });
+        setOldImage(user.photoBase64); // save old image before edit
         setShowEditAccountModal(true);
+        setError("");
     };
 
     // reset password action
@@ -301,7 +351,43 @@ const UsersTab = () => {
 
     // Function to handle edit data of account
     const saveDataEdit = async () => {
+        editData.disabled = editData.disabled === "true" ? true : false; // string to bool
 
+        // send new user info and call API
+        try {
+            const token = await currentUser.getIdToken();
+
+            // call api to register a new user
+            const response = await axios.post(
+                global.APIEndpoint + "/api/user/update/admin",
+                {
+                    uid: currentUser.uid,
+                    data: editData
+                },
+                {
+                    headers:
+                    {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            // check api's reponse
+            if (response.status !== 200)
+                setError(response.data.payload);
+            else {
+                setError("AC");
+                setTimeout(() => {
+                    setShowEditAccountModal(false);
+                    setError("");
+                    setRefresh(!refresh);
+                }, 3000); // Delay in milliseconds (e.g., 2000ms = 2 seconds)
+            }
+        }
+        catch (error) {
+            setError(error.response.data.payload)
+        }
     };
 
     return loading === true ? (
@@ -382,28 +468,43 @@ const UsersTab = () => {
                                         Create a new account
                                     </h3>
                                     <div className="mt-6">
-                                        <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                First Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="firstName"
-                                                value={newAccountData.firstName || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
+                                        <div className="mb-4 flex space-x-4">
+                                            <div className="w-1/2">
+                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                    First Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="firstName"
+                                                    value={newAccountData.firstName || ''}
+                                                    onChange={handleNewAccountInputChange}
+                                                    required
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                />
+                                            </div>
+                                            <div className="w-1/2">
+                                                <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                    Last Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="lastName"
+                                                    required
+                                                    value={newAccountData.lastName || ''}
+                                                    onChange={handleNewAccountInputChange}
+                                                    className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="mb-4">
+                                        <div className='mb-4'>
                                             <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Last Name
+                                                Email
                                             </label>
                                             <input
-                                                type="text"
-                                                name="lastName"
+                                                type="email"
+                                                name="email"
                                                 required
-                                                value={newAccountData.lastName || ''}
+                                                value={newAccountData.email || ''}
                                                 onChange={handleNewAccountInputChange}
                                                 className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                             />
@@ -422,17 +523,6 @@ const UsersTab = () => {
                                             />
                                         </div>
                                         <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                value={newAccountData.email || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
                                             <div className="mb-4 mt-4">
                                                 <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                     Password
@@ -485,9 +575,57 @@ const UsersTab = () => {
                             <div className="inline-block align-bottom dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                                 <div className="bg-slate-50 dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
-                                        Edit account
+                                        Edit account details
                                     </h3>
                                     <div className="mt-6">
+                                        <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-slate-700">
+                                            <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+                                                <img
+                                                    ref={imageRef}
+                                                    className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
+                                                    src={editData.photoBase64}
+                                                    alt=""
+                                                />
+                                                <div>
+                                                    <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
+                                                        Profile picture
+                                                    </h3>
+                                                    <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                                                        JPG or PNG. Max file size of 800Kb
+                                                    </div>
+                                                    <div className="flex items-center space-x-4">
+                                                        <div>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={handleImageChange}
+                                                                style={{ display: "none" }}
+                                                                id="imageInput"
+                                                            />
+                                                            <label
+                                                                htmlFor="imageInput"
+                                                                style={{ cursor: "pointer" }}
+                                                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-700 dark:hover:bg-primary-800 dark:focus:ring-primary-900"
+                                                            >
+                                                                <BsFillFileEarmarkImageFill className="plus-icon inline text-white" />
+                                                                Select an Image
+                                                            </label>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => {
+                                                                imageRef.current.src = oldImage;
+                                                                editData.photoBase64 = oldImage;
+                                                            }}
+                                                            type="button"
+                                                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-800 hover:bg-red-900 focus:ring-4 focus:ring-red-300 dark:bg-red-800 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                                                        >
+                                                            <CiImageOff className="plus-icon inline" />
+                                                            Reset
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="mb-4">
                                             <div className="flex space-x-4">
                                                 <div className="w-1/2">
@@ -527,15 +665,15 @@ const UsersTab = () => {
                                                         Account Role
                                                     </label>
                                                     <select
-                                                        id="status"
-                                                        name="status"
+                                                        id="role"
+                                                        name="role"
                                                         required
-                                                        onChange={handleEditAccount}
-                                                        value={editData.disabled === true ? "disabled" : "enabled" || "enabled"}
+                                                        onChange={handleEditAccountInputChange}
+                                                        value={editData.role || 'user'}
                                                         className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                     >
                                                         {roles.map((role) => (
-                                                            <option key={role} value={role}>{role}</option>
+                                                            <option value={role}>{role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}</option>
                                                         ))}
                                                     </select>
                                                 </div>
@@ -544,31 +682,19 @@ const UsersTab = () => {
                                                         Account Status
                                                     </label>
                                                     <select
-                                                        id="role"
-                                                        name="role"
+                                                        id="disabled"
+                                                        name="disabled"
                                                         required
-                                                        onChange={handleEditAccount}
-                                                        value={editData.role}
+                                                        onChange={handleEditAccountInputChange}
+                                                        value={editData.disabled.toString()}
                                                         className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                     >
-                                                        <option value="enabled">Enabled</option>
-                                                        <option value="disabled">Disabled</option>
+                                                        <option value="false">Enabled</option>
+                                                        <option value="true">Disabled</option>
                                                     </select>
+
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Email
-                                            </label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                required
-                                                value={editData.email || ''}
-                                                onChange={handleNewAccountInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
                                         </div>
                                         <div className="mb-4">
                                             <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
