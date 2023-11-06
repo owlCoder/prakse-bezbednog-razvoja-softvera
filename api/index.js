@@ -15,6 +15,10 @@ const orderRoutes = require('./routes/orderRoutes'); // Import the orders routes
 const productRoutes = require('./routes/productRoutes'); // Import the products routes
 const rolesRoutes = require('./routes/roleRoutes'); // Import the roles routes
 
+// Working mode - demonstration purposes only (keep flag WM_SECURE)
+// Available values WM_SECURE, WM_UNRESTRICTED
+global.WM = "WM_SECURE";
+
 /// ROUTES
 app.use('/api/user',  userRoutes);  // Define a base path for user routes, e.g., '/api/user'
 app.use('/api/audit', auditRoutes); // Define a base path for audit routes, e.g., '/api/audit'

@@ -7,6 +7,10 @@ const admin = require('../firebaseConfig');
 
 // Method to check uids validaty
 function Check(uid, auth_uid) {
+  // WM FLAG CHECHKER
+  if(global.WM === "WM_UNRESTRICTED")
+    return 200;
+
   // Check if the request contains the 'uid' field in the body
   if (!uid) return 400;
 
@@ -263,6 +267,17 @@ router.post('/delete', verifyToken, async (req, res) => {
   const auth_uid = req.user.uid; // property access
   const { uid } = req.body;
 
+  if(global.WM === "WM_UNRESTRICTED") {
+    // delete user
+    try {
+      let data = await users.deleteUser(uid);
+      return res.status(200).json(data);
+    }
+    catch (error) {
+      return res.status(401).json({ code: data.code, payload: error });
+    }
+  }
+
   // Check if the request contains the 'uid' field in the body
   if (!uid) {
     return res.status(400).json({ code: data.code, payload: "Missing 'uid' field in the request body." });
@@ -270,7 +285,7 @@ router.post('/delete', verifyToken, async (req, res) => {
 
   // Check if the authenticated user matches the requested user's UID
   if (uid !== auth_uid) {
-    return res.status(403).json({ code: data.code, payload: "Unauthorized." });
+    return res.status(403).json({ code: 403, payload: "Unauthorized." });
   }
 
   // RBAC

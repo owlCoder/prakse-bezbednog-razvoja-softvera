@@ -26,7 +26,7 @@ export default function Item ({data, openPopup}) {
 
             {/* Button */}
             <div>
-                <a href="#" onClick={handleButtonClick} className="flex justify-between p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
+                <div onClick={handleButtonClick} className="flex justify-between p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
                     <div className=""></div>
                     <p>View Product</p>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -37,7 +37,7 @@ export default function Item ({data, openPopup}) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                         </path>
                     </svg>
-                </a>                
+                </div>                
             </div>              
             
         </div>
