@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <main className="dark:bg-gray-900 bg-gray-100 dark:text-white min-h-screen pb-2">
-      {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <div></div>}
+      {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <></>}
       <Navbar />
 
       <HeroSection />
@@ -34,17 +34,17 @@ export default function Home() {
 
       </section>
 
-      {/* 
-      <section>
-        <div className="flex flex-col items-center space-y-3 text-center p-2 mt-16 bg-gray-700">
+      
+      <section className="mx-6 md:mx-32">
+        <div className="flex flex-col items-center space-y-3 text-center p-7 md:p-2 md:pt-8 mt-16 bg-slate-800 rounded-t-xl">
           <h1 className="font-bold text-3xl">Best seller grocery near you</h1>
           <p className="text-xl">We provide best quality &amp; fresh items near your location</p>
         </div>
 
-         // Items Container 
-        <div className="dark:bg-slate-700 flex flex-col p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
+         {/* // Items Container  */}
+        <div className="dark:bg-slate-800 flex flex-col p-8 md:-mt-4 rounded-b-xl bg-gray-50 md:flex-row md:space-y-0 md:space-x-10 md:p-16">
 
-          // Grid Container
+          {/* // Grid Container */}
           <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mx-auto">
 
             <Item data={{ name: "Name1", val: 5 }} openPopup={openPopup} />
@@ -52,7 +52,7 @@ export default function Home() {
           </div>
         </div>
       </section> 
-      */}
+      
 
       {/* Footer */}
       <section className="mt-20 mb-1">

@@ -12,7 +12,7 @@ export const Popup = ({ data, closePopup }) => {
     };
 
     return (
-        <div className="z-50 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 mt-12 md:mt-6">
+        <div className="z-50 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 md:mt-6">
             {/* Card Container */}
             <div className="relative flex flex-col p-6 m-3 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 mb-16">
 
@@ -64,8 +64,8 @@ export const Popup = ({ data, closePopup }) => {
                     <div className="flex items-center justify-start space-x-5">
 
                         {/* Number Input */}
-                        <div class="custom-number-input h-10 w-32">
-                            <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
+                        <div className="custom-number-input h-10 w-32">
+                            <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
                                 <button id="minus" onClick={handleClick} className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
                                     <span className="m-auto text-2xl font-thin">-</span>
                                 </button>
