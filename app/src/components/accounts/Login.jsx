@@ -12,11 +12,10 @@ export default function Login() {
   })
 
   const handleChange = (e) => {
-    setForm(prev => ({
-      ...prev,
+    setForm({
+      ...form,
       [e.target.name]: e.target.value,
-    }));
-
+    });
   };
 
   const [response, setResponse] = useState("");

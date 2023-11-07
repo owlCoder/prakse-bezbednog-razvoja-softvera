@@ -20,11 +20,10 @@ export default function Register() {
   })
 
   const handleChange = (e) => {
-    setForm(prev => ({
-      ...prev,
+    setForm({
+      ...form,
       [e.target.name]: e.target.value,
-    }));
-
+    });
   };
 
   const navigate = useNavigate();
