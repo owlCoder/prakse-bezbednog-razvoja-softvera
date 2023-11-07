@@ -1,6 +1,6 @@
 const admin = require('../firebaseConfig');
 
-const getProducts = async (uid) => {
+const getProducts = async () => {
     try {
       const productRef = admin.firestore().collection('products');
       const productSnapshot = await productRef.get();
@@ -9,12 +9,6 @@ const getProducts = async (uid) => {
       productSnapshot.forEach((doc) => {
         productData.push(doc.data());
       });      
-  
-      await admin.firestore().collection("audits").add({
-        messageType: "INFO",
-        message: "Administrator (uid: " + uid + ") has been accessed to users collection",
-        date: admin.firestore.FieldValue.serverTimestamp(),
-      });
   
       return { code: 200, payload: productData };
     } catch (error) {
@@ -27,4 +21,4 @@ const getProducts = async (uid) => {
     }
   };
 
-  module.exports = { getProducts };
+module.exports = { getProducts };

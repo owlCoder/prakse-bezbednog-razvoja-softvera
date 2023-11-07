@@ -12,10 +12,19 @@ export default function Profile() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [profilePicture, setProfilePicture] = useState("");
-    const [date, setDate] = useState("");
+    const [user, setUser] = useState({
+        firstName: "",
+        lastName:"",
+        date:"",
+        profilePicture: ""
+    })
+    
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const [selectedImage, setSelectedImage] = useState(null);
     const imageRef = useRef(null);
@@ -26,16 +35,6 @@ export default function Profile() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalText, setModalText] = useState("");
     const [modalDesc, setModalDesc] = useState("");
-
-    function handleChangeFirstName(e) {
-        setFirstName(e.target.value);
-    }
-    function handleChangeLastName(e) {
-        setLastName(e.target.value);
-    }
-    function handleChangeDate(e) {
-        setDate(e.target.value);
-    }
 
     // Modal handle functions
     const handleGotItClick = () => {
@@ -111,7 +110,7 @@ export default function Profile() {
             // no image has been selected
             setSelectedImage(null);
             if (imageRef.current) {
-                imageRef.current.src = profilePicture;
+                imageRef.current.src = user.profilePicture;
             }
         }
     };
@@ -171,9 +170,9 @@ export default function Profile() {
                 global.APIEndpoint + "/api/user/update",
                 {
                     uid: currentUser.uid,
-                    firstName: `${firstName}`,
-                    lastName: `${lastName}`,
-                    date: `${date}`,
+                    firstName: `${user.firstName}`,
+                    lastName: `${user.lastName}`,
+                    date: `${user.date}`,
                 },
                 {
                     headers: {
@@ -222,10 +221,14 @@ export default function Profile() {
                 );
 
                 setData(response.data);
-                setFirstName(response.data.payload.firstName);
-                setLastName(response.data.payload.lastName);
-                setDate(response.data.payload.date);
-                setProfilePicture(response.data.payload.photoBase64);
+
+                setUser({                    
+                    firstName: response.data.payload.firstName,
+                    lastName: response.data.payload.lastName,
+                    date: response.data.payload.date,
+                    profilePicture: response.data.payload.photoBase64, 
+                });
+
                 setLoading(false);
                 if(response.status !== 200) 
                     navigate('/' + response.status.toString());
@@ -388,17 +391,17 @@ export default function Profile() {
                                     {isEditing ? (
                                         <input
                                             type="text"
-                                            name="first-name"
-                                            value={firstName}
-                                            onChange={handleChangeFirstName}
-                                            id="first-name"
+                                            name="firstName"
+                                            value={user.firstName}
+                                            onChange={handleChange}
+                                            id="firstName"
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500"
                                             placeholder="First Name"
                                             required
                                         />
                                     ) : (
                                         <p className="text-gray-500 dark:text-gray-400">
-                                            {firstName}
+                                            {user.firstName}
                                         </p>
                                     )}
                                 </div>
@@ -412,17 +415,17 @@ export default function Profile() {
                                     {isEditing ? (
                                         <input
                                             type="text"
-                                            name="last-name"
-                                            value={lastName}
-                                            onChange={handleChangeLastName}
-                                            id="last-name"
+                                            name="lastName"
+                                            value={user.lastName}
+                                            onChange={handleChange}
+                                            id="lastName"
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500"
                                             placeholder="Last Name"
                                             required
                                         />
                                     ) : (
                                         <p className="text-gray-500 dark:text-gray-400">
-                                            {lastName}
+                                            {user.lastName}
                                         </p>
                                     )}
                                 </div>
@@ -436,17 +439,17 @@ export default function Profile() {
                                     {isEditing ? (
                                         <input
                                             type="date"
-                                            name="birthday"
-                                            value={date}
-                                            onChange={handleChangeDate}
+                                            name="date"
+                                            value={user.date}
+                                            onChange={handleChange}
                                             min="1950-01-01"
                                             max="2021-01-01"
-                                            id="birthday"
+                                            id="date"
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500"
                                             required
                                         />
                                     ) : (
-                                        <p className="text-gray-500 dark:text-gray-400">{new Intl.DateTimeFormat("en-GB").format(new Date(date)).toString().replaceAll("/", ".")}</p>
+                                        <p className="text-gray-500 dark:text-gray-400">{new Intl.DateTimeFormat("en-GB").format(new Date(user.date)).toString().replaceAll("/", ".")}</p>
                                     )}
                                 </div>
                                 <div className="col-span-6 sm:col-span-3">

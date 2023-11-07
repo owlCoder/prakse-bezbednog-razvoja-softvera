@@ -1,13 +1,14 @@
 import React from "react";
 
-export default function Item ({data, openPopup}) {
-    
+export default function Item ({product, openPopup}) {
+
     const handleButtonClick = () => {
         // Call the openPopup function to open the popup
-        openPopup(data);
-      };
-    return (    
+        openPopup(product);
+    };
 
+    return (    
+        product != null ? ( 
         <div className="flex flex-col border-2 shadow p-5 space-y-5 max-w-sm rounded-lg bg-gray-100 dark:bg-gray-900 dark:border-gray-800">
 
             {/* Image */}
@@ -18,9 +19,9 @@ export default function Item ({data, openPopup}) {
             {/* Price & Title */}
             <div className="text-left flex flex-col">
                 <p className="text-xl line-through">$2.64</p>
-                <p className="text-3xl font-bold">${data.val}</p>
+                <p className="text-3xl font-bold">${product.price}</p>
                 <div className="text-xl">
-                    {data.name}
+                    {product.name}
                 </div>
             </div>
 
@@ -41,5 +42,6 @@ export default function Item ({data, openPopup}) {
             </div>              
             
         </div>
+        ) : (<></>)
     );
 }

@@ -40,9 +40,7 @@ export default function Register() {
   }, [currentUser, navigate]);
 
   async function handleFormSubmit(e) {
-    e.preventDefault();
-
-    console.log(form);
+    e.preventDefault();    
 
     if (form.password !== form.confirmPassword) {
       return setResponse("Password doesn't match!");
