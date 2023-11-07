@@ -5,14 +5,27 @@ import ImagePicker from '../randImg/randomImage'
 import { AiOutlineLogin } from "react-icons/ai";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [response, setResponse] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [date, setDate] = useState("");
   const [maxRegDate, setMaxRegDate] = useState("");
+  
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName:"",
+    date:"",
+    email:"",
+    password:"",
+    confirmPassword:"",
+  })
+
+  const handleChange = (e) => {
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
+  };
 
   const navigate = useNavigate();
   const { currentUser, register } = useAuth();
@@ -30,12 +43,14 @@ export default function Register() {
   async function handleFormSubmit(e) {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    console.log(form);
+
+    if (form.password !== form.confirmPassword) {
       return setResponse("Password doesn't match!");
     }
 
     setLoading(true);
-    let res = await register(email, password, firstName, lastName, date);
+    let res = await register(form.email, form.password, form.firstName, form.lastName, form.date);
     setResponse(res.response);
     setLoading(false);
 
@@ -66,39 +81,39 @@ export default function Register() {
             {/* First Name */}
             <div>
               <label className="block">First Name</label>
-              <input type="text" name="first-name" id="first-name" onChange={(e) => setFirstName(e.target.value)} placeholder="Enter First Name" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
+              <input type="text" name="firstName" id="first-name" onChange={handleChange} placeholder="Enter First Name" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
             </div>
 
             {/* Last Name */}
             <div className="mt-4">
               <label className="block">Last Name</label>
-              <input type="text" name="last-name" id="last-name" onChange={(e) => setLastName(e.target.value)} placeholder="Enter Last Name" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
+              <input type="text" name="lastName" id="last-name" onChange={handleChange} placeholder="Enter Last Name" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
             </div>
 
             {/* Date */}
             <div className="mt-4">
               <label className="block">Date of birth</label>
-              <input type="date" max={maxRegDate} name="date" id="date" onChange={(e) => setDate(e.target.value)} placeholder="Enter Date of Birth" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
+              <input type="date" max={maxRegDate} name="date" id="date" onChange={handleChange} placeholder="Enter Date of Birth" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" required />
             </div>
 
             {/* Mail */}
             <div className="mt-4">
               <label className="block">Email Address</label>
-              <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" autoComplete="email" required />
+              <input type="email" name="email" id="email" onChange={handleChange} placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" autoComplete="email" required />
             </div>
 
             {/* Password */}
             <div className="mt-4">
               <label className="block">Password</label>
               <input type="password" name="password" id="password" placeholder="Enter Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
-                focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={(e) => setPassword(e.target.value)} required />
+                focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={handleChange} required />
             </div>
 
             {/* Confirm Password */}
             <div className="mt-4">
               <label className="block">Confirm Password</label>
-              <input type="password" name="password2" id="password2" placeholder="Repeat Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
-                focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={(e) => setConfirmPassword(e.target.value)} required />
+              <input type="password" name="confirmPassword" id="password2" placeholder="Repeat Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
+                focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={handleChange} required />
             </div>
             
             {/* Error Message */}
