@@ -5,8 +5,20 @@ import ImagePicker from '../randImg/randomImage'
 import { AiOutlineLogin } from "react-icons/ai";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  })
+
+  const handleChange = (e) => {
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
+  };
+
   const [response, setResponse] = useState("");
 
   const navigate = useNavigate();
@@ -25,7 +37,7 @@ export default function Login() {
     e.preventDefault();
 
     setLoading(true);
-    let res = await login(email, password);
+    let res = await login(form.email, form.password);
     setResponse(res.response);
     setLoading(false);
     
@@ -72,14 +84,14 @@ export default function Login() {
               {/* Mail */}
               <div>
                 <label className="block">Email Address</label>
-                <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" autoComplete="email" required />
+                <input type="email" name="email" id="email" onChange={handleChange} placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-50 mt-2 border border-slate-500 focus:border-blue-500 focus:bg-white focus:outline-none dark:bg-gray-900 dark:focus:bg-gray-800" autoComplete="email" required />
               </div>
 
               {/* Password */}
               <div className="mt-4">
                 <label className="block">Password</label>
                 <input type="password" name="password" id="password" placeholder="Enter Password" minLength="6" className="w-full px-4 py-3 rounded-lg border-slate-500 bg-gray-50 mt-2 border focus:border-blue-500
-                  focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={(e) => setPassword(e.target.value)} required />
+                  focus:bg-white focus:outline-none  dark:bg-gray-900 dark:focus:bg-gray-800 " onChange={handleChange} required />
               </div>
 
               {/* Error Message */}
