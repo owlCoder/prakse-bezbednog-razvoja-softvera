@@ -7,9 +7,12 @@ var bodyParser = require('body-parser'); // Configure app settings
 
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+
 app.use(cors({
-  credentials: true,
-})); // Enable CORS policy
+  origin: 'https://oib-byif.vercel.app', // Replace with your React app's URL
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type',
+}));
 
 const userRoutes = require('./routes/userRoutes');   // Import the users routes
 const auditRoutes = require('./routes/auditRoutes'); // Import the audits routes
