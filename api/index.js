@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:500
 app.use(cors({
   origin: 'https://oib-byif.vercel.app', // Replace with your React app's URL
   methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type',
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 const userRoutes = require('./routes/userRoutes');   // Import the users routes
