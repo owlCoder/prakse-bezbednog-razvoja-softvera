@@ -2,17 +2,20 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+// CORS
+const cors = require('cors');
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
+
 var bodyParser = require('body-parser'); // Configure app settings
 
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
-// enable cors
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 const userRoutes = require('./routes/userRoutes');   // Import the users routes
 const auditRoutes = require('./routes/auditRoutes'); // Import the audits routes
