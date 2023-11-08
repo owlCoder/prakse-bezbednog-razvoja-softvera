@@ -3,9 +3,14 @@
   "version": "3.21.3211",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
+    "vercel-build": "echo hey"
   },
   "keywords": [],
   "author": "",
