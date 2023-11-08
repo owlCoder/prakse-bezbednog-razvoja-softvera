@@ -2,6 +2,7 @@
   "name": "oibis-api3",
   "version": "3.21.3211",
   "description": "",
+  "homepage": ".",
   "main": "index.js",
   "engines": {
     "node": "18.x"
