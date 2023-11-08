@@ -29,103 +29,48 @@ function New() {
     ) : currentUser ? (
         <div className="bg-gray-100 dark:bg-gray-900 min-h-screen pb-5">
             <Navbar />
-            <div className="bg-gray-100 dark:bg-gray-900 min-h-screen mt-20"> 
-                <div className="fixed z-10 inset-0 overflow-y-auto backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0bg-opacity-75 transition-opacity" aria-hidden="true" />
-                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-                            &#8203;
-                        </span>
-                        <div className="inline-block align-bottom dark:bg-gray-800 dark:text-white rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                            <div className="bg-slate-50 dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <h3 className="text-lg font-medium text-gray-900 dark:text-white" id="modal-title">
-                                    Create a new account
-                                </h3>
-                                <div className="mt-6">
-                                    <div className="mb-4 flex space-x-4">
-                                        <div className="w-1/2">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                First Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="firstName"
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
-                                        </div>
-                                        <div className="w-1/2">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Last Name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="lastName"
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className='mb-4'>
-                                        <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            required
-                                            className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                        />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                            Birthday
-                                        </label>
-                                        <input
-                                            type="date"
-                                            name="birthday"
-                                            required
-                                            className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                        />
-                                    </div>
-                                    <div className="mb-4">
-                                        <div className="mb-4 mt-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Password
-                                            </label>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                minLength={6}
-                                                required
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
-                                        </div>
-                                    </div>
 
-                                    {/* Add similar input fields for other account details, e.g., lastName, email, password */}
-                                    <div className="mt-6">
-                                        <button
-                                            className="px-4 py-2 bg-sky-800 text-white font-medium hover:bg-sky-700 rounded-lg"
-                                        >
-                                            <AiOutlineUserAdd className="plus-icon inline -mt-1" />
-                                            Create Account
-                                        </button>
+            <div className="mt-24 pb-6"></div>
+                <div className="dark:text-white dark:bg-gray-800 mx-12 rounded-2xl p-6 pb-16 shadow-2xl">
+                    
+                    <p className="text-4xl p-6 mb-6">Add new Product</p>
+                    <form action="">
 
-                                        <button
-                                            className="px-4 py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900 ml-4"
-                                        >
-                                            <AiOutlineClose className="plus-icon inline -mt-0.5" />
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
+                        <div className="flex flex-col md:flex-row space-y-3 md:space-x-24 md:space-y-0">
+                            {/* Image */}
+                            <div className="overflow-hidden rounded-lg">
+                                <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 w-full duration duration-300 max-w-sm"/>
                             </div>
+
+                            {/* Other Info */}
+                            <grid className="grid grid-cols-3 gap-16">
+                                <div className="flex flex-col space-y-3 justify-center">
+                                    <label htmlFor="">Name:</label>
+                                    <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required/>
+                                </div>
+
+                                <div className="flex flex-col space-y-3 justify-center">
+                                    <label htmlFor="">Author:</label>
+                                    <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required/>
+                                </div>
+
+                                <div className="flex flex-col space-y-3 justify-center">
+                                    <label htmlFor="">Year:</label>
+                                    <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required/>
+                                </div>
+
+                                <div className="flex flex-col space-y-3 justify-start">
+                                    <label htmlFor="">Price:</label>
+                                    <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm-text-sm rounded-lg focus-ring-primary-500 focus-border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-primary-500 dark:focus-border-primary-500" required/>
+                                </div>
+                                    
+                            </grid>
                         </div>
-                    </div>
+                        
+                    </form>
+
                 </div>
             </div>
-        </div>
     ) : (
         <div></div>
     );
