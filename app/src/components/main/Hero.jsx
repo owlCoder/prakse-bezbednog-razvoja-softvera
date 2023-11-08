@@ -19,14 +19,16 @@ export const HeroSection = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{ outline: 'none' }}
                     />
-
+                    
                     <button
-                        className="new-account-button inline mb-4"
+                        className="new-account-button inline mb-4 mx-auto"
                         style={{ fontSize: 16, fontWeight: '600' }}
                     >
                         <AiOutlineSearch className="plus-icon" />
                         &nbsp;Search
                     </button>
+                    
+                    
                 </div>
             </div>
 

@@ -33,7 +33,7 @@ export default function Home() {
         </div>
       </section>
 
-      
+
       <section className="mx-6 md:mx-32">
         <div className="flex flex-col items-center space-y-3 text-center p-7 md:p-2 md:pt-8 mt-16 bg-slate-800 rounded-t-xl">
           <h1 className="font-bold text-3xl">Best seller grocery near you</h1>
@@ -46,11 +46,13 @@ export default function Home() {
           {/* // Grid Container */}
           <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mx-auto">
 
-            <Item data={{ name: "Name1", val: 5 }} openPopup={openPopup} />
-            <Item data={{ name: "Name2", val: 10.1 }} openPopup={openPopup} />
+            {/* {data.map((product, index) => (
+              <Item key={index} product={product} openPopup={openPopup} />
+            ))} */}
+
           </div>
         </div>
-      </section> 
+      </section>
 
       {/* Footer */}
       <section className="mt-20 mb-1">

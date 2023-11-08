@@ -72,7 +72,7 @@ function Navbar() {
   return (
     <div>
       <nav className="bg-gray-50 dark:bg-gray-950 dark:text-white dark:border-gray-800 fixed top-0 w-full border-b-2 border-gray-200 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
@@ -108,7 +108,7 @@ function Navbar() {
                         className="relative inline-block text-left"
                       >
                         <div>
-                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold bg-primary-800 dark:bg-primary-900 hover:bg-blue-800 text-white">
+                          <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2  text-sm font-semibold bg-primary-800 dark:bg-primary-900 hover:bg-blue-800 text-white">
                             <FaUser className="plus-icon inline mt-1" />
                             Welcome, {currentUser.email} <BiSolidDownArrow className="plus-icon inline mt-1.5" style={{ fontSize: 10 }} />
                           </Menu.Button>
@@ -275,7 +275,7 @@ function Navbar() {
           leaveTo="opacity-0 scale-95"
         >
           <div className="md:hidden" id="mobile-menu">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <div className="flex flex-col items-center space-y-3 px-2 pt-2 pb-3 sm:px-3">
               {links.map((link, index) => (
                 <a
                   href={link.toLowerCase().replaceAll(" ", "-")}
@@ -291,11 +291,11 @@ function Navbar() {
                   className="relative inline-block text-left"
                 >
                   <div>
-                    <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    <Menu.Button className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:bg-blue-700 opacity-80 dark:hover:bg-blue-800 dark:ring-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                       {
                         "Welcome"
                       }
-                      , {currentUser.email}
+                      , {currentUser.email} <BiSolidDownArrow className="plus-icon inline mt-1.5" style={{ fontSize: 10 }} />
                     </Menu.Button>
                   </div>
 
@@ -324,12 +324,31 @@ function Navbar() {
                                   "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
                                 )}
                               >
-                                {link}
+                                <RiSettingsLine className="icon inline mr-2 dark:text-white" fontSize="1.2rem" />{link}
                               </a>
                             )}
                           </Menu.Item>
                         ))}
                       </div>
+                      {user && (
+                        <div className="py-1">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="/orders-history"
+                                className={classNames(
+                                  active
+                                    ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
+                                    : "text-gray-700",
+                                  "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
+                                )}
+                              >
+                                <LuBarChartBig className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Products & Orders
+                              </a>
+                            )}
+                          </Menu.Item>
+                        </div>
+                      )}
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -343,11 +362,11 @@ function Navbar() {
                                 "block px-4 py-2 text-sm"
                               )}
                             >
-                              Sign Out
+                              <BiSolidExit className="icon inline mr-2 text-red-500" fontSize="1.2rem" /> Sign Out
                             </a>
                           )}
                         </Menu.Item>
-                      </div>
+                      </div>                    
                     </Menu.Items>
                   </Transition>
                 </Menu>

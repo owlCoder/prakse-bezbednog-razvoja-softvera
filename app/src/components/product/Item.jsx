@@ -18,16 +18,14 @@ export default function Item ({product, openPopup}) {
 
             {/* Price & Title */}
             <div className="text-left flex flex-col">
-                <p className="text-xl line-through">$2.64</p>
-                <p className="text-3xl font-bold">${product.price}</p>
-                <div className="text-xl">
-                    {product.name}
-                </div>
+                <p className="text-xl">year: {product.productionYear}</p>
+                <p className="text-3xl font-bold">{product.name}</p>
+                <div className="text-xl">{product.price}€</div>
             </div>
 
             {/* Button */}
             <div>
-                <div onClick={handleButtonClick} className="flex justify-between p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
+                <div onClick={handleButtonClick} className="flex justify-between cursor-pointer p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
                     <div className=""></div>
                     <p>View Product</p>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

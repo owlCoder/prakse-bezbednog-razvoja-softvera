@@ -34,24 +34,24 @@ export const Popup = ({ data, closePopup }) => {
                     <div className="flex flex-col mb-4 space-y-3 text-center md:text-left">
                         <div>
                             <div className="inline-block px-3 py-1 text-sm text-white bg-black rounded-full">
-                                Lorem, ipsum.
+                                {data.productionYear}
                             </div>
                         </div>
-
-                        {/* Title */}
-                        <div className="flex items-center justify-center md:justify-start">
-                            <div className="max-w-sm text-2xl font-medium">
-                                Razer Kraken Kitty Edt Gaming Headset Quartz
-                            </div>
-                        </div>
-
+                        
                         {/* Price Container */}
                         <div className="flex flex-col mb-4 space-y-3 text-center md:text-left">
-                            <p className="text-4xl font-bold">${data.val}</p>
+                            <p className="text-4xl font-bold">{data.name}</p>                           
+                        </div>
+
+                        {/* Title and info */}
+                        <div className="flex flex-col items-center justify-center md:items-start">
+                            <div className="max-w-sm text-2xl font-medium">
+                                {data.price}€
+                            </div>                            
                             <p className="text-sm font-light text-gray-400">
                                 Lorem ipsum dolor sit amet.
                             </p>
-                        </div>
+                        </div>                        
 
                     </div>
 
