@@ -40,7 +40,7 @@ function Navbar() {
       try {
         const token = await currentUser.getIdToken();
         const response = await axios.post(
-          global.APIEndpoint + "/api/user/getRoleByUid",
+          global.APIEndpoint + "/api/user/getRoleByUid", { crossdomain: true },
           {
             uid: currentUser.uid,
           },
@@ -49,6 +49,7 @@ function Navbar() {
               Authorization: `${token}`,
               "Content-Type": "application/json",
             },
+            
           }
         );
 
