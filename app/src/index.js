@@ -7,11 +7,11 @@ import App from "./App";
 // Available values WM_SECURE, WM_UNRESTRICTED
 global.WM = "WM_SECURE";
 
-
-global.APIEndpoint = "https://oib.vercel.app/"
-
 // Global variable to access base API endpoint
-// global.APIEndpoint = "http://localhost:5000";
+// global.APIEndpoint = "https://oib.vercel.app/"
+
+global.APIEndpoint = "http://localhost:5000";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

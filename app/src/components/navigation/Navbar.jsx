@@ -40,7 +40,7 @@ function Navbar() {
       try {
         const token = await currentUser.getIdToken();
         const response = await axios.post(
-          global.APIEndpoint + "/api/user/getRoleByUid", { crossdomain: true },
+          global.APIEndpoint + "/api/user/getRoleByUid",
           {
             uid: currentUser.uid,
           },

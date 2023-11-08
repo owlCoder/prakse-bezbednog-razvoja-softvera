@@ -21,7 +21,6 @@ export default function Dashboard() {
 
             try {
                 const token = await currentUser.getIdToken();
-                console.log(token)
                 const response = await axios.post(
                     global.APIEndpoint + "/api/user/getById",
                     {
