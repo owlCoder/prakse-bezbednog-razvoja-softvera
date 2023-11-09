@@ -371,18 +371,18 @@ function Navbar() {
                   </Transition>
                 </Menu>
               ) : (
-                <div className="space-x-4 py-1">
+                <div className="flex flex-col justify-center items-center space-y-3 pb-3">
                   <a
                     href="/login"
                     className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Login
+                    <VscAccount className="plus-icon inline -mt-0.5" /> Login
                   </a>
                   <a
                     href="/register"
                     className="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Create an account
+                    <AiOutlineUserAdd className="plus-icon inline -mt-0.5" /> Create an account
                   </a>
                 </div>
               )}
