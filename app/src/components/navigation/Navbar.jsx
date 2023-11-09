@@ -49,6 +49,7 @@ function Navbar() {
               Authorization: `${token}`,
               "Content-Type": "application/json",
             },
+            
           }
         );
 

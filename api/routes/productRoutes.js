@@ -4,7 +4,7 @@ const router = express.Router();
 const products = require('../controllers/productController');
 
 // Product route to get all products
-router.post('/get', async (req, res) => {
+router.get('/get', async (req, res) => {
 
   // Call controller method for products data fetch
   let data = await products.getProducts();

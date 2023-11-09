@@ -23,7 +23,7 @@ function Store() {
     setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.post(
+        const response = await axios.get(
           global.APIEndpoint + "/api/product/get",
           {
             headers: {

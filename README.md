@@ -4,7 +4,7 @@
 _________________________________________________________________________
 ## Development setup guide
 
-Node version: [`v16.17.0`](https://nodejs.org/ca/blog/release/v16.17.0/)
+Node version: [`v18.x.0`](https://nodejs.org/)
 Package manager: [`npm`](https://npmjs.com/)
 
 How to run:
@@ -15,4 +15,4 @@ How to run:
 3. Run the development server (app)
 `$ npm start`
 4. Run the development server (API)
-`$ npx nodemon`
+`$ npm run startdev`
