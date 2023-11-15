@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 import { AiOutlineUserAdd, AiOutlineClose } from "react-icons/ai";
 import Navbar from "../navigation/Navbar";
@@ -10,6 +11,27 @@ function New() {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(true);
+
+    const [form, setForm] = useState(
+    {
+        author: "",
+        dateValidity: "",
+        genres: [],
+        name: "",
+        photoBase64: "",
+        price: -1,
+        productionYear: "",
+        quantity: -1,
+        sellerUid: currentUser["uid"],
+        used: "",
+    })
+
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const [showModal, setShowModal] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,19 +53,58 @@ function New() {
     }, [currentUser, navigate]);
 
 
-    const handleAddClick = () => {
+    const handleAddClick = async (e) => {
+        
+        e.preventDefault();
 
+        //console.log(form);
 
+        //provera praznih
 
+        try {
+            const token = await currentUser.getIdToken();            
+            
+            console.log(form);
+
+            const response = await axios.post(
+                global.APIEndpoint + "/api/product/create",
+                {
+                    form
+                },
+                {
+                    headers: {
+                        Authorization: `${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            ); 
+            
+            console.log(response);
+
+            if(response.data.code === 200){
+                console.log("+");
+            }
+            else{
+                console.log("-");
+            }
+
+        } catch (error) {
+            //navigate('/403')
+        }
+
+        
+        
         setModalText("Product added");
         setModalDesc("New item has been posted.");
         setShowModal(true);    
     };
 
+
     const handleGotItClick = () => {
         setShowModal(false);
     };
 
+   
 
     return loading === true ? (
         <LoadingSpinner />
@@ -75,7 +136,7 @@ function New() {
                     <div className="">
                     
                         { /* Title */}
-                        <div className="pt-6 pb-10 text-center">
+                        <div className="pt-6 pb-10 text-start">
                             <p className="text-5xl mb-6">Add new Product</p>
                         </div>                    
 
@@ -124,17 +185,17 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Name:</label>
-                                        <input type="text" required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input type="text" name="name" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Author:</label>
-                                        <input type="text" required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input type="text" name="author" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Year of Production:</label>
-                                        <input type="date" required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input type="number" min={1700} max={2023} name="productionYear" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
                                     </div>
 
                                     
@@ -155,31 +216,23 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Price:</label>
-                                        <input required type="text" className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
+                                        <input required type="number" name="price" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
                                     </div>                        
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Quantity:</label>
-                                        <input required type="number" className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
+                                        <input required type="number"  name="quantity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
                                     </div>
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Available untill:</label>
-                                        <input required type="date" className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input required type="date"  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
-
                                     
                                     <div className="flex">
                                         <label className="mr-6 mt-2">Used? </label>
                                         
-                                        <div className="flex items-center me-4 mt-2">
-                                            <input id="inline-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                            <label htmlFor="inline-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">New</label>
-                                        </div>
-                                        <div className="flex items-center me-4 mt-2">
-                                            <input id="inline-2-checkbox" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                            <label htmlFor="inline-2-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Used</label>
-                                        </div>                                                                                
+                                       <Dropdown />                                                                               
                                     </div>
                                     
                                         
