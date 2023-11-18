@@ -9,7 +9,7 @@ function classNames(...classes) {
 
 export default function Dropdown() {
   return (
-    <Menu as="div" className="relative inline-block text-left ">
+    <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="mx-auto inline-flex items-center  px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Options
@@ -30,9 +30,9 @@ export default function Dropdown() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
         >
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none max-h-2xl">            
+            <Menu.Items className="max-h-48 overflow-auto absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 dark:bg-gray-800 dark:divide-gray-700 ring-black ring-opacity-5 focus:outline-none max-h-2xl">            
             
-                <div className="py-1">
+                <div className="py-1 relative">
                     <Menu.Item>
                         {({ active }) => (
                         <div
@@ -47,206 +47,12 @@ export default function Dropdown() {
                         </div>
                         )}
                     </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
-                    <Menu.Item>
-                        {({ active }) => (
-                        <div
-                            className={classNames(
-                            active
-                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
-                                : "text-gray-700",
-                            "block px-4 py-2 text-sm dark:text-gray-300 dark:hover:bg-gray-900"
-                            )}
-                        >
-                            <BiMusic className="icon inline mr-2 dark:text-white" fontSize="1.2rem" /> Placeholder
-                        </div>
-                        )}
-                    </Menu.Item>
+                   
                 </div>
                
             </Menu.Items>
         </Transition>
+
     </Menu>
   )
 }

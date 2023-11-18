@@ -2,10 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
-import { AiOutlineUserAdd, AiOutlineClose } from "react-icons/ai";
 import Navbar from "../navigation/Navbar";
 import LoadingSpinner from "../loading/loading";
 import Dropdown from "../dropdown/Dropdown";
+import Combo from "../dropdown/Combo";
 
 function New() {
     const navigate = useNavigate();
@@ -31,6 +31,7 @@ function New() {
             ...form,
             [e.target.name]: e.target.value,
         });
+
     };
 
     const [showModal, setShowModal] = useState(false);
@@ -130,23 +131,23 @@ function New() {
             )}
 
             <div className="flex justify-center items-center mt-32 pb-6">
-                <div className="dark:text-white dark:bg-gray-800 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end space-y-10">
+                <div className="dark:text-white dark:bg-gray-800 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
                     
                     {/* All Content */}
-                    <div className="">
+                    <div className="p-12 w-full">
                     
                         { /* Title */}
-                        <div className="pt-6 pb-10 text-start">
-                            <p className="text-5xl mb-6">Add new Product</p>
+                        <div className="text-start">
+                            <p className="text-3xl mb-6">Add new Product</p>
                         </div>                    
 
                         <form action="">
-                            <div className="flex flex-col lg:flex-row lg:space-x-24 space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
+                            <div className="flex flex-col space-x-10 lg:flex-row space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
                         
                                 {/* Image */}
-                                <div className="flex flex-col space-y-3 justify-center">                                    
+                                <div className="flex basis-1/4 flex-col space-y-3 justify-center">                                    
                                     <div className="overflow-hidden rounded-lg mx-auto">
-                                        <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 duration duration-300 w-44"/>
+                                        <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 duration duration-300 w-52"/>
                                     </div>
                                     
                                     <div className="flex flex-col items-center">
@@ -176,7 +177,7 @@ function New() {
                                 </div>
 
                                 {/* Info about Product */}
-                                <div className="flex flex-col space-y-5 ">
+                                <div className="flex basis-1/3 flex-col space-y-5 ">
                                     
                                     {/* Title */}
                                     <div className="dark:text-white text-black text-2xl mt-6">
@@ -185,7 +186,7 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Name:</label>
-                                        <input type="text" name="name" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input type="text" name="author" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
 
                                     <div className="flex flex-col space-y-2 justify-center">
@@ -201,13 +202,13 @@ function New() {
                                     
                                     <div className="flex items-center space-x-4">
                                         <label>Genres:</label>
-                                        <Dropdown />
+                                        <Combo />
                                     </div>                                                                    
                                         
                                 </div>
 
                                 {/* Info about Order */}
-                                <div className="flex flex-col space-y-5">
+                                <div className="flex basis-1/3 flex-col space-y-5">
 
                                     {/* Title */}
                                     <div className="dark:text-white text-black text-2xl mt-6">
@@ -229,10 +230,18 @@ function New() {
                                         <input required type="date"  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
                                     
-                                    <div className="flex">
-                                        <label className="mr-6 mt-2">Used? </label>
-                                        
-                                       <Dropdown />                                                                               
+                                    <div className="flex">                                                                                
+                                        <div className="flex flex-col">
+                                            <div class="flex items-center mb-4">
+                                                <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default radio</label> 
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
+                                            </div>
+                                        </div>
+                                                                             
                                     </div>
                                     
                                         
