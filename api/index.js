@@ -14,6 +14,7 @@ const auditRoutes = require('./routes/auditRoutes'); // Import the audits routes
 const orderRoutes = require('./routes/orderRoutes'); // Import the orders routes
 const productRoutes = require('./routes/productRoutes'); // Import the products routes
 const rolesRoutes = require('./routes/roleRoutes'); // Import the roles routes
+const genreRoutes = require('./routes/genreRoutes'); // Import the genres routes
 
 // Working mode - demonstration purposes only (keep flag WM_SECURE)
 // Available values WM_SECURE, WM_UNRESTRICTED
@@ -25,6 +26,7 @@ app.use('/api/audit', auditRoutes); // Define a base path for audit routes, e.g.
 app.use('/api/order', orderRoutes); // Define a base path for order routes, e.g., '/api/order'
 app.use('/api/product', productRoutes); // Define a base path for product routes, e.g., '/api/product'
 app.use('/api/role', rolesRoutes); // Define a base path for roles routes, e.g., '/api/role'
+app.use('/api/genre', genreRoutes); // Define a base path for genres routes, e.g., '/api/role'
 
 app.get(['/', '/api'], (req, res) => { // Default route to show static API3 page
   res.sendFile(path.join(__dirname, 'static', 'index.html')); 

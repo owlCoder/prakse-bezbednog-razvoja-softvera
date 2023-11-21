@@ -4,13 +4,15 @@ import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "../navigation/Navbar";
 import LoadingSpinner from "../loading/loading";
-import Dropdown from "../dropdown/Dropdown";
 import Combo from "../dropdown/Combo";
 
 function New() {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(true);
+    const [currYear, setCurrYear] = useState("");
+    const [comboGenres, setComboGenres] = useState([]);
+    const [error, setError] = useState("");
 
     const [form, setForm] = useState(
     {
@@ -41,63 +43,118 @@ function New() {
 
     useEffect(() => {
         setLoading(true);
+
         const fetchData = async () => {
             if (!currentUser) {
                 navigate("/login");
                 return;
             }
 
-            setLoading(false);
+            setLoading(false);           
         };
 
+        const fetchGenres = async () => {
+            try {
+              const response = await axios.get(
+                global.APIEndpoint + "/api/genre/get",
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+      
+              if (response.status === 200) {
+                setComboGenres(response.data.payload);
+              }
+                    
+
+            } catch (error) {
+              navigate("/403");
+            }
+          };
+
+        var currentDate = new Date();
+        var allowedYear = currentDate.getFullYear();
+        var formattedDate = `${allowedYear}-01-01`;
+        setCurrYear(formattedDate);
+
         fetchData();
-    }, [currentUser, navigate]);
+        fetchGenres();        
+
+    }, [currentUser]);
 
 
     const handleAddClick = async (e) => {
         
         e.preventDefault();
-
-        //console.log(form);
-
-        //provera praznih
-
-        try {
-            const token = await currentUser.getIdToken();            
-            
-            console.log(form);
-
-            const response = await axios.post(
-                global.APIEndpoint + "/api/product/create",
-                {
-                    form
-                },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            ); 
-            
-            console.log(response);
-
-            if(response.data.code === 200){
-                console.log("+");
-            }
-            else{
-                console.log("-");
-            }
-
-        } catch (error) {
-            //navigate('/403')
+        setError("");
+        console.log(form);
+        
+        if (form.name.trim().length === 0) {
+            setError("Name field can't be empty");
+        }
+        else if (form.author.trim().length === 0) {
+           setError("Author field can't be empty");
+        }
+        else if (form.productionYear.length === 0) {
+            setError("Year of production field can't be empty");  
+        }
+        else if(form.productionYear < 1887 || form.productionYear > currYear){
+            setError("Year of production not valid");
+        }
+        else if (form.price === -1) {
+            setError("Price field can't be empty");
+        }
+        else if (form.quantity === -1) {
+            setError("Quantity field can't be empty");
         }
 
-        
-        
-        setModalText("Product added");
-        setModalDesc("New item has been posted.");
-        setShowModal(true);    
+        else{
+            try {
+                const token = await currentUser.getIdToken();            
+    
+                const response = await axios.post(
+                    global.APIEndpoint + "/api/product/create",
+                    {
+                        form
+                    },
+                    {
+                        headers: {
+                            Authorization: `${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                ); 
+                
+                if(response.data.code === 200){
+                    console.log("+");
+                }
+                else{
+                    console.log("-");
+                }
+    
+            } catch (error) {
+                //navigate('/403')
+            }
+            
+            setModalText("Product added");
+            setModalDesc("New item has been posted.");
+            setShowModal(true);   
+
+            setForm({
+                ...form,                
+                author: "",
+                dateValidity: "",
+                name: "",
+                photoBase64: "",
+                price: -1,
+                productionYear: "",
+                quantity: -1,
+                used: "",
+            });
+        }
+         
     };
 
 
@@ -110,9 +167,8 @@ function New() {
     return loading === true ? (
         <LoadingSpinner />
     ) : currentUser ? (
-        <div className="bg-gray-100 dark:bg-gray-900 min-h-screen pb-5">
+        <div className="bg-gray-100 dark:bg-slate-800 min-h-screen pb-5">
             <Navbar />
-
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
                     <div className="bg-white w-96 rounded-lg p-6 shadow-lg dark:bg-gray-900 transition-opacity duration-300">
@@ -131,21 +187,21 @@ function New() {
             )}
 
             <div className="flex justify-center items-center mt-32 pb-6">
-                <div className="dark:text-white dark:bg-gray-800 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
+                <div className="dark:text-white dark:bg-gray-900 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
                     
                     {/* All Content */}
                     <div className="p-12 w-full">
                     
                         { /* Title */}
-                        <div className="text-start">
-                            <p className="text-3xl mb-6">Add new Product</p>
+                        <div className="lg:text-start text-center">
+                            <p className="text-3xl mb-6">Add new product</p>
                         </div>                    
 
-                        <form action="">
+                        <form>
                             <div className="flex flex-col space-x-10 lg:flex-row space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
                         
                                 {/* Image */}
-                                <div className="flex basis-1/4 flex-col space-y-3 justify-center">                                    
+                                <div className="flex flex-col space-y-3 justify-center">                                    
                                     <div className="overflow-hidden rounded-lg mx-auto">
                                         <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 duration duration-300 w-52"/>
                                     </div>
@@ -186,7 +242,7 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Name:</label>
-                                        <input type="text" name="author" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input type="text" name="name" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
 
                                     <div className="flex flex-col space-y-2 justify-center">
@@ -196,12 +252,12 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Year of Production:</label>
-                                        <input type="number" min={1700} max={2023} name="productionYear" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
+                                        <input type="number" min={1887}  max={currYear} name="productionYear" onChange={handleChange} required className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"></input>
                                     </div>
 
                                     
                                     <div className="flex items-center space-x-4">
-                                        <label>Genres:</label>
+                                        <label>Genres:</label>                                        
                                         <Combo />
                                     </div>                                                                    
                                         
@@ -227,18 +283,18 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Available untill:</label>
-                                        <input required type="date"  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input required type="date" min={currYear}  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
                                     
                                     <div className="flex">                                                                                
                                         <div className="flex flex-col">
-                                            <div class="flex items-center mb-4">
-                                                <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default radio</label> 
+                                            <div className="flex items-center mb-4">
+                                                <input id="default-radio-1" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">New</label> 
                                             </div>
-                                            <div class="flex items-center">
-                                                <input checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
+                                            <div className="flex items-center">
+                                                <input defaultChecked id="default-radio-2" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <label htmlFor="default-radio-2" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Used</label>
                                             </div>
                                         </div>
                                                                              
@@ -250,12 +306,15 @@ function New() {
                         </form>
                     </div>
 
-                    <div className="">
-                        <button type="button" onClick={handleAddClick} className="mx-auto inline-flex items-center px-6 py-2 text-lg font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 1024 1024" className="plus-icon" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8Z"></path><path d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8Z"></path>
-                            </svg>
-                            Add
-                        </button>
+                    <div className="flex gap-5">
+                        <h4 className="text-red-700 dark:text-red-400 mt-4 mb-5">{error}</h4>
+                        <div className="">
+                            <button type="button" onClick={handleAddClick} className="mx-auto inline-flex items-center px-6 py-2 text-lg font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 1024 1024" className="plus-icon" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8Z"></path><path d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8Z"></path>
+                                </svg>
+                                Add
+                            </button>
+                        </div>
                     </div>
                                         
 
