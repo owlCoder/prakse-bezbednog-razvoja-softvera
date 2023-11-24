@@ -281,11 +281,18 @@ function Navbar() {
                 <a
                   href={link.toLowerCase().replaceAll(" ", "-")}
                   key={index}
-                  className="hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover-bg-gray-700"
+                  className="hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-800"
                 >
                   {link}
                 </a>
               ))}
+              {user && (
+                    <a href="/new" className="new-ad-button">
+                      <AiOutlinePlus className="plus-icon" />
+                      New product&nbsp;
+                    </a>
+
+                  )}
               {currentUser !== null ? (
                 <Menu
                   as="div"
