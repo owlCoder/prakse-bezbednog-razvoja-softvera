@@ -5,20 +5,17 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Combo({ genresArr }) {
   const [selected, setSelected] = useState([]);
-  const [query, setQuery] = useState(""); 
+  const [query, setQuery] = useState("");
 
   const filteredGenres =
     query === ""
       ? genresArr
       : genresArr.filter((genre) =>
-          genre.name
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.toLowerCase().replace(/\s+/g, ""))
+          genre.name.toLowerCase().replace(/\s+/g, "").includes(query.toLowerCase().replace(/\s+/g, ""))
         );
 
   const handleSelection = (item) => {
-    if (selected.length < 5 && !selected.includes(item)) {
+    if (selected.length < 5 && !selected.find((selectedItem) => selectedItem.id === item.id)) {
       setSelected([...selected, item]);
     }
   };
@@ -27,8 +24,7 @@ export default function Combo({ genresArr }) {
     const updatedSelected = selected.filter((selectedItem) => selectedItem.id !== item.id);
     setSelected(updatedSelected);
   };
-
-
+  
   return (
     <div className="w-full">
       <Combobox value={selected} onChange={setSelected} multiple>
