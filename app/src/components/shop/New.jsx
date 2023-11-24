@@ -187,10 +187,10 @@ function New() {
             )}
 
             <div className="flex justify-center items-center mt-32 pb-6">
-                <div className="dark:text-white dark:bg-gray-900 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
+                <div className="dark:text-white dark:bg-gray-900 mx-10 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
                     
                     {/* All Content */}
-                    <div className="p-12 w-full">
+                    <div className="lg:p-12 md:p-24 w-full">
                     
                         { /* Title */}
                         <div className="lg:text-start text-center">
@@ -198,7 +198,7 @@ function New() {
                         </div>                    
 
                         <form>
-                            <div className="flex flex-col space-x-10 lg:flex-row space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
+                            <div className="flex flex-col lg:space-x-10 lg:flex-row space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
                         
                                 {/* Image */}
                                 <div className="flex flex-col space-y-3 justify-center">                                    
@@ -256,7 +256,7 @@ function New() {
                                     </div>
 
                                     
-                                    <div className="flex items-center space-x-4">
+                                    <div className="flex flex-col space-y-2 justify-center">
                                         <label>Genres:</label>                                                                             
                                         <Combo genresArr={comboGenres}/>
                                     </div>                                                                    
