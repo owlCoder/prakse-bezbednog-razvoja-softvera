@@ -21,7 +21,10 @@ export default function Home() {
       {open ? <Popup data={data} closePopup={() => setOpen(false)} /> : <></>}
       <Navbar />
 
-      <HeroSection />
+      <div className="pt-10 md:pt-0">
+        <HeroSection />
+      </div>
+      
 
       <section className="mt-20 md:mt-40 mb-20">
 
