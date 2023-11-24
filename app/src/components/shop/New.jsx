@@ -257,8 +257,8 @@ function New() {
 
                                     
                                     <div className="flex items-center space-x-4">
-                                        <label>Genres:</label>                                        
-                                        <Combo />
+                                        <label>Genres:</label>                                                                             
+                                        <Combo genresArr={comboGenres}/>
                                     </div>                                                                    
                                         
                                 </div>
