@@ -35,15 +35,14 @@ export default function Combo({ genresArr }) {
             {selected.length > 0 && (
               <div className="ml-2 space-x-1 flex flex-wrap  items-center mr-8">
                 {selected.map((item) => (
-                  <div key={item.id} className="flex items-center text-gray-400 hover:text-white hover:border-white text-xs border border-gray-400 rounded-full px-2 py-0.5 pb-1 my-0.5 ">
+                  <div key={item.id} onClick={() => handleRemoveSelection(item)} className="cursor-pointer flex items-center text-gray-400 hover:text-white hover:border-white text-xs border border-gray-400 rounded-full px-2 py-0.5 pb-1 my-0.5 ">
                     <button
-                      type="button"
-                      onClick={() => handleRemoveSelection(item)}
+                      type="button"                      
                       className="focus:outline-none"
                     >
                       {item.name}
                     </button>
-                    <span className="cursor-pointer" onClick={() => handleRemoveSelection(item)}>
+                    <span>
                       <IoIosClose />
                     </span>
                   </div>

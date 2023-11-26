@@ -103,6 +103,9 @@ function New() {
         else if(form.productionYear < 1887 || form.productionYear > currYear){
             setError("Year of production not valid");
         }
+        else if(form.genres.length < 1){
+            
+        }
         else if (form.price === -1) {
             setError("Price field can't be empty");
         }
