@@ -23,7 +23,7 @@ const admin = require('../firebaseConfig');
 
   const createProduct = async (data) => {
     try {
-      await admin.firestore().collection("products").add(
+      const productRef = await admin.firestore().collection("products").add(
         {
           author: data.author,
           dateValidity: data.dateValidity,
@@ -35,9 +35,11 @@ const admin = require('../firebaseConfig');
           quantity: data.quantity,
           sellerUid: data.sellerUid,
           used: data.used,
-        }
+        }  
       );
   
+      await productRef.update({uid: productRef.id});
+
       await admin.firestore().collection("audits").add(
         {
           messageType: "INFO",
