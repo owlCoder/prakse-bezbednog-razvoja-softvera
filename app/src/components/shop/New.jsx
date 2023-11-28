@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import imageCompression from 'browser-image-compression';
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "../navigation/Navbar";
 import LoadingSpinner from "../loading/loading";
@@ -11,11 +12,11 @@ function New() {
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(true);
     const [currYear, setCurrYear] = useState("");
+    const [currYear2, setCurrYear2] = useState("");
     const [comboGenres, setComboGenres] = useState([]);
     const [error, setError] = useState("");
 
-    const [form, setForm] = useState(
-    {
+    const initialData = {
         author: "",
         dateValidity: "",
         genres: [],
@@ -25,8 +26,12 @@ function New() {
         productionYear: "",
         quantity: -1,
         sellerUid: currentUser["uid"],
-        used: "",
-    })
+        used: false,
+    }
+
+    const [form, setForm] = useState(
+        initialData   
+    )
 
     const handleChange = (e) => {
         setForm({
@@ -40,6 +45,16 @@ function New() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalText, setModalText] = useState("");
     const [modalDesc, setModalDesc] = useState("");
+
+    const [selected, setSelected] = useState([]);
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    const imageRef = useRef(null);
+
+    function clearForm(){
+        
+        form.genres = [];
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -75,6 +90,11 @@ function New() {
           };
 
         var currentDate = new Date();
+        var currentDate2 = new Date();
+        currentDate2 = `${currentDate2.getFullYear()}-${currentDate2.getMonth() + 1 }-${currentDate2.getDate()}`;
+        setCurrYear2(currentDate2);
+        
+
         var allowedYear = currentDate.getFullYear();
         var formattedDate = `${allowedYear}-01-01`;
         setCurrYear(formattedDate);
@@ -89,8 +109,10 @@ function New() {
         
         e.preventDefault();
         setError("");
-        console.log(form);
-        
+        console.log(form); 
+
+        form.genres = selected;
+
         if (form.name.trim().length === 0) {
             setError("Name field can't be empty");
         }
@@ -100,18 +122,31 @@ function New() {
         else if (form.productionYear.length === 0) {
             setError("Year of production field can't be empty");  
         }
-        else if(form.productionYear < 1887 || form.productionYear > currYear){
+        else if(form.productionYear.length !==4 || parseInt(form.productionYear) < 1887 || parseInt(form.productionYear) > parseInt(currYear.substring(0, 4))){
             setError("Year of production not valid");
         }
         else if(form.genres.length < 1){
-            
+            setError("Pick genres");
         }
         else if (form.price === -1) {
             setError("Price field can't be empty");
         }
+        else if(parseFloat(form.price) < 0){
+            setError("Price can't be negative number");
+        }
         else if (form.quantity === -1) {
             setError("Quantity field can't be empty");
         }
+        else if(parseFloat(form.quantity) < 0){
+            setError("Quantity can't be negative number");
+        }
+        else if(form.dateValidity === ""){
+            setError("Product must have expiry date")
+        }
+        else if(selectedImage === null){    
+            setError("Product must have an image");
+        }
+        
 
         else{
             try {
@@ -132,6 +167,7 @@ function New() {
                 
                 if(response.data.code === 200){
                     console.log("+");
+                    clearForm();
                 }
                 else{
                     console.log("-");
@@ -145,19 +181,57 @@ function New() {
             setModalDesc("New item has been posted.");
             setShowModal(true);   
 
-            setForm({
-                ...form,                
-                author: "",
-                dateValidity: "",
-                name: "",
-                photoBase64: "",
-                price: -1,
-                productionYear: "",
-                quantity: -1,
-                used: "",
-            });
+            
+            console.log(form);
+            console.log("init Data " + initialData);
         }
          
+    };
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+              const options = {
+                maxSizeMB: 1, // Maximum size after compression (1MB in this example)
+                maxWidthOrHeight: 800, // Maximum width or height after compression
+              };
+      
+              const compressedFile = await imageCompression(file, options);
+      
+              const reader = new FileReader();
+      
+              reader.onload = (event) => {
+                const base64String = event.target.result; // This is the base64 string of the compressed image.
+                setSelectedImage(base64String);
+      
+                form.photoBase64 = base64String;
+
+                if (imageRef.current) {
+                  imageRef.current.src = base64String;
+                }
+              };
+      
+              reader.readAsDataURL(compressedFile);
+            } catch (error) {
+              console.error('Error compressing image:', error);
+            }
+        } else {
+            // no image has been selected
+  
+            if(form.photoBase64 === "") {
+                setSelectedImage(null);  
+                if (imageRef.current) {
+                    imageRef.current.src = "https://musicbox.co.rs/images/1.vr7_resize.jpg";
+                }                 
+            }
+            else{
+                if (imageRef.current) {
+                    imageRef.current.src = form.photoBase64;
+                }
+            }
+                    
+        }
     };
 
 
@@ -188,7 +262,7 @@ function New() {
                     </div>
                 </div>
             )}
-
+            
             <div className="flex justify-center items-center mt-32 pb-6">
                 <div className="dark:text-white dark:bg-gray-900 mx-10 rounded-2xl p-12 px-20 pt-6 shadow-2xl flex flex-col items-end lg:w-4/5">
                     
@@ -204,32 +278,30 @@ function New() {
                             <div className="flex flex-col lg:space-x-10 lg:flex-row space-y-12 lg:space-y-0 lg:divide-none divide-y dark:divide-gray-200">
                         
                                 {/* Image */}
-                                <div className="flex flex-col space-y-3 justify-center">                                    
+                                <div className="flex flex-col space-y-3 justify-center">                                   
                                     <div className="overflow-hidden rounded-lg mx-auto">
-                                        <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 duration duration-300 w-52"/>
+                                        <img
+                                            ref={imageRef}
+                                            className="hover:scale-105 duration duration-300 w-52 max-h-52 "
+                                            src="https://musicbox.co.rs/images/1.vr7_resize.jpg"
+                                            alt=""
+                                        />
                                     </div>
                                     
                                     <div className="flex flex-col items-center">
                                         <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
-                                            Profile picture
+                                            Product picture
                                         </h3>
                                         <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
                                             JPG or PNG. Max file size of 800Kb
                                         </div>
                                         <div className="flex items-center space-x-4">
                                             <div className="mr-2">
-                                                <input type="file" accept="image/*" id="imageInput" style={{display: "none"}} />
+                                                <input type="file" accept="image/*" id="imageInput" onChange={handleImageChange} style={{display: "none"}} />
                                                 <label htmlFor="imageInput" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800" style={{cursor: "pointer"}}>
                                                     Select an Image
                                                 </label>
-                                            </div>
-                                            <button type="button" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                <svg className="w-4 h-4 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path>
-                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
-                                                </svg>
-                                                Upload
-                                            </button>
+                                            </div>                                        
                                         </div>
                                     </div>
 
@@ -261,7 +333,7 @@ function New() {
                                     
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label>Genres:</label>                                                                             
-                                        <Combo genresArr={comboGenres}/>
+                                        <Combo genresArr={comboGenres} setter={setSelected} handleSelectionChagne hgandleDeleteChange/>                                        
                                     </div>                                                                    
                                         
                                 </div>
@@ -286,17 +358,17 @@ function New() {
 
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label htmlFor="">Available untill:</label>
-                                        <input required type="date" min={currYear}  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
+                                        <input required type="date" min={currYear2}  name="dateValidity" onChange={handleChange} className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"></input>
                                     </div>
                                     
                                     <div className="flex">                                                                                
                                         <div className="flex flex-col">
                                             <div className="flex items-center mb-4">
-                                                <input id="default-radio-1" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input defaultChecked id="default-radio-1" type="radio" value="" name="used" onClick={() => {form.used = false}} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">New</label> 
                                             </div>
                                             <div className="flex items-center">
-                                                <input defaultChecked id="default-radio-2" type="radio" value="" name="default-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input id="default-radio-2" type="radio" value="" name="used" onClick={() => {form.used = true}} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label htmlFor="default-radio-2" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Used</label>
                                             </div>
                                         </div>

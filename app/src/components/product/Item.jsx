@@ -13,7 +13,7 @@ export default function Item ({product, openPopup}) {
 
             {/* Image */}
             <div className="overflow-hidden rounded-lg">
-                <img src="https://musicbox.co.rs/images/1.vr7_resize.jpg" alt="" className="hover:scale-105 w-full duration duration-300"/>
+                <img src={product.photoBase64} alt="" className="hover:scale-105 w-[300px] h-[300px] object-fill duration duration-300"/>
             </div>
 
             {/* Price & Title */}

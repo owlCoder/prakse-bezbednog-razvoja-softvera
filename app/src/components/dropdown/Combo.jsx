@@ -1,11 +1,12 @@
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { IoIosArrowDown, IoIosClose } from "react-icons/io";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
-export default function Combo({ genresArr }) {
-  const [selected, setSelected] = useState([]);
+export default function Combo({ genresArr, setter }) {
+  
   const [query, setQuery] = useState(""); 
+  const [selected, setSelected] = useState([]);
 
   const filteredGenres =
     query === ""
@@ -17,15 +18,17 @@ export default function Combo({ genresArr }) {
             .includes(query.toLowerCase().replace(/\s+/g, ""))
         );
 
-  const handleSelection = (item) => {
-    setSelected([...selected, item]);
-  };
-
-  const handleRemoveSelection = (item) => {
-    const updatedSelected = selected.filter((selectedItem) => selectedItem.id !== item.id);
-    setSelected(updatedSelected);
-  };
-
+    const handleSelection = (item) => {
+      setSelected([...selected, item]);
+      setter([...selected, item]);
+    };
+    
+    const handleRemoveSelection = (item) => {
+      const updatedSelected = selected.filter((selectedItem) => selectedItem.id !== item.id);
+      setSelected(updatedSelected);
+      setter(updatedSelected);
+      
+    };
 
   return (
     <div className="w-full">
