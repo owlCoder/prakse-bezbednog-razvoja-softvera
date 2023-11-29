@@ -10,14 +10,14 @@ function Store() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [popupData, setPopupData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const openPopup = (data) => {
     setOpen(true);
     setPopupData(data);
   };
-
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -45,7 +45,7 @@ function Store() {
     fetchData();
   }, [navigate]);
 
-  return loading === true ? (
+  return loading ? (
     <LoadingSpinner />
   ) : data != null ? (
     <div className="bg-gray-100 dark:bg-slate-800 dark:text-white min-h-screen pb-5">
@@ -65,15 +65,31 @@ function Store() {
             </p>
           </div>
 
-          {/* Items Container */}
-          <div className="dark:bg-slate-800 flex flex-col p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
-            {/* Grid Container */}
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mx-auto">
-              {data.map((product, index) => (
-                <Item key={index} product={product} openPopup={openPopup} />
-              ))}
+          {/* Filter and Items Container */}
+          <div className="flex flex-col lg:flex-row">
+
+            {/* Filter Sidebar */}
+            <aside className="hidden lg:flex flex-col basis-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
+              {/* Title */}
+              <div className="flex flex-col p-6 ">
+                <h2 className="text-3xl">Filter</h2>
+              </div>
+
+             
+
+            </aside>
+
+            {/* Items Container */}
+            <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
+              {/* Grid Container */}
+              <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-auto">
+                {data.map((product, index) => (
+                  <Item key={index} product={product} openPopup={openPopup} />
+                ))}
+              </div>
             </div>
           </div>
+
         </section>
       </div>
     </div>

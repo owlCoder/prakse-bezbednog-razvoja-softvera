@@ -9,17 +9,19 @@ export default function Item ({product, openPopup}) {
 
     return (    
         product != null ? ( 
-        <div className="flex flex-col border-2 shadow p-5 space-y-5 max-w-sm rounded-lg bg-gray-100 dark:bg-gray-900 dark:border-gray-800">
+        <div className="flex flex-col border-2 shadow p-5 space-y-5 max-w-sm rounded-2xl bg-gray-100 dark:bg-slate-900 dark:border-slate-800">
 
             {/* Image */}
-            <div className="overflow-hidden rounded-lg">
-                <img src={product.photoBase64} alt="" className="hover:scale-105 w-[300px] h-[300px] object-fill duration duration-300"/>
+            <div className="h-[300px] max-w-[300px]">
+                <div className="overflow-hidden rounded-lg">
+                    <img src={product.photoBase64} alt="" className="hover:scale-105 w-full object-fill duration duration-300"/>
+                </div>
             </div>
 
             {/* Price & Title */}
             <div className="text-left flex flex-col">
                 <p className="text-xl">year: {product.productionYear}</p>
-                <p className="text-3xl font-bold">{product.name}</p>
+                <p className="text-3xl font-bold">{product.name.length < 15 ? product.name : (product.name.substring(0,11) + "...") }</p>
                 <div className="text-xl">{product.price}€</div>
             </div>
 
