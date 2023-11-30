@@ -42,7 +42,6 @@ export default function Home() {
           <h1 className="font-bold text-3xl">Best seller grocery near you</h1>
           <p className="text-xl">We provide best quality &amp; fresh items near your location</p>
         </div>
-
          {/*  Items Container  */}
         <div className="dark:bg-slate-800 flex flex-col p-8 md:-mt-4 rounded-b-xl bg-gray-50 md:flex-row md:space-y-0 md:space-x-10 md:p-16">
 

@@ -2,7 +2,10 @@ import { React, useState } from "react";
 
 export const Popup = ({ data, closePopup }) => {
 
-    const [counter, setCounter] = useState(0);
+
+    console.log('Data Object:', data);
+
+    const [counter, setCounter] = useState(1);
 
     const handleClick = (button) => {
         if (button.target.id === 'minus' && counter > 0)
@@ -13,7 +16,7 @@ export const Popup = ({ data, closePopup }) => {
 
     return (
         <div className="z-50 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 md:mt-6">
-            {/* Card Container */}
+            {/* Card Container */}            
             <div className="relative flex flex-col py-16 pr-12 pl-6 md:mx-6 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-6">
 
                 {/* Close Button */}
@@ -25,7 +28,7 @@ export const Popup = ({ data, closePopup }) => {
 
                 {/* Image Div */}
                 <div className="flex items-center justify-center">
-                    <img src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="" className="mx-auto duration-200 w-60 hover:scale-105 md:mr-6" />
+                    <img src={data.photoBase64} alt="" className="mx-auto duration-200 w-60 hover:scale-105 md:mr-6" />
                 </div>
 
                 {/* Content */}
@@ -49,15 +52,19 @@ export const Popup = ({ data, closePopup }) => {
                                 {data.price}€
                             </div>                            
                             <p className="text-sm font-light text-gray-400">
-                                Lorem ipsum dolor sit amet.
+                                Available untill: {data.dateValidity}
                             </p>
                         </div>                        
 
                     </div>
 
                     {/* Description */}
-                    <div className="max-w-xl md:text-left">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid mollitia odio voluptatem fugit asperiores fuga quae alias, repellendus reprehenderit magnam modi iure porro est temporibus corporis sed dignissimos nesciunt doloribus ullam ab aliquam placeat? Expedita provident rerum reprehenderit eius atque, quod adipisci eveniet dolorum tempore exercitationem blanditiis ab tempora corporis.</p>
+                    <div className="max-w-xl md:text-left flex flex-col gap-2">
+                        <p>{data.used ? "Used" : "New"}</p>
+                        <p>In stock: {data.quantity}</p>
+                        <p>Author: {data.author}</p>
+                        <p>Genres: {data.genres.map( item => <li>{item.name}</li> )} </p>
+                        
                     </div>
 
                     {/* Button & Number Input */}
