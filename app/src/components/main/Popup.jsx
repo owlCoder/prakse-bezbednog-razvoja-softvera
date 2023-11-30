@@ -57,11 +57,11 @@ export const Popup = ({ data, closePopup }) => {
                         </div>                        
 
                     </div>
-
+ 
                     {/* Description */}
                     <div className="max-w-xl md:text-left flex flex-col gap-2">
                         <p>{data.used ? "Used" : "New"}</p>
-                        <p>In stock: {data.quantity}</p>
+                        <p>In Stock: {data.quantity}</p>
                         <p>Author: {data.author}</p>
                         <p>Genres: {data.genres.map( item => <li>{item.name}</li> )} </p>
                         
