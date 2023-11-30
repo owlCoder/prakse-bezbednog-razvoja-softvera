@@ -71,7 +71,7 @@ export function AuthProvider({ children }) {
       }
     }
     catch (error) {
-      if (error.code === "auth/invalid-login-credentials") {
+      if (error.code === "auth/invalid-credential") {
         return {
           code: 401,
           response: "The information you entered is incorrect or account doesn't exist"
@@ -145,6 +145,9 @@ export function AuthProvider({ children }) {
           }
         );
       }
+
+      console.log("greskica")
+      console.log("wrong")
     }
   }
 
