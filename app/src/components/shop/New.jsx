@@ -87,7 +87,7 @@ function New() {
             } catch (error) {
               navigate("/403");
             }
-          };
+        };
 
         var currentDate = new Date();
         var currentDate2 = new Date();

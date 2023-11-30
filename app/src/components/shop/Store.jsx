@@ -5,6 +5,7 @@ import { Popup } from "../main/Popup";
 import axios from "axios";
 import Navbar from "../navigation/Navbar";
 import LoadingSpinner from "../loading/loading";
+import FilterSidebar from "./FilterSidebar";
 
 function Store() {
   const [open, setOpen] = useState(false);
@@ -66,18 +67,9 @@ function Store() {
           </div>
 
           {/* Filter and Items Container */}
-          <div className="flex flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-row lg:items-start">
 
-            {/* Filter Sidebar */}
-            <aside className="hidden lg:flex flex-col basis-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
-              {/* Title */}
-              <div className="flex flex-col p-6 ">
-                <h2 className="text-3xl">Filter</h2>
-              </div>
-
-             
-
-            </aside>
+            <FilterSidebar />
 
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
