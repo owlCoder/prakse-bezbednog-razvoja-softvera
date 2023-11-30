@@ -1,8 +1,11 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 
 export const Popup = ({ data, closePopup }) => {
+
+
+    console.log('Data Object:', data);
+
     const [counter, setCounter] = useState(1);
-    var str = "";
 
     const handleClick = (button) => {
         if (button.target.id === 'minus' && counter > 0)
@@ -11,24 +14,10 @@ export const Popup = ({ data, closePopup }) => {
             setCounter(counter + 1);
     };
 
-    useEffect(() => {
-        str = "";
-        for (let i = 0; i < data.name.length; i++) {
-            if(data.name[i] === " " || (data.name[i] !== " " && i % 15 === 0)) {
-                str += "\n";
-            }
-            else {
-                str += data.name[i];
-            }
-        }
-
-        data.name = str;
-    }, [])
-
     return (
         <div className="z-50 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 md:mt-6">
             {/* Card Container */}            
-            <div className="relative max-w-2xl flex flex-col py-16 pr-12 pl-6 md:mx-6 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-6">
+            <div className="relative flex flex-col py-16 pr-12 pl-6 md:mx-6 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-6">
 
                 {/* Close Button */}
                 <button className="absolute top-6 right-9 p-2 hover:text-gray-500" onClick={closePopup}>
@@ -38,7 +27,7 @@ export const Popup = ({ data, closePopup }) => {
                 </button>
 
                 {/* Image Div */}
-                <div className="flex items-center justify-center min-w-2xl">
+                <div className="flex items-center justify-center">
                     <img src={data.photoBase64} alt="" className="mx-auto duration-200 w-60 hover:scale-105 md:mr-6" />
                 </div>
 
@@ -52,10 +41,9 @@ export const Popup = ({ data, closePopup }) => {
                             </div>
                         </div>
                         
-                        {/* Title Container */}
+                        {/* Price Container */}
                         <div className="flex flex-col mb-4 space-y-3 text-center md:text-left">
-                            <p className="text-4xl font-bold">
-                                {data.name}</p>                           
+                            <p className="text-4xl font-bold">{data.name}</p>                           
                         </div>
 
                         {/* Title and info */}
