@@ -17,6 +17,7 @@ function Store() {
   const [loading, setLoading] = useState(true);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
 
   const openPopup = (data) => {
@@ -39,6 +40,7 @@ function Store() {
 
         if (response.status === 200) {
           setData(response.data.payload);
+          setFilteredProducts(response.data.payload); // Initialize with all products
         }
 
         setLoading(false);
@@ -50,15 +52,15 @@ function Store() {
     fetchData();
   }, [navigate]);
 
-  const filteredData = data.filter((product) => {
-    if (selectedGenres.length === 0) {
-      return true;
-    }
+  useEffect(() => {
+    // Filter products based on search query
+    const searchResults = data.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredProducts(searchResults);
+  }, [searchQuery, data]);
 
-    return product.genres.some((genre) => selectedGenres.includes(genre.id));
-  });
-
-  const filteredProducts = filteredData.map((product, index) => (
+  const filteredProductsUI = filteredProducts.map((product, index) => (
     <Item key={index} product={product} openPopup={openPopup} />
   ));
 
@@ -79,10 +81,10 @@ function Store() {
             <FilterSidebar setSelectedGenres={setSelectedGenres} />
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16">
               <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-auto">
-                {filteredProducts.length > 0 ? (
-                  filteredProducts
+                {filteredProductsUI.length > 0 ? (
+                  filteredProductsUI
                 ) : (
-                  <p>No products match the selected genres.</p>
+                  <p>No products match the search query.</p>
                 )}
               </div>
             </div>

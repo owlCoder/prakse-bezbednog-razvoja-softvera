@@ -20,8 +20,8 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex items-center justify-center mb-8 mx-6">
-      <div className="max-w-2xl w-full">
+    <div className="flex items-center justify-center mb-8">
+      <div className="max-w-3xl w-full">
         <input
           type="text"
           placeholder="Search for products..."
@@ -29,15 +29,7 @@ const SearchBar = ({ onSearch }) => {
           value={searchQuery}
           onChange={handleSearchChange}
         />
-      </div>
-      <button
-        className="new-account-button ml-2 px-4 py-2 text-white bg-primary-700 hover:bg-primary-800 focus-ring-4 focus-ring-primary-300 font-medium rounded-lg"
-        style={{ fontSize: 16, fontWeight: '600' }}
-        onClick={handleSearchClick}
-      >
-        <AiOutlineSearch className="plus-icon" />
-        &nbsp;Search
-      </button>
+      </div>      
     </div>
   );
 };
