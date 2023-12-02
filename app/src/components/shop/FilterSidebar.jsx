@@ -43,7 +43,7 @@ const FilterSidebar = ({ setPriceRange, setSelectedGenres }) => {
   }, [navigate]);
 
   return (
-    <div className="sticky top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 hidden lg:flex flex-col w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4 mt-16">
+    <div className="sticky top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 hidden lg:flex flex-col w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
       {/* Price Range Slider */}

@@ -1,7 +1,4 @@
-// SearchBar.js
-
 import React, { useState } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
 
 const SearchBar = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState('');
