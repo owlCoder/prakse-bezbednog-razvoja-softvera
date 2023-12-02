@@ -44,6 +44,9 @@ export const Popup = ({ data, closePopup }) => {
       if (response.status !== 201)
         navigate('/' + response.status.toString());
 
+      data.quantity -= counter;
+      setCounter(1);
+
       setModalText("Order has been completed");
       setModalDesc("Product(s) with desired quantity has been added to your account.");
       setShowModal(true);

@@ -1,4 +1,5 @@
 import React from "react";
+import { CgUnavailable } from 'react-icons/cg';
 
 export default function Item ({product, openPopup}) {
 
@@ -27,6 +28,7 @@ export default function Item ({product, openPopup}) {
 
             {/* Button */}
             <div>
+                {product.quantity > 0 ? 
                 <div onClick={handleButtonClick} className="flex justify-between cursor-pointer p-2 bg-primary-700 px-5 rounded-lg hover:bg-primary-800 font-medium text-white text-md">
                     <div className=""></div>
                     <p>View Product</p>
@@ -38,7 +40,13 @@ export default function Item ({product, openPopup}) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                         </path>
                     </svg>
-                </div>                
+                </div> :
+                       <div onClick={() => {}} className="flex justify-between cursor-default p-2 bg-rose-700 px-5 rounded-lg opacity-60 font-medium text-white text-md">
+                       <div className=""></div>
+                       <p>Product Unavailable</p>
+                       <CgUnavailable className="mt-0.5 text-xl" />
+                   </div>        
+}
             </div>              
             
         </div>
