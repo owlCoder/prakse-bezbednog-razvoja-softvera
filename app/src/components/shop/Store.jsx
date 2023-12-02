@@ -15,6 +15,7 @@ function Store() {
   const [loading, setLoading] = useState(true);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [highestPrice, setHighestPrice] = useState(0);
 
   const navigate = useNavigate();
 
@@ -35,7 +36,12 @@ function Store() {
         });
 
         if (response.status === 200) {
-          setData(response.data.payload);
+
+          const products = response.data.payload;
+          const maxPrice = Math.max(...products.map((product) => product.price));
+  
+          setHighestPrice(maxPrice);
+          setData(products);
         }
 
         setLoading(false);
@@ -46,7 +52,6 @@ function Store() {
 
     fetchData();
   }, [navigate]);
-
 
   const filteredData = data.filter((product) => {
     if (selectedGenres.length === 0) {
@@ -79,7 +84,7 @@ function Store() {
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
-            <FilterSidebar setSelectedGenres={setSelectedGenres} />
+            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice}/>
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}
