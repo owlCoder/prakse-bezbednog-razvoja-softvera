@@ -1,11 +1,23 @@
-// FilterSidebar.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const FilterSidebar = ({ setSelectedGenres, maxPrice }) => {
-  const [priceRange, setLocalPriceRange] = useState([0, maxPrice]);
+const FilterSidebar = ({ setSelectedGenres }) => {
+  const [priceRange, setLocalPriceRange] = useState([0, 100]);
   const [genres, setGenres] = useState([]);
-  const [highestPrice, setHighestPrice] = useState(0);
+  const navigate = useNavigate();
+
+  const handlePriceChange = (newRange) => {
+    setLocalPriceRange(newRange);
+  };
+
+  const handleGenreChange = (genre) => {
+    setSelectedGenres((prevGenres) =>
+      prevGenres.includes(genre.id)
+        ? prevGenres.filter((selectedGenre) => selectedGenre !== genre.id)
+        : [...prevGenres, genre.id]
+    );
+  };
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -23,55 +35,12 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice }) => {
           setGenres(response.data.payload);
         }
       } catch (error) {
-        // Handle error, e.g., navigate to an error page
-        console.error('Error fetching genres:', error);
+        navigate('/403');
       }
     };
 
     fetchGenres();
-  }, []);
-
-  useEffect(() => {
-    const fetchMaxPrice = async () => {
-      try {
-        const response = await axios.get(
-          global.APIEndpoint + '/api/product/get',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          const products = response.data.payload;
-
-          // Find the highest price
-          const maxPrice = Math.max(...products.map((product) => product.price));
-
-          // Set the highest price in state
-          setHighestPrice(maxPrice);
-        }
-      } catch (error) {
-        // Handle error, e.g., navigate to an error page
-        console.error('Error fetching max price:', error);
-      }
-    };
-
-    fetchMaxPrice();
-  }, []);
-
-  const handlePriceChange = (newRange) => {
-    setLocalPriceRange(newRange);
-  };
-
-  const handleGenreChange = (genre) => {
-    setSelectedGenres((prevGenres) =>
-      prevGenres.includes(genre.id)
-        ? prevGenres.filter((selectedGenre) => selectedGenre !== genre.id)
-        : [...prevGenres, genre.id]
-    );
-  };
+  }, [navigate]);
 
   return (
     <div className="sticky top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 hidden lg:flex flex-col w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
@@ -86,7 +55,7 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice }) => {
           <input
             type="range"
             min={0}
-            max={maxPrice}
+            max={100}
             step={1}
             value={priceRange[1]}
             onChange={(e) =>
