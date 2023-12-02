@@ -12,12 +12,6 @@ const SearchBar = ({ onSearch }) => {
     onSearch(query);
   };
 
-  const handleSearchClick = () => {
-    // Implement search functionality as needed
-    // You can trigger the search when the user clicks the search button
-    // For now, it's just a placeholder
-    alert(`Searching for: ${searchQuery}`);
-  };
 
   return (
     <div className="flex items-center justify-center mb-8">
