@@ -3,11 +3,13 @@ import React, { useState } from "react";
 export const Popup = ({ data, closePopup }) => {
   const [counter, setCounter] = useState(1);
 
-  const handleClick = (button) => {
-    if (button.target.id === 'minus' && counter > 0)
-      setCounter(counter - 1);
-    else if (button.target.id === 'plus')
-      setCounter(counter + 1);
+  const changeQuantity = (plusOrMinus) => {
+    if (plusOrMinus)
+      if(counter + 1 <= data.quantity)
+        setCounter(prevCounter => prevCounter + 1);
+    else
+      if(counter - 1 >= 1)
+        setCounter(prevCounter => prevCounter - 1);
   };
 
   return (
@@ -67,17 +69,18 @@ export const Popup = ({ data, closePopup }) => {
             {/* Number Input */}
             <div className="custom-number-input h-10 w-32">
               <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
-                <button id="minus" onClick={handleClick} className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                <button id="minus" onClick={() => { changeQuantity(false) }} className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
                   <span className="m-auto text-2xl font-thin">-</span>
                 </button>
                 <input
                   type="number"
                   value={counter}
+                  readOnly
                   onChange={(e) => setCounter(parseInt(e.target.value, 10))}
                   className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700  "
                   name="custom-input-number"
                 />
-                <button id="plus" onClick={handleClick} data-action="increment" className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                <button id="plus" onClick={() => { changeQuantity(true) }} data-action="increment" className="pb-1 bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
                   <span className="m-auto text-2xl font-thin">+</span>
                 </button>
               </div>
