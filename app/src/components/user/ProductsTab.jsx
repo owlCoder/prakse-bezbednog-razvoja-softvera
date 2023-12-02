@@ -5,7 +5,7 @@ import axios from 'axios';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import { AiOutlineClose, AiFillCheckCircle } from 'react-icons/ai';
-import { FaUserEdit, FaUserMinus } from 'react-icons/fa';
+import { CiEdit, CiCircleMinus } from 'react-icons/ci';
 import { CiImageOff } from 'react-icons/ci';
 import { BsFillFileEarmarkImageFill } from 'react-icons/bs';
 import imageCompression from 'browser-image-compression';
@@ -163,22 +163,38 @@ const ProductsTab = () => {
             const lowerCaseQuery = searchQuery.toLowerCase();
             sortedData = sortedData.filter((product) =>
                 product.author.toLowerCase().includes(lowerCaseQuery) ||
-                product.genres.includes(lowerCaseQuery) ||
+                product.name.toLowerCase().includes(lowerCaseQuery) ||
+                product.quantity.toLowerCase().includes(lowerCaseQuery) ||
                 product.price.toLowerCase().includes(lowerCaseQuery)
             );
         }
 
-        if (sortBy === 'enabled') {
+        if (sortBy === 'used') {
             sortedData = sortedData.sort((a, b) => {
                 // Convert 'true' to 1 and 'false' to 0
-                const valueA = a.disabled ? 1 : 0;
-                const valueB = b.disabled ? 1 : 0;
+                const valueA = a.used ? 1 : 0;
+                const valueB = b.used ? 1 : 0;
 
                 if (ascDesc) {
                     return valueA - valueB;
                 } else {
                     return valueB - valueA;
                 }
+            });
+        }
+        else if (sortBy === 'price') {
+            sortedData = sortedData.sort((a, b) => {
+                const priceA = parseFloat(a.price);
+                const priceB = parseFloat(b.price);
+    
+                return ascDesc ? priceA - priceB : priceB - priceA;
+            });
+        } else if (sortBy === 'quantity') {
+            sortedData = sortedData.sort((a, b) => {
+                const quantityA = parseInt(a.quantity);
+                const quantityB = parseInt(b.quantity);
+    
+                return ascDesc ? quantityA - quantityB : quantityB - quantityA;
             });
         } else {
             sortedData = sortedData.sort((a, b) => {
@@ -321,7 +337,9 @@ const ProductsTab = () => {
 
         <div className="p-4 bg-white dark:bg-slate-800 bg-opacity-60 rounded-lg shadow-lg mx-6 my-4">
             <p className="text-gray-700 dark:text-gray-200 mb-6 ml-1 my-2 text-center font-medium" style={{ fontSize: 17.5 }}>
-                Lorem ispusl dolur <br />
+            Explore the product data, utilize sorting and search capabilities to quickly find the information
+            you need. You can also take various actions on products, such as editing details,
+            deleting products, and performing sort operations. <br />
             </p>
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
@@ -370,7 +388,7 @@ const ProductsTab = () => {
                 {/* Search Bar */}
                 <input
                     type="text"
-                    placeholder="Search users..."
+                    placeholder="Search products..."
                     className="w-full p-2 mb-4 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-xl"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -617,9 +635,17 @@ const ProductsTab = () => {
                             </th>
                             <th
                                 scope="col"
-                                className="px-1 py-3 cursor-pointer"
+                                className="px-6 py-3 cursor-pointer"
+                                onClick={() => handleSortBy('used')}
                             >
                                 Is New{' '}
+                                {sortBy === 'used' ? (
+                                    ascDesc ? (
+                                        <FiArrowUp className="inline" />
+                                    ) : (
+                                        <FiArrowDown className="inline" />
+                                    )
+                                ) : <div></div>}
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Manage Product
@@ -658,7 +684,7 @@ const ProductsTab = () => {
 
                                 </td>
                                 <td className="px-6 py-4">
-                                    {!product.disabled ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
+                                    {!product.used ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg><span>&nbsp;&nbsp;New</span></div>
 
@@ -670,8 +696,8 @@ const ProductsTab = () => {
                                 <td className="px-6 py-4">
                                         <div className="flex flex-wrap gap-2">
                                             {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                            <button onClick={() => handleEditAccount(product)} className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><FaUserEdit className="plus-icon inline" /> Edit</button>
-                                            <button onClick={() => handleDeleteProduct(product.uid, product.sellerUid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><FaUserMinus className="plus-icon inline" /> Delete</button>
+                                            <button onClick={() => handleEditAccount(product)} className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><CiEdit className="plus-icon -mt-1 inline" /> Edit</button>
+                                            <button onClick={() => handleDeleteProduct(product.uid, product.sellerUid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><CiCircleMinus className="plus-icon -mt-1 inline" /> Delete</button>
                                         </div>
                                     </td>
                             </tr>
