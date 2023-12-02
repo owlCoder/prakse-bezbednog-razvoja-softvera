@@ -231,11 +231,11 @@ const ProductsTab = () => {
         setShowModal(false);
     };
 
-    // Function to handle the "Delete Account" button click
+    // Function to handle the "Delete product" button click
     const handleDeleteProductClick = async () => {
         if (uidToDelete === "" || sellerUidToDelete === "") return;
 
-        // Handle the account deletion logic here
+        // Handle the product deletion logic here
         try {
             const token = await currentUser.getIdToken();
             const response = await axios.post(
