@@ -1,4 +1,3 @@
-// Import necessary dependencies and libraries
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -22,10 +21,11 @@ function Store() {
   const openPopup = (data) => {
     setOpen(true);
     setPopupData(data);
-  };
+  };  
 
   useEffect(() => {
     setLoading(true);
+
     const fetchData = async () => {
       try {
         const response = await axios.get(global.APIEndpoint + '/api/product/get', {
@@ -47,27 +47,22 @@ function Store() {
     fetchData();
   }, [navigate]);
 
-  // Filter the data based on selected genres and search query
+
   const filteredData = data.filter((product) => {
-    // If no genres are selected, display all products
     if (selectedGenres.length === 0) {
-      // Check if the product name contains the search query
       return product.name.toLowerCase().includes(searchQuery.toLowerCase());
     }
 
-    // Check if the product has any selected genres and if the name contains the search query
     return (
       product.genres.some((genre) => selectedGenres.includes(genre.id)) &&
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
 
-  // Map over the filtered data
   const filteredProducts = filteredData.map((product, index) => (
     <Item key={index} product={product} openPopup={openPopup} />
   ));
 
-  // Render the Store component
   return loading ? (
     <LoadingSpinner />
   ) : data != null ? (

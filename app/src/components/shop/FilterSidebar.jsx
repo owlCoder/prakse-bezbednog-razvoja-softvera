@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const FilterSidebar = ({ setPriceRange, setSelectedGenres }) => {
+const FilterSidebar = ({ setSelectedGenres }) => {
   const [priceRange, setLocalPriceRange] = useState([0, 100]);
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
