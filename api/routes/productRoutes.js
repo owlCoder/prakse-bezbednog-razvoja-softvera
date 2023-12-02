@@ -12,6 +12,15 @@ router.get('/get', async (req, res) => {
   return res.status(200).json(data);
 });
 
+// Product route to get all products
+router.get('/getProductsPerSellerUid', async (req, res) => {
+  const { uid } = req.body.form; // seller uid from body of request
+
+  // Call controller method for products data fetch
+  let data = await products.getProducts(uid);
+  return res.status(200).json(data);
+});
+
 // Product route to create a new product
 router.post('/create', verifyToken, async (req, res) => {
   const { author, dateValidity, genres, name, photoBase64, price, productionYear, quantity, sellerUid, used } = req.body.form;
