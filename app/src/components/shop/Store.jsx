@@ -53,7 +53,6 @@ function Store() {
   }, [navigate]);
 
   useEffect(() => {
-    // Filter products based on search query
     const searchResults = data.filter((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
