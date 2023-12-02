@@ -253,8 +253,6 @@ const ProductsTab = () => {
                 }
             );
 
-
-
             if (response.status !== 200)
                 navigate('/' + response.status.toString());
 

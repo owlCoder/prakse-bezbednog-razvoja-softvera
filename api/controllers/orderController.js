@@ -22,7 +22,9 @@ const createOrder = async (buyerUid, buyQuantity, product) => {
         const orderRef = await admin.firestore().collection("orders").add({
             buyerUid: buyerUid,
             buyQuantity: buyQuantity,
-            product: product
+            product: product,
+            orderDate: admin.firestore.FieldValue.serverTimestamp(),
+            total: parseFloat(buyQuantity) * parseFloat(availableProductQuantity.data().price)
         });
 
         await productRef.update({ quantity: parseInt(availableProductQuantity.data().quantity) - parseInt(buyQuantity) });
