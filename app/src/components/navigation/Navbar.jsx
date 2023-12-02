@@ -165,7 +165,7 @@ function Navbar() {
                                 <Menu.Item>
                                   {({ active }) => (
                                     <a
-                                      href="/orders-history"
+                                      href="/products-orders"
                                       className={classNames(
                                         active
                                           ? "bg-gray-100 dark:bg-gray-900 text-gray-900"
@@ -343,7 +343,7 @@ function Navbar() {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="/orders-history"
+                                href="/products-orders"
                                 className={classNames(
                                   active
                                     ? "bg-gray-100 dark:bg-gray-900 text-gray-900"

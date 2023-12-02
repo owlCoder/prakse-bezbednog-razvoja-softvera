@@ -34,13 +34,10 @@ export default function UserDashboard() {
                     }
                 );
 
-                if (global.WM === "WM_UNRESTRICTED") // unsecure
+               if(response.status === 200) {
                     setLoading(false);
-                else if(response.status === 200)
-                    setLoading(false);
-                else
-                    navigate('/403');
-
+                }
+              
             } catch (error) {
                 navigate('/403')
             }
