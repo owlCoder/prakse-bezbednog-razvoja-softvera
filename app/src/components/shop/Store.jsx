@@ -16,6 +16,8 @@ function Store() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [highestPrice, setHighestPrice] = useState(0);
+
   const navigate = useNavigate();
 
   const openPopup = (data) => {
@@ -25,7 +27,7 @@ function Store() {
 
   useEffect(() => {
     setLoading(true);
-
+  
     const fetchData = async () => {
       try {
         const response = await axios.get(global.APIEndpoint + '/api/product/get', {
@@ -33,20 +35,27 @@ function Store() {
             'Content-Type': 'application/json',
           },
         });
-
+  
         if (response.status === 200) {
-          setData(response.data.payload);
+          const products = response.data.payload;
+  
+          // Find the highest price
+          const maxPrice = Math.max(...products.map((product) => product.price));
+  
+          // Set the highest price in state
+          setHighestPrice(maxPrice);
+  
+          setData(products);
         }
-
+  
         setLoading(false);
       } catch (error) {
         navigate('/403');
       }
     };
-
+  
     fetchData();
   }, [navigate]);
-
 
   const filteredData = data.filter((product) => {
     if (selectedGenres.length === 0) {
@@ -74,12 +83,12 @@ function Store() {
       )}
       <Navbar />
       <div className="min-h-screen mt-20">
-        <section>
+        <section>          
           <SearchBar onSearch={setSearchQuery} />
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
-            <FilterSidebar setSelectedGenres={setSelectedGenres} />
+            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} />
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}
