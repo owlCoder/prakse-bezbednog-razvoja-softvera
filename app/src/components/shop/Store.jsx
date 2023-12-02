@@ -16,6 +16,7 @@ function Store() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [highestPrice, setHighestPrice] = useState(0);
+  const [priceRange, setPriceRange] = useState([0, 0]);
 
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ function Store() {
           const maxPrice = Math.max(...products.map((product) => product.price));
   
           setHighestPrice(maxPrice);
+          setPriceRange([0, maxPrice]); 
           setData(products);
         }
 
@@ -53,14 +55,27 @@ function Store() {
     fetchData();
   }, [navigate]);
 
+  const handlePriceChange = (newRange) => {
+    setPriceRange(newRange);
+    console.log("handlePriceChange: ", newRange)
+  };
+
   const filteredData = data.filter((product) => {
     if (selectedGenres.length === 0) {
-      return product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      // Filter only based on search query and price range
+      return (
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        parseFloat(product.price) >= parseFloat(priceRange[0]) &&
+        parseFloat(product.price) <= parseFloat(priceRange[1])
+      );
     }
 
+    // Include genre filtering along with search query and price range
     return (
       product.genres.some((genre) => selectedGenres.includes(genre.id)) &&
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      parseFloat(product.price) >= parseFloat(priceRange[0]) &&
+      parseFloat(product.price) <= parseFloat(priceRange[1])
     );
   });
 
@@ -78,13 +93,14 @@ function Store() {
         <div></div>
       )}
       <Navbar />
+      {console.log()}
       <div className="min-h-screen mt-20">
         <section>
           <SearchBar onSearch={setSearchQuery} />
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
-            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice}/>
+            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}

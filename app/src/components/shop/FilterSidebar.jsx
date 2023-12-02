@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const FilterSidebar = ({ setSelectedGenres, maxPrice }) => {
+const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
   const [priceRange, setLocalPriceRange] = useState([0, maxPrice]);
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
 
   const handlePriceChange = (newRange) => {
+    range(newRange);
     setLocalPriceRange(newRange);
   };
 
@@ -59,7 +60,7 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice }) => {
             step={1}
             value={priceRange[1]}
             onChange={(e) =>
-              handlePriceChange([priceRange[0], parseInt(e.target.value, 10)])
+              handlePriceChange([priceRange[0], e.target.value])
             }
             className="w-full"
           />
