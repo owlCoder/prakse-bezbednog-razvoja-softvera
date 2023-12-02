@@ -12,7 +12,7 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="flex items-center justify-center mb-8">
-      <div className="max-w-3xl w-full">
+      <div className="md:max-w-3xl max-w-sm mx-2 w-full">
         <input
           type="text"
           placeholder="Search for products..."
