@@ -128,5 +128,4 @@ const deleteProduct = async (uid) => {
   }
 };
 
-
 module.exports = { getProducts, createProduct, getProductsPerSeller, updateProduct, deleteProduct };

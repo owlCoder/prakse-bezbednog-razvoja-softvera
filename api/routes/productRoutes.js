@@ -60,14 +60,16 @@ router.post('/create', verifyToken, async (req, res) => {
 
 // Product route to update product
 router.post('/update', verifyToken, async (req, res) => {
-  const { uid, dateValidity, genres, name, photoBase64, price, productionYear, sellerUid, quantity, used, currentUserUid } = req.body.form;
-  const reqData = { uid: uid,  dateValidity: dateValidity, genres: genres, name: name, photoBase64: photoBase64, price: price, productionYear: productionYear, quantity: quantity, used: used };
+  const { payload } = req.body;
+  const { currentUserUid } = req.body;
+  const { uid, author: author, dateValidity, genres, name, photoBase64, price, productionYear, sellerUid, quantity, used } = payload;
+  const reqData = { uid: uid,  author: author, dateValidity: dateValidity, genres: genres, name: name, photoBase64: photoBase64, price: price, productionYear: productionYear, quantity: quantity, used: used };
   
   // RBAC
   let role = await getUserRole(currentUserUid);
-
+  
   if (role == null || currentUserUid !== sellerUid) {
-    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+    return res.status(401).json({ code: 403, payload: "You don't have permission to view this data" });
   }
 
   let reqs = await checkRole(role, "products", "update");

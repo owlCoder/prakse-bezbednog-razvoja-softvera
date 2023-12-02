@@ -186,14 +186,14 @@ const ProductsTab = () => {
             sortedData = sortedData.sort((a, b) => {
                 const priceA = parseFloat(a.price);
                 const priceB = parseFloat(b.price);
-    
+
                 return ascDesc ? priceA - priceB : priceB - priceA;
             });
         } else if (sortBy === 'quantity') {
             sortedData = sortedData.sort((a, b) => {
                 const quantityA = parseInt(a.quantity);
                 const quantityB = parseInt(b.quantity);
-    
+
                 return ascDesc ? quantityA - quantityB : quantityB - quantityA;
             });
         } else {
@@ -234,12 +234,12 @@ const ProductsTab = () => {
     // Function to handle the "Delete Account" button click
     const handleDeleteProductClick = async () => {
         if (uidToDelete === "" || sellerUidToDelete === "") return;
-        
+
         // Handle the account deletion logic here
         try {
             const token = await currentUser.getIdToken();
             const response = await axios.post(
-                global.APIEndpoint + "/api/product/delete", 
+                global.APIEndpoint + "/api/product/delete",
                 {
                     uid: uidToDelete,
                     sellerUid: sellerUidToDelete,
@@ -253,7 +253,7 @@ const ProductsTab = () => {
                 }
             );
 
-           
+
 
             if (response.status !== 200)
                 navigate('/' + response.status.toString());
@@ -283,7 +283,7 @@ const ProductsTab = () => {
         setIsModalVisible(true);
     };
 
-    const handleEditAccount = (product) => {
+    const handleEditProduct = (product) => {
         setEditData({ ...product });
         setOldImage(product.photoBase64); // save old image before edit
         setShowEditAccountModal(true);
@@ -292,7 +292,7 @@ const ProductsTab = () => {
 
     // Function to handle edit data of account
     const saveDataEdit = async () => {
-        editData.disabled = editData.disabled === "true" ? true : false; // string to bool
+        editData.used = editData.used === "true" ? true : false; // string to bool
 
         // send new product info and call API
         try {
@@ -302,8 +302,8 @@ const ProductsTab = () => {
             const response = await axios.post(
                 global.APIEndpoint + "/api/product/update/",
                 {
-                    uid: currentUser.uid,
-                    data: editData
+                    currentUserUid: currentUser.uid,
+                    payload: editData,
                 },
                 {
                     headers:
@@ -337,9 +337,9 @@ const ProductsTab = () => {
 
         <div className="p-4 bg-white dark:bg-slate-800 bg-opacity-60 rounded-lg shadow-lg mx-6 my-4">
             <p className="text-gray-700 dark:text-gray-200 mb-6 ml-1 my-2 text-center font-medium" style={{ fontSize: 17.5 }}>
-            Explore the product data, utilize sorting and search capabilities to quickly find the information
-            you need. You can also take various actions on products, such as editing details,
-            deleting products, and performing sort operations. <br />
+                Explore the product data, utilize sorting and search capabilities to quickly find the information
+                you need. You can also take various actions on products, such as editing details,
+                deleting products, and performing sort operations. <br />
             </p>
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-md dark:backdrop-filter">
@@ -486,36 +486,23 @@ const ProductsTab = () => {
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div className="mb-4">
                                             <div className="flex space-x-4">
                                                 <div className="w-1/2">
                                                     <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                         Genres
                                                     </label>
-                                                    <select
-                                                        id="genres"
-                                                        name="genres"
-                                                        required
-                                                        onChange={handleEditProductInputChange}
-                                                        value={editData.genres || []}
-                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                                    >
-                                                        {genres.map((role) => (
-                                                            <option value={role}>{role.name}</option>
-                                                        ))}
-                                                    </select>
+                                                    {/* ovde ubaci tvoj dropdown i promeni name!!! */}
                                                 </div>
                                                 <div className="w-1/2">
                                                     <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                        Price
+                                                        Valid Until
                                                     </label>
                                                     <input
-                                                        type="text"
-                                                        name="price"
+                                                        type="date"
+                                                        name="dateValidity"
                                                         required
-                                                        value={editData.price || ''}
+                                                        value={editData.dateValidity || ''}
                                                         onChange={handleEditProductInputChange}
                                                         className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
                                                     />
@@ -523,18 +510,71 @@ const ProductsTab = () => {
                                             </div>
                                         </div>
                                         <div className="mb-4">
-                                            <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                                                Quantity
-                                            </label>
-                                            <input
-                                                type="number"
-                                                name="number"
-                                                required
-                                                value={editData.quantity || ''}
-                                                onChange={handleEditProductInputChange}
-                                                className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
-                                            />
+                                            <div className="flex space-x-4">
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Price
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="price"
+                                                        value={editData.price || ''}
+                                                        onChange={handleEditProductInputChange}
+                                                        required
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    />
+                                                </div>
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Quantity
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="quantity"
+                                                        required
+                                                        value={editData.quantity || ''}
+                                                        onChange={handleEditProductInputChange}
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
+
+
+                                        <div className="mb-4">
+                                            <div className="flex space-x-4">
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Production Year
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="productionYear"
+                                                        value={editData.productionYear || ''}
+                                                        onChange={handleEditProductInputChange}
+                                                        required
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    />
+                                                </div>
+                                                <div className="w-1/2">
+                                                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
+                                                        Is New
+                                                    </label>
+                                                    <select
+                                                        id="used"
+                                                        name="used"
+                                                        required
+                                                        onChange={handleEditProductInputChange}
+                                                        value={editData.used.toString()}
+                                                        className="w-full p-2 bg-white border-primary-800 dark:bg-slate-700 text-black dark:text-white rounded-lg shadow-md outline-none"
+                                                    >
+                                                        <option value="false">New</option>
+                                                        <option value="true">Used</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div className='ml-1 text-center'>
                                             {error === "AC" ? <span className='text-green-600'>Modifications have been saved</span> : <span className='text-red-600'>{error}</span>}
                                         </div>
@@ -569,7 +609,7 @@ const ProductsTab = () => {
                                 scope="col"
                                 className="px-6 py-3"
                             >
-                                Profile Picture{' '}
+                                Product Picture{' '}
                             </th>
                             <th
                                 scope="col"
@@ -676,8 +716,8 @@ const ProductsTab = () => {
                                 </td>
                                 <td className="px-6 py-4 font-medium">
                                     {product.genres.map((genre, index) => (
-                                        index === product.genres.length - 1 ? 
-                                            <span key={index}>{genre.name} </span> 
+                                        index === product.genres.length - 1 ?
+                                            <span key={index}>{genre.name} </span>
                                             :
                                             <span key={index}>{genre.name}, </span>
                                     ))}
@@ -694,12 +734,12 @@ const ProductsTab = () => {
                                     }
                                 </td>
                                 <td className="px-6 py-4">
-                                        <div className="flex flex-wrap gap-2">
-                                            {/* Buttons for Edit, Delete, Reset Password, and Change Role */}
-                                            <button onClick={() => handleEditAccount(product)} className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><CiEdit className="plus-icon -mt-1 inline" /> Edit</button>
-                                            <button onClick={() => handleDeleteProduct(product.uid, product.sellerUid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><CiCircleMinus className="plus-icon -mt-1 inline" /> Delete</button>
-                                        </div>
-                                    </td>
+                                    <div className="flex flex-wrap gap-2">
+                                        {/* Buttons for Edit, Delete Product*/}
+                                        <button onClick={() => handleEditProduct(product)} className="px-4 py-1.5 mr-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><CiEdit className="plus-icon -mt-1 inline" /> Edit</button>
+                                        <button onClick={() => handleDeleteProduct(product.uid, product.sellerUid)} className="px-4 py-1.5 bg-red-800 text-white rounded-lg hover:bg-red-900"><CiCircleMinus className="plus-icon -mt-1 inline" /> Delete</button>
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
