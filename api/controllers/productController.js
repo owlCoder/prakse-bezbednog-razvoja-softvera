@@ -82,4 +82,51 @@ const createProduct = async (data) => {
   }
 };
 
-module.exports = { getProducts, createProduct, getProductsPerSeller };
+const updateProduct = async (data) => {
+  try {
+    await admin.firestore().collection("products").doc(data.uid).update(data);
+    await admin.firestore().collection("audits").add(
+      {
+        messageType: "INFO",
+        message: "Product [name: " + data.name + "] has been updated in the system",
+        date: admin.firestore.FieldValue.serverTimestamp(),
+      }
+    );
+
+    return { code: 200, payload: "Product has been updated" };
+  } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: "Product [name: " + data.name + "] couldn't be updated in the system [" + `${error.message}` + "]",
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    }
+    );
+    return { code: 400, payload: "Product can't be updated" };
+  }
+};
+
+const deleteProduct = async (uid) => {
+  try {
+    // Delete the product directly by its UID
+    await admin.firestore().collection("products").doc(uid).delete();
+
+    // Add audit log for the deletion action
+    await admin.firestore().collection("audits").add({
+      messageType: "INFO",
+      message: `Product [uid: ${uid}] has been deleted from the system`,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    return { code: 200, payload: "Product has been deleted" };
+  } catch (error) {
+    await admin.firestore().collection("audits").add({
+      messageType: "ERROR",
+      message: `Product [UID: ${uid}] couldn't be deleted from the system [${error.message}]`,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+    });
+    return { code: 400, payload: "Product couldn't be deleted" };
+  }
+};
+
+
+module.exports = { getProducts, createProduct, getProductsPerSeller, updateProduct, deleteProduct };

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import Navbar from "../navigation/Navbar";
-import Tabs from "../tabs/tab";
+import UsersTabs from "../tabs/UsersTab.jsx";
 import LoadingSpinner from "../loading/loading";
 
 export default function UserDashboard() {
@@ -52,7 +52,7 @@ export default function UserDashboard() {
         <div className="bg-gray-100 dark:bg-gray-900 min-h-screen pb-5">
             <Navbar />
             <div className="bg-gray-100 dark:bg-gray-900 min-h-screen mt-20">
-                <Tabs /> {/* Render the Tabs component here */}
+                <UsersTabs /> {/* Render the Tabs component here */}
             </div>
         </div>
     ) : (
