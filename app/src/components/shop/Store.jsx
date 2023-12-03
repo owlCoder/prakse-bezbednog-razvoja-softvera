@@ -7,6 +7,7 @@ import Navbar from '../navigation/Navbar';
 import LoadingSpinner from '../loading/loading';
 import FilterSidebar from './FilterSidebar';
 import SearchBar from './SearchBar';
+import { useLocation } from 'react-router-dom';
 
 function Store() {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,11 @@ function Store() {
   const [searchQuery, setSearchQuery] = useState('');
   const [highestPrice, setHighestPrice] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 0]);
+
+  // search query
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const queryValue = queryParams.get('query');
 
   const navigate = useNavigate();
 
@@ -53,7 +59,12 @@ function Store() {
     };
 
     fetchData();
-  }, [navigate]);
+
+    if(queryValue && queryValue !== "") {
+      setSearchQuery(queryValue);
+    }
+
+  }, [navigate, queryValue]);
 
   const handlePriceChange = (newRange) => {
     setPriceRange(newRange);
@@ -93,7 +104,7 @@ function Store() {
       <Navbar />
       <div className="min-h-screen mt-20">
         <section>
-          <SearchBar onSearch={setSearchQuery} />
+          <SearchBar initQuery={queryValue} onSearch={setSearchQuery} />
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
@@ -105,7 +116,7 @@ function Store() {
                 {filteredProducts.length > 0 ? (
                   filteredProducts
                 ) : (
-                  <p>No products match the selected genres.</p>
+                  <p className='inline'>No products match the selected genres or search criteria.</p>
                 )}
               </div>
             </div>

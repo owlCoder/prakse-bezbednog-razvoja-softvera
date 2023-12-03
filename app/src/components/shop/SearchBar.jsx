@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, initQuery }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (e) => {
@@ -9,6 +9,12 @@ const SearchBar = ({ onSearch }) => {
     onSearch(query);
   };
 
+  useEffect(() => {
+    if(initQuery && initQuery !== "") {
+      setSearchQuery(initQuery);
+      onSearch(initQuery);
+    }
+  }, [initQuery])
 
   return (
     <div className="flex items-center justify-center mb-8">

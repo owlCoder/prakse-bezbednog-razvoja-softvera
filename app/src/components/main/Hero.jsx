@@ -1,8 +1,10 @@
 import { React, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 
 export const HeroSection = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     return (
         <section className="mb-16 flex flex-col justify-between gap-6 sm:gap-10 md:mb-16 md:gap-16 lg:flex-row md:mt-32 mx-6 mt-20 md:mx-24">
@@ -23,6 +25,7 @@ export const HeroSection = () => {
                     <button
                         className="new-account-button inline mb-4 mx-auto"
                         style={{ fontSize: 16, fontWeight: '600' }}
+                        onClick={() => { let query = "/store?query=" + searchQuery; navigate(query) }}
                     >
                         <AiOutlineSearch className="plus-icon" />
                         &nbsp;Search
