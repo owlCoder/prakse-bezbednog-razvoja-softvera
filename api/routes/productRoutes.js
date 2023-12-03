@@ -84,7 +84,7 @@ router.post('/update', verifyToken, async (req, res) => {
   return res.status(data.code).json({ code: data.code, payload: data.payload });
 });
 
-// Product route to create a new product
+// Product route to delete a product
 router.post('/delete', verifyToken, async (req, res) => {
   const { uid, sellerUid, currentUserUid } = req.body;
   

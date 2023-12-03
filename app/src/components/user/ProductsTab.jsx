@@ -163,9 +163,7 @@ const ProductsTab = () => {
             const lowerCaseQuery = searchQuery.toLowerCase();
             sortedData = sortedData.filter((product) =>
                 product.author.toLowerCase().includes(lowerCaseQuery) ||
-                product.name.toLowerCase().includes(lowerCaseQuery) ||
-                product.quantity.toLowerCase().includes(lowerCaseQuery) ||
-                product.price.toLowerCase().includes(lowerCaseQuery)
+                product.name.toLowerCase().includes(lowerCaseQuery)
             );
         }
 

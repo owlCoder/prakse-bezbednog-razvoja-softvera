@@ -57,12 +57,11 @@ function Store() {
 
   const handlePriceChange = (newRange) => {
     setPriceRange(newRange);
-    console.log("handlePriceChange: ", newRange)
   };
 
   const filteredData = data.filter((product) => {
     if (selectedGenres.length === 0) {
-      // Filter only based on search query and price range
+
       return (
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
         parseFloat(product.price) >= parseFloat(priceRange[0]) &&
@@ -70,7 +69,6 @@ function Store() {
       );
     }
 
-    // Include genre filtering along with search query and price range
     return (
       product.genres.some((genre) => selectedGenres.includes(genre.id)) &&
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -93,7 +91,6 @@ function Store() {
         <div></div>
       )}
       <Navbar />
-      {console.log()}
       <div className="min-h-screen mt-20">
         <section>
           <SearchBar onSearch={setSearchQuery} />

@@ -39,7 +39,6 @@ const OrdersTab = () => {
                 );
 
                 setData(response.data.payload);
-                console.log(response.data.payload)
                 setLoading(false);
 
                 if (response.status !== 200) 
@@ -55,20 +54,11 @@ const OrdersTab = () => {
   
     // sorting
     const handleSortBy = (key) => {
-        if (key === 'enabled') {
-            if (key === sortBy) {
-                setAscDesc(!ascDesc);
-            } else {
-                setSortBy(key);
-                setAscDesc(true);
-            }
+        if (key === sortBy) {
+            setAscDesc(!ascDesc);
         } else {
-            if (key === sortBy) {
-                setAscDesc(!ascDesc);
-            } else {
-                setSortBy(key);
-                setAscDesc(true);
-            }
+            setSortBy(key);
+            setAscDesc(true);
         }
     };
 
@@ -77,46 +67,63 @@ const OrdersTab = () => {
     if (sortedData) {
         if (searchQuery.trim() !== '') {
             const lowerCaseQuery = searchQuery.toLowerCase();
-            sortedData = sortedData.filter((product) =>
-                product.author.toLowerCase().includes(lowerCaseQuery) ||
-                product.name.toLowerCase().includes(lowerCaseQuery) ||
-                product.quantity.toLowerCase().includes(lowerCaseQuery) ||
-                product.price.toLowerCase().includes(lowerCaseQuery)
+            sortedData = sortedData.filter((order) =>
+                order.product.author.toLowerCase().includes(lowerCaseQuery) ||
+                order.product.name.toLowerCase().includes(lowerCaseQuery)
             );
         }
 
-        if (sortBy === 'used') {
+        if (sortBy === 'name') {
             sortedData = sortedData.sort((a, b) => {
-                // Convert 'true' to 1 and 'false' to 0
-                const valueA = a.used ? 1 : 0;
-                const valueB = b.used ? 1 : 0;
-
-                if (ascDesc) {
-                    return valueA - valueB;
-                } else {
-                    return valueB - valueA;
-                }
+                const nameA = a.product.name.toLowerCase();
+                const nameB = b.product.name.toLowerCase();
+        
+                return ascDesc ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
             });
-        }
-        else if (sortBy === 'price') {
+        } else if (sortBy === 'price') {
             sortedData = sortedData.sort((a, b) => {
-                const priceA = parseFloat(a.price);
-                const priceB = parseFloat(b.price);
+                const priceA = parseFloat(a.product.price);
+                const priceB = parseFloat(b.product.price);
 
                 return ascDesc ? priceA - priceB : priceB - priceA;
             });
         } else if (sortBy === 'quantity') {
-            sortedData = sortedData.sort((a, b) => {
-                const quantityA = parseInt(a.quantity);
-                const quantityB = parseInt(b.quantity);
+            sortedData = sortedData.sort((a, b) => {                
+                const quantityA = parseInt(a.buyQuantity);
+                const quantityB = parseInt(b.buyQuantity);
 
-                return ascDesc ? quantityA - quantityB : quantityB - quantityA;
+                return ascDesc ?  quantityA - quantityB : quantityB - quantityA ;
+            });
+        } else if (sortBy === 'totalPrice') {
+            sortedData = sortedData.sort((a, b) => {
+                const totalPriceA = parseInt(a.total);
+                const totalPriceB = parseInt(b.total);
+
+                return ascDesc ? totalPriceA - totalPriceB : totalPriceB - totalPriceA;
             });
         } else {
             sortedData = sortedData.sort((a, b) => {
-                if (sortBy === 'date') {
-                    const dateA = new Date(a.dateValidity);
-                    const dateB = new Date(b.dateValidity);
+                if (sortBy === 'orderDate') {
+                    const fdateA = new Intl.DateTimeFormat('en-GB', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }).format(new Date(a.orderDate._seconds * 1000)).replace(/\//g, '.');
+                    const fdateB = new Intl.DateTimeFormat('en-GB', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }).format(new Date(b.orderDate._seconds * 1000)).replace(/\//g, '.');
+
+                    const dateA = new Date(fdateA);
+                    const dateB = new Date(fdateB);
+
                     return ascDesc ? dateA - dateB : dateB - dateA;
                 } else {
                     return ascDesc
@@ -201,10 +208,10 @@ const OrdersTab = () => {
                             <th
                                 scope="col"
                                 className="px-6 py-3 cursor-pointer"
-                                onClick={() => handleSortBy('productionYear')}
+                                onClick={() => handleSortBy('orderDate')}
                             >
-                                Production Year{' '}
-                                {sortBy === 'productionYear' ? (
+                                Order Date{' '}
+                                {sortBy === 'orderDate' ? (
                                     ascDesc ? (
                                         <FiArrowUp className="inline" />
                                     ) : (
@@ -215,33 +222,24 @@ const OrdersTab = () => {
                             <th
                                 scope="col"
                                 className="px-6 py-3 cursor-pointer"
+                                onClick={() => handleSortBy('totalPrice')}
                             >
-                                Genres{' '}
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 cursor-pointer"
-                                onClick={() => handleSortBy('used')}
-                            >
-                                Is New{' '}
-                                {sortBy === 'used' ? (
+                                Total Price{' '}
+                                {sortBy === 'totalPrice' ? (
                                     ascDesc ? (
                                         <FiArrowUp className="inline" />
                                     ) : (
                                         <FiArrowDown className="inline" />
                                     )
                                 ) : <div></div>}
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Manage Product
-                            </th>
+                            </th>                                                                         
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {sortedData.map((order) => (
+                        {sortedData.map((order) => (
                             <tr
-                                className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"
                                 key={order.uid}
+                                className="bg-white border-1 border-b-gray-950 dark:bg-gray-900 dark:border-gray-700"                            
                             >
                                 <td className="px-6 py-4 font-medium">
                                     <div className="flex-shrink-0 flex items-center">
@@ -252,33 +250,22 @@ const OrdersTab = () => {
                                         />
                                     </div>
                                 </td>
-                                <td className="px-6 py-4">{product.name}</td>
-                                <td className="px-6 py-4">{product.price}</td>
-                                <td className="px-6 py-4">{product.quantity}</td>
+                                <td className="px-6 py-4">{order.product.name}</td>
+                                <td className="px-6 py-4">{order.product.price}</td>
+                                <td className="px-6 py-4">{order.buyQuantity}</td>
                                 <td className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                    {new Date(product.productionYear).toLocaleDateString('en-GB').replace(/\//g, '.')}
+                                    {new Intl.DateTimeFormat('en-GB', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit'
+                                    }).format(new Date(order.orderDate._seconds * 1000)).replace(/\//g, '.')}
                                 </td>
-                                <td className="px-6 py-4 font-medium">
-                                    {product.genres.map((genre, index) => (
-                                        index === product.genres.length - 1 ?
-                                            <span key={index}>{genre.name} </span>
-                                            :
-                                            <span key={index}>{genre.name}, </span>
-                                    ))}
-
-                                </td>
-                                <td className="px-6 py-4">
-                                    {!product.used ? <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="w-6 h-6 inline -mt-0.5">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg><span>&nbsp;&nbsp;New</span></div>
-
-                                        : <div className='inline'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="crimson" className="w-6 h-6 inline -mt-0.5">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                        </svg><span>&nbsp;&nbsp;Used</span></div>
-                                    }
-                                </td>
+                                <td className="px-6 py-4">{order.total}</td>                                
                             </tr>
-                        ))} */}
+                        ))}                      
                     </tbody>
                 </table>
             </div>
