@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
+const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, queryGenre }) => {
   const [priceRange, setLocalPriceRange] = useState([0, maxPrice]);
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
@@ -34,6 +34,16 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
 
         if (response.status === 200) {
           setGenres(response.data.payload);
+
+          if (queryGenre && queryGenre !== "") {
+            var genrestr = decodeURIComponent(queryGenre);
+            const matchingGenre = response.data.payload.find(genre => genre.name === genrestr);
+            if (matchingGenre) {
+              setSelectedGenres((prevGenres) =>
+                [...prevGenres, matchingGenre.id]
+              );
+            }
+          }
         }
       } catch (error) {
         navigate('/403');
@@ -41,7 +51,8 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
     };
 
     fetchGenres();
-  }, [navigate]);
+  }, [navigate, queryGenre, setSelectedGenres]);
+
 
   return (
     <div className="sticky top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 hidden lg:flex flex-col w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
@@ -82,6 +93,7 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
               <input
                 type="checkbox"
                 id={genre.id}
+                checked={selectedGenres.includes(genre.id)}
                 onChange={() => handleGenreChange(genre)}
                 className="mr-2"
               />

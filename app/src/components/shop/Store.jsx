@@ -23,6 +23,7 @@ function Store() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const queryValue = queryParams.get('query');
+  const genreValue = queryParams.get('genre');
 
   const navigate = useNavigate();
 
@@ -59,9 +60,9 @@ function Store() {
     };
 
     fetchData();
-
+    
     if(queryValue && queryValue !== "") {
-      setSearchQuery(queryValue);
+      setSearchQuery(decodeURIComponent(queryValue));
     }
 
   }, [navigate, queryValue]);
@@ -108,7 +109,7 @@ function Store() {
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
-            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
+            <FilterSidebar queryGenre={genreValue} selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}
