@@ -71,7 +71,14 @@ export function AuthProvider({ children }) {
       }
     }
     catch (error) {
+      console.warn(error);
       if (error.code === "auth/invalid-credential") {
+        return {
+          code: 401,
+          response: "The information you entered is incorrect or account doesn't exist"
+        };
+      }
+      else if (error.code === "auth/invalid-login-credentials") {
         return {
           code: 401,
           response: "The information you entered is incorrect or account doesn't exist"

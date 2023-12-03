@@ -139,21 +139,13 @@ const ProductsTab = () => {
 
     // sorting
     const handleSortBy = (key) => {
-        if (key === 'enabled') {
-            if (key === sortBy) {
-                setAscDesc(!ascDesc);
-            } else {
-                setSortBy(key);
-                setAscDesc(true);
-            }
+        if (key === sortBy) {
+            setAscDesc(!ascDesc);
         } else {
-            if (key === sortBy) {
-                setAscDesc(!ascDesc);
-            } else {
-                setSortBy(key);
-                setAscDesc(true);
-            }
+            setSortBy(key);
+            setAscDesc(true);
         }
+
     };
 
     let sortedData = data;
