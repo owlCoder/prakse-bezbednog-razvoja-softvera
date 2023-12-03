@@ -49,7 +49,7 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
 
       {/* Price Range Slider */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 pt-2">
+        <label className="block text-sm font-medium dark:text-gray-300 pt-2">
           Price Range
         </label>
         <div className="mt-1">
@@ -73,7 +73,7 @@ const FilterSidebar = ({ setSelectedGenres, maxPrice, range }) => {
 
       {/* Genre Checkboxes */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 pt-2">
+        <label className="block text-sm font-medium dark:text-gray-300 pt-2">
           Genres
         </label>
         <div className="mt-2 space-y-2">
