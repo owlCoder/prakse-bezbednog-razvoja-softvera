@@ -7,6 +7,7 @@ import Navbar from '../navigation/Navbar';
 import LoadingSpinner from '../loading/loading';
 import FilterSidebar from './FilterSidebar';
 import SearchBar from './SearchBar';
+import { useLocation } from 'react-router-dom';
 
 function Store() {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,12 @@ function Store() {
   const [searchQuery, setSearchQuery] = useState('');
   const [highestPrice, setHighestPrice] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 0]);
+
+  // search query
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const queryValue = queryParams.get('query');
+  const genreValue = queryParams.get('genre');
 
   const navigate = useNavigate();
 
@@ -53,7 +60,12 @@ function Store() {
     };
 
     fetchData();
-  }, [navigate]);
+    
+    if(queryValue && queryValue !== "") {
+      setSearchQuery(decodeURIComponent(queryValue));
+    }
+
+  }, [navigate, queryValue]);
 
   const handlePriceChange = (newRange) => {
     setPriceRange(newRange);
@@ -93,11 +105,11 @@ function Store() {
       <Navbar />
       <div className="min-h-screen mt-20">
         <section>
-          <SearchBar onSearch={setSearchQuery} />
+          <SearchBar initQuery={queryValue} onSearch={setSearchQuery} />
           {/* Filter and Items Container */}
           <div className="flex flex-col lg:flex-row lg:items-start">
             {/* Filter Sidebar */}
-            <FilterSidebar setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
+            <FilterSidebar queryGenre={genreValue} selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}
@@ -105,7 +117,7 @@ function Store() {
                 {filteredProducts.length > 0 ? (
                   filteredProducts
                 ) : (
-                  <p>No products match the selected genres.</p>
+                  <p className='inline'>No products match the selected genres or search criteria.</p>
                 )}
               </div>
             </div>

@@ -17,8 +17,8 @@ export const Card = ({ year, title, hyperlink, hyperlinkText }) => {
                         {year}
                     </div>
                     <div className="flex flex-col items-start space-y-3 ">
-                      <p className="2xl:text-4xl xl:text-3xl lg:text-2xl md:text-xl text-3xl">{title}</p>
-                      <a href={hyperlink} className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium">
+                      <p className="2xl:text-2xl xl:text-2xl lg:text-2xl md:text-xl text-2xl">{title}</p>
+                      <a href={hyperlink} className="bg-blue-600 uppercase hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium">
                         {hyperlinkText}
                       </a>
                     </div>
