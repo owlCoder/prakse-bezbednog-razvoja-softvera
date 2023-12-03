@@ -240,7 +240,7 @@ const OrdersTab = () => {
                                 onClick={() => handleSortBy('seller')}
                             >
                                 Seller{' '}
-                                {sortBy === 'name' ? (
+                                {sortBy === 'seller' ? (
                                     ascDesc ? (
                                         <FiArrowUp className="inline" />
                                     ) : (
