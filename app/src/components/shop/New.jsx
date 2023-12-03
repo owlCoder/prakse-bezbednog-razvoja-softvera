@@ -333,7 +333,7 @@ function New() {
                                     
                                     <div className="flex flex-col space-y-2 justify-center">
                                         <label>Genres:</label>                                                                             
-                                        <Combo genresArr={comboGenres} setter={setSelected} handleSelectionChagne hgandleDeleteChange/>                                        
+                                        <Combo genresArr={comboGenres} setter={setSelected} initialSelectedGenres={[]}/>                                        
                                     </div>                                                                    
                                         
                                 </div>

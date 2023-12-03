@@ -1,12 +1,18 @@
 import { Fragment, useState } from "react";
+import { useEffect } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { IoIosArrowDown, IoIosClose } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 
-export default function Combo({ genresArr, setter }) {
+export default function Combo({ genresArr, setter, initialSelectedGenres  }) {
   
   const [query, setQuery] = useState(""); 
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(initialSelectedGenres);
+
+  // useEffect to update selectedGenres when initialSelectedGenres change
+  useEffect(() => {
+    setSelected(initialSelectedGenres || []);
+  }, [initialSelectedGenres]);
 
   const filteredGenres =
     query === ""

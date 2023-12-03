@@ -9,6 +9,7 @@ import { CiEdit, CiCircleMinus } from 'react-icons/ci';
 import { CiImageOff } from 'react-icons/ci';
 import { BsFillFileEarmarkImageFill } from 'react-icons/bs';
 import imageCompression from 'browser-image-compression';
+import Combo from '../dropdown/Combo';
 
 const ProductsTab = () => {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ const ProductsTab = () => {
     const [ascDesc, setAscDesc] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [error, setError] = useState("");
+    const [selectedGenres, setSelectedGenres] = useState([]);
 
     // info modal
     const [showModal, setShowModal] = useState(false);
@@ -40,6 +42,10 @@ const ProductsTab = () => {
 
     // available genres
     const [genres, setGenres] = useState(null);
+
+    const handleGenreSelection = (selected) => {
+        setSelectedGenres(selected);
+      };
 
     useEffect(() => {
         setLoading(true);
@@ -281,7 +287,9 @@ const ProductsTab = () => {
     // Function to handle edit data of account
     const saveDataEdit = async () => {
         editData.used = editData.used === "true" ? true : false; // string to bool
-
+        
+        console.log("Selected Genres:", selectedGenres);
+        
         // send new product info and call API
         try {
             const token = await currentUser.getIdToken();
@@ -475,14 +483,15 @@ const ProductsTab = () => {
                                             </div>
                                         </div>
                                         <div className="mb-4">
-                                            <div className="flex space-x-4">
-                                                <div className="w-1/2">
+                                            <div className="">
+                                                {/*<div className="w-1/2">
                                                     <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                         Genres
-                                                    </label>
-                                                    {/* ovde ubaci tvoj dropdown i promeni name!!! */}
-                                                </div>
-                                                <div className="w-1/2">
+                                                    </label>                                                    
+                                                    {console.log(editData)}
+                                                    <Combo genresArr={genres} setter={handleGenreSelection} initialSelectedGenres={editData.genres}/>
+                                                </div> */}
+                                                <div className="w-full">
                                                     <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
                                                         Valid Until
                                                     </label>

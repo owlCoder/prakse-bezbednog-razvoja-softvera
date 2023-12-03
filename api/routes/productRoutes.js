@@ -11,7 +11,7 @@ router.get('/get', async (req, res) => {
   return res.status(200).json(data);
 });
 
-// Product route to get all products
+// Product route to get all products with certain seller uid
 router.post('/getProductsPerSellerUid', async (req, res) => {
   const { uid } = req.body; // user uid from body of request
   
