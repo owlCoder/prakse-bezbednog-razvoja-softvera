@@ -2,7 +2,7 @@
 
 ## Description
 
-"Practices for the development of secure software" is a project focused on implementing secure software development practices. This project aims to [briefly describe the project's goals, objectives, or what it intends to achieve in terms of secure software development].
+"Practices for the development of secure software" is a project focused on implementing secure software development practices.
 
 ## Table of Contents
 
