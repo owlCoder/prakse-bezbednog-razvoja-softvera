@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getRoleByUid } from '../../services/main';
 import { RiSettingsLine } from 'react-icons/ri';
 import { LuLayoutDashboard, LuBarChartBig } from 'react-icons/lu';
 import { BiSolidExit } from 'react-icons/bi';
@@ -39,19 +39,7 @@ function Navbar() {
 
       try {
         const token = await currentUser.getIdToken();
-        const response = await axios.post(
-          global.APIEndpoint + "/api/user/getRoleByUid",
-          {
-            uid: currentUser.uid,
-          },
-          {
-            headers: {
-              Authorization: `${token}`,
-              "Content-Type": "application/json",
-            },
-            
-          }
-        );
+        const response = await getRoleByUid(currentUser, token);
 
         if (response.data != null) {
           if (response.data.payload === "admin")
@@ -63,7 +51,7 @@ function Navbar() {
         if (response.status !== 200)
           navigate('/403' + response.status.toString());
       } catch (error) {
-        navigate('/403')
+        console.log(error)
       }
     };
 

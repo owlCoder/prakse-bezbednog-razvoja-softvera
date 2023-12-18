@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { createOrder } from '../../services/main';
 
 export const Popup = ({ data, closePopup }) => {
   const [counter, setCounter] = useState(1);
@@ -26,20 +26,8 @@ export const Popup = ({ data, closePopup }) => {
   const makeAnOrder = async () => {
     try {
       const token = await currentUser.getIdToken();
-      const response = await axios.post(
-        global.APIEndpoint + "/api/order/create",
-        {
-          buyQuantity: counter,
-          buyerUid: currentUser.uid,
-          product: data
-        },
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+
+      const response = await createOrder(counter, currentUser, data, token);
 
       if (response.status !== 201)
         navigate('/' + response.status.toString());
