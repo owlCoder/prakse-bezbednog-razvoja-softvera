@@ -53,7 +53,7 @@ export const Popup = ({ data, closePopup }) => {
   return (
     <div>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-2xl dark:backdrop-filter">
+        <div className="lg:mt-0 fixed inset-0 flex items-center justify-center z-50 backdrop-blur-2xl backdrop-filter dark:backdrop-blur-2xl dark:backdrop-filter">
           <div className="bg-white w-96 rounded-lg p-6 shadow-lg dark:bg-gray-900 transition-opacity duration-300">
             <h2 className="text-xl font-semibold mb-4 dark:text-white">
               {modalText}
@@ -69,9 +69,9 @@ export const Popup = ({ data, closePopup }) => {
         </div>
       )}
 
-      <div className="z-40 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mb-16 md:mt-6">
+      <div className="z-40 fixed inset-0 flex items-center justify-center min-h-screen text-black dark:text-gray-300 backdrop-blur-md backdrop-filter dark:backdrop-blur-md dark:backdrop-filter mt-10 md:mt-6">
         {/* Card Container */}
-        <div className="relative flex flex-col py-16 pr-32 pl-16 md:mx-6 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-6">
+        <div className="relative flex flex-col py-7 px-14 md:py-16 md:pr-32 md:pl-16 md:mx-6 space-y-10 border-2 border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-300 rounded-2xl shadow-2xl md:flex-row md:space-y-0 md:space-x-6">
 
           {/* Close Button */}
           <button className="absolute top-6 right-9 p-2 hover:text-gray-500" onClick={closePopup}>

@@ -16,7 +16,7 @@ function classNames(...classes) {
 }
 
 function Navbar() {
-  const links = ["Homepage", "Store"];
+  const links = ["Store"];
   const profileLinks = ["Account Settings"];
   const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
@@ -62,23 +62,29 @@ function Navbar() {
     <div>
       <nav className="bg-gray-50 dark:bg-gray-950 dark:text-white dark:border-gray-800 fixed top-0 w-full border-b-2 border-gray-200 z-50">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <img
-                  className="h-8 w-13"
-                  src="/logo512.png"
-                  alt="Workflow"
-                />
-                <div className="inline font-medium text-slate-950 dark:text-white">eBordy</div>
+                <a href={"/Homepage"} className="hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-800 flex items-center">
+                  <img
+                    className="h-8 w-13"
+                    src="/logo512.png"
+                    alt="Workflow"
+                  />
+                  <div className="inline font-medium text-slate-950 dark:text-white">
+                    <span>
+                      eBordy
+                    </span>                 
+                  </div>                    
+                </a>
               </div>
               <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
+                <div className="ml-5 flex items-baseline space-x-4">
                   {links.map((link, index) => (
                     <a
                       href={"/" + link.toLowerCase().replaceAll(" ", "-")}
                       key={index}
-                      className="hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium dark:hover:bg-gray-800"
+                      className="hover:bg-gray-300 px-3 py-3.5 rounded-md text-sm font-medium dark:hover:bg-gray-800"
                     >
                       {link}
                     </a>
@@ -90,7 +96,7 @@ function Navbar() {
                     </a>
 
                   )}
-                  <div className="absolute right-4 text-base font-normal">
+                  <div className="absolute top-3 right-4 text-base font-normal">
                     {currentUser !== null ? (
                       <Menu
                         as="div"
@@ -207,7 +213,7 @@ function Navbar() {
                 </div>
               </div>
             </div>
-            <div className="-mr-2 flex flex-col md:hidden">
+            <div className="-mr-2 mt-3 flex flex-col md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"

@@ -55,7 +55,7 @@ const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, que
 
 
   return (
-    <div className="sticky top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 hidden lg:flex flex-col w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl ml-4">
+    <div className="lg:sticky lg:top-20 h-full max-h-screen overflow-y-auto bg-gray-200 p-4 lg:flex flex-col lg:w-1/4 dark:bg-slate-900 divide-y divide-solid rounded-2xl mb-4 md:max-w-3xl max-w-sm mx-2 w-full">
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
       {/* Price Range Slider */}
@@ -87,7 +87,7 @@ const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, que
         <label className="block text-sm font-medium dark:text-gray-300 pt-2">
           Genres
         </label>
-        <div className="mt-2 space-y-2">
+        <div className="mt-2 gap-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
           {genres.map((genre) => (
             <div key={genre.id} className="flex items-center">
               <input

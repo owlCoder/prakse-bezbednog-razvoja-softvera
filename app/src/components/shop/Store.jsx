@@ -107,13 +107,13 @@ function Store() {
         <section>
           <SearchBar initQuery={queryValue} onSearch={setSearchQuery} />
           {/* Filter and Items Container */}
-          <div className="flex flex-col lg:flex-row lg:items-start">
+          <div className="flex flex-col lg:flex-row lg:items-start items-center">
             {/* Filter Sidebar */}
             <FilterSidebar queryGenre={genreValue} selectedGenres={selectedGenres} setSelectedGenres={setSelectedGenres} maxPrice={highestPrice} range={handlePriceChange}/>
             {/* Items Container */}
             <div className="dark:bg-slate-800 flex flex-col basis-3/4 p-6 m-3 bg-gray-50 rounded-2xl md:rounded-none md:flex-row md:space-y-0 md:space-x-10 md:m-0 md:p-16 md:pt-0">
               {/* Grid Container */}
-              <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-auto">
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-auto">
                 {filteredProducts.length > 0 ? (
                   filteredProducts
                 ) : (
