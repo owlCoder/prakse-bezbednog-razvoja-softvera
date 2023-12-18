@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getRoleByUid } from '../../services/main';
+import { getRoleByUid } from '../services/main';
 import { RiSettingsLine } from 'react-icons/ri';
 import { LuLayoutDashboard, LuBarChartBig } from 'react-icons/lu';
 import { BiSolidExit } from 'react-icons/bi';

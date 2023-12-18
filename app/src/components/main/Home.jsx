@@ -4,8 +4,8 @@ import { Popup } from "./Popup";
 import { HeroSection } from "./Hero";
 import { Card } from "../cards/Card";
 import { Footer } from "../footer/Footer";
-import { getProducts } from '../../services/main';
-import { countGenres } from "../../utils/product-counter";
+import { getProducts } from '../services/main';
+import { countGenres } from "../utils/product-counter";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
