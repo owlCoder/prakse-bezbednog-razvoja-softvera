@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+import { getOrdersAdmin } from '../services/admin';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 
@@ -25,18 +25,7 @@ const OrdersTab = () => {
 
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post(
-                    global.APIEndpoint + '/api/order/get',
-                    {
-                        uid: currentUser.uid,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
+                const response = await getOrdersAdmin(currentUser, token);
 
                 setData(response.data.payload);
                 setLoading(false);

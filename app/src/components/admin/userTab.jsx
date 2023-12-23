@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import axios from 'axios';
+import { getUsersAdmin, getRolesAdmin, deleteUserByGuidAdmin, createNewUserAdmin, updateUserAdmin} from '../services/admin';
 import LoadingSpinner from '../loading/loading';
 import { FiArrowUp, FiArrowDown } from 'react-icons/fi';
 import { AiOutlineUserAdd, AiOutlineClose, AiFillCheckCircle } from 'react-icons/ai';
@@ -53,37 +53,13 @@ const UsersTab = () => {
 
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post(
-                    global.APIEndpoint + '/api/user/get', // Adjust the API endpoint for fetching user data
-                    {
-                        uid: currentUser.uid,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
+                const response = await getUsersAdmin(currentUser, token); 
 
                 setData(response.data.payload);
 
-                // fetch roles from firestore
                 try {
                     const token = await currentUser.getIdToken();
-                    const response = await axios.post(
-                        global.APIEndpoint + '/api/role/get', // Adjust the API endpoint for fetching user data
-                        {
-                            uid: currentUser.uid,
-                        },
-                        {
-                            headers: {
-                                Authorization: `${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                        }
-                    );
-
+                    const response = await getRolesAdmin(currentUser, token);
                     setRoles(response.data.payload);
 
                     if (response.status !== 200) navigate('/' + response.status.toString());
@@ -243,18 +219,7 @@ const UsersTab = () => {
         // Handle the account deletion logic here
         try {
             const token = await currentUser.getIdToken();
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/delete/guid",
-                {
-                    uid: uidToDelete,
-                },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await deleteUserByGuidAdmin(uidToDelete, token);
 
             if (response.status !== 200)
                 navigate('/' + response.status.toString());
@@ -315,22 +280,7 @@ const UsersTab = () => {
         try {
             const token = await currentUser.getIdToken();
 
-            // call api to register a new user
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/newAccount",
-                {
-                    uid: currentUser.uid,
-                    userProperties: userProperties,
-                    userData: userData
-                },
-                {
-                    headers:
-                    {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await createNewUserAdmin(currentUser, userProperties, userData, token);
 
             // check api's reponse
             if (response.data.code !== 200)
@@ -357,21 +307,7 @@ const UsersTab = () => {
         try {
             const token = await currentUser.getIdToken();
 
-            // call api to register a new user
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/update/admin",
-                {
-                    uid: currentUser.uid,
-                    data: editData
-                },
-                {
-                    headers:
-                    {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await updateUserAdmin(currentUser, editData, token);
 
             // check api's reponse
             if (response.status !== 200)
