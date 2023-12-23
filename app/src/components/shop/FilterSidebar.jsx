@@ -23,7 +23,7 @@ const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, que
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = getGenres();
+        const response = await getGenres();
 
         if (response.status === 200) {
           setGenres(response.data.payload);

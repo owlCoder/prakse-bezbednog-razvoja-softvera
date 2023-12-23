@@ -109,7 +109,7 @@ export default function Profile() {
         if (selectedImage != null) {
             try {
                 const token = await currentUser.getIdToken();
-                const response = updateUserPicture(currentUser, selectedImage, token);
+                const response = await updateUserPicture(currentUser, selectedImage, token);
 
                 if(response.status !== 200) 
                     navigate('/' + response.status.toString());
@@ -386,7 +386,7 @@ export default function Profile() {
                                         htmlFor="birthday"
                                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                     >
-                                        Birthday
+                                        Date of Birth
                                     </label>
                                     {isEditing ? (
                                         <input
