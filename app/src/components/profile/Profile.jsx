@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import { deleteAccount, updateUserPicture, updateUser, getUserById } from "../services/profile";
 import Navbar from "../navigation/Navbar";
 import imageCompression from 'browser-image-compression';
 import LoadingSpinner from "../loading/loading";
@@ -46,18 +46,7 @@ export default function Profile() {
         // Handle the account deletion logic here
         try {
             const token = await currentUser.getIdToken();
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/delete",
-                {
-                    uid: currentUser.uid,
-                },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await deleteAccount(currentUser,  token);
 
             if(response.status !== 200) 
                 navigate('/' + response.status.toString());
@@ -120,19 +109,7 @@ export default function Profile() {
         if (selectedImage != null) {
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post(
-                    global.APIEndpoint + "/api/user/updatePicture",
-                    {
-                        uid: currentUser.uid,
-                        photoBase64: `${selectedImage}`,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
+                const response = updateUserPicture(currentUser, selectedImage, token);
 
                 if(response.status !== 200) 
                     navigate('/' + response.status.toString());
@@ -166,21 +143,7 @@ export default function Profile() {
     const handleSave = async () => {
         try {
             const token = await currentUser.getIdToken();
-            const response = await axios.post(
-                global.APIEndpoint + "/api/user/update",
-                {
-                    uid: currentUser.uid,
-                    firstName: `${user.firstName}`,
-                    lastName: `${user.lastName}`,
-                    date: `${user.date}`,
-                },
-                {
-                    headers: {
-                        Authorization: `${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await updateUser(currentUser, user, token);
 
             if(response.status !== 200) 
                 navigate('/' + response.status.toString());
@@ -207,18 +170,7 @@ export default function Profile() {
 
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post(
-                    global.APIEndpoint + "/api/user/getById",
-                    {
-                        uid: currentUser.uid,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
+                const response = await getUserById(currentUser, token);
 
                 setData(response.data);
 
