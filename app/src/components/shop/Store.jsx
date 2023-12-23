@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { getProducts } from '../services/shop';
 import Item from '../product/Item';
 import { Popup } from '../main/Popup';
 import Navbar from '../navigation/Navbar';
@@ -37,11 +37,7 @@ function Store() {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(global.APIEndpoint + '/api/product/get', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await getProducts();
 
         if (response.status === 200) {
 

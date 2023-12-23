@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getGenres } from '../services/shop'; 
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, queryGenre }) => {
   const [priceRange, setLocalPriceRange] = useState([0, maxPrice]);
@@ -23,14 +23,7 @@ const FilterSidebar = ({ setSelectedGenres, selectedGenres, maxPrice, range, que
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await axios.get(
-          global.APIEndpoint + '/api/genre/get',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        const response = getGenres();
 
         if (response.status === 200) {
           setGenres(response.data.payload);

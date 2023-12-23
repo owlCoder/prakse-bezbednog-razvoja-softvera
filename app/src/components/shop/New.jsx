@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import imageCompression from 'browser-image-compression';
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "../navigation/Navbar";
 import LoadingSpinner from "../loading/loading";
 import Combo from "../dropdown/Combo";
+import { getGenres, createProduct } from "../services/shop";
 
 function New() {
     const navigate = useNavigate();
@@ -70,14 +70,7 @@ function New() {
 
         const fetchGenres = async () => {
             try {
-              const response = await axios.get(
-                global.APIEndpoint + "/api/genre/get",
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
+              const response = await getGenres();
       
               if (response.status === 200) {
                 setComboGenres(response.data.payload);
@@ -152,18 +145,7 @@ function New() {
             try {
                 const token = await currentUser.getIdToken();            
     
-                const response = await axios.post(
-                    global.APIEndpoint + "/api/product/create",
-                    {
-                        form
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                ); 
+                const response = await createProduct(form, token);
                 
                 if(response.data.code === 200){
                     console.log("+");
