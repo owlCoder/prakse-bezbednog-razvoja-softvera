@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import { getUserById } from "../services/user.js";
 import Navbar from "../navigation/Navbar";
 import UsersTabs from "../tabs/UsersTab.jsx";
 import LoadingSpinner from "../loading/loading";
@@ -21,18 +21,7 @@ export default function UserDashboard() {
 
             try {
                 const token = await currentUser.getIdToken();
-                const response = await axios.post(
-                    global.APIEndpoint + "/api/user/getById",
-                    {
-                        uid: currentUser.uid,
-                    },
-                    {
-                        headers: {
-                            Authorization: `${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
+                const response = await getUserById(currentUser, token);
 
                if(response.status === 200) {
                     setLoading(false);
