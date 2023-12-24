@@ -161,38 +161,24 @@ const updateUserAdmin = async (data) => {
 const deleteUser = async (uid) => {
   try {
     const userRef = admin.firestore().collection('users').doc(uid);
-    const userDoc = await userRef.get();
-
-    //////////////////////////////////////////////////////////////
-
-    const productRef = admin.firestore().collection('products');
-    const snapshot = await productRef.where('sellerUid', '==', uid).get();
-
-    snapshot.forEach(doc => {
-      console.log(doc.id, '=>', doc.data());
-    });
-
-    //////////////////////////////////////////////////////////////
-
-    // const productRef = admin.firestore().collection('products');
-    // const productQuery = productRef.where('sellerId', '==', uid);
-
-    // const batch = admin.firestore().batch();
-
-    // const productsSnapshot = await productQuery.get();
-    // productsSnapshot.forEach((doc) => {
-    //   batch.delete(doc.ref);
-    // });
-
-    // await batch.commit();
-
-    //////////////////////////////////////////////////////////////
+    const userDoc = await userRef.get();    
   
     if (!userDoc.exists) {
       return { code: 404, payload: 'User not found' };
     } else {
-      await userRef.delete(); // delete user in firestore
-      await admin.auth().deleteUser(uid); // delete user in auth collection
+      
+      // delete products made by user that will be deleted
+      const productRef = admin.firestore().collection('products');
+      const snapshot = await productRef.where('sellerUid', '==', uid).get();
+
+      const deleteProductPromises = snapshot.docs.map(async (doc) => {
+        await doc.ref.delete();
+      });
+
+      await Promise.all(deleteProductPromises);
+
+      await userRef.delete(); 
+      await admin.auth().deleteUser(uid); 
       await admin.firestore().collection("audits").add({
         messageType: "INFO",
         message: "User account (uid: " + uid + ") has been deleted",
