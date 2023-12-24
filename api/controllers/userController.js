@@ -166,7 +166,7 @@ const deleteUser = async (uid) => {
     //////////////////////////////////////////////////////////////
 
     const productRef = admin.firestore().collection('products');
-    const snapshot = await productRef.where('sellerId', '==', uid).get();
+    const snapshot = await productRef.where('sellerUid', '==', uid).get();
 
     snapshot.forEach(doc => {
       console.log(doc.id, '=>', doc.data());
