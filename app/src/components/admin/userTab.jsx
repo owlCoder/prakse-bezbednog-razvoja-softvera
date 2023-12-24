@@ -52,26 +52,21 @@ const UsersTab = () => {
             }
 
             try {
+
                 const token = await currentUser.getIdToken();
+
                 const response = await getUsersAdmin(currentUser, token); 
 
-                setData(response.data.payload);
+                // if (response.status !== 200) navigate('/' + response.status.toString());
 
-                try {
-                    const token = await currentUser.getIdToken();
-                    const response = await getRolesAdmin(currentUser, token);
-                    setRoles(response.data.payload);
-
-                    if (response.status !== 200) navigate('/' + response.status.toString());
-                } catch (error) {
-                    navigate('/403');
-                }
+                // setData(response.data.payload);
+                // const responseRole = await getRolesAdmin(currentUser, token);
+                // setRoles(responseRole.data.payload);
 
                 setLoading(false);
-
-                if (response.status !== 200) navigate('/' + response.status.toString());
+               
             } catch (error) {
-                navigate('/403');
+                //navigate('/403');
             }
         };
 

@@ -19,20 +19,21 @@ export default function Dashboard() {
                 return;
             }
 
-            try {
-                const token = await currentUser.getIdToken();
-                const response = await getUserByIdAdmin(currentUser, token);
+            setLoading(false);
+            // try {
+            //     const token = await currentUser.getIdToken();
+            //     const response = await getUserByIdAdmin(currentUser, token);
 
-                if (global.WM === "WM_UNRESTRICTED") // unsecure
-                    setLoading(false);
-                else if(response.status === 200 && global.WM === "WM_SECURE" && response.data.payload.role === "admin") // secure
-                    setLoading(false);
-                else
-                    navigate('/403');
+            //     if (global.WM === "WM_UNRESTRICTED") // unsecure
+            //         setLoading(false);
+            //     else if(response.status === 200 && global.WM === "WM_SECURE" && response.data.payload.role === "admin") // secure
+            //         setLoading(false);
+            //     else
+            //         navigate('/403');
 
-            } catch (error) {
-                navigate('/403')
-            }
+            // } catch (error) {
+            //     navigate('/403')
+            // }
         };
 
         fetchData();

@@ -163,6 +163,31 @@ const deleteUser = async (uid) => {
     const userRef = admin.firestore().collection('users').doc(uid);
     const userDoc = await userRef.get();
 
+    //////////////////////////////////////////////////////////////
+
+    const productRef = admin.firestore().collection('products');
+    const snapshot = await productRef.where('sellerId', '==', uid).get();
+
+    snapshot.forEach(doc => {
+      console.log(doc.id, '=>', doc.data());
+    });
+
+    //////////////////////////////////////////////////////////////
+
+    // const productRef = admin.firestore().collection('products');
+    // const productQuery = productRef.where('sellerId', '==', uid);
+
+    // const batch = admin.firestore().batch();
+
+    // const productsSnapshot = await productQuery.get();
+    // productsSnapshot.forEach((doc) => {
+    //   batch.delete(doc.ref);
+    // });
+
+    // await batch.commit();
+
+    //////////////////////////////////////////////////////////////
+  
     if (!userDoc.exists) {
       return { code: 404, payload: 'User not found' };
     } else {

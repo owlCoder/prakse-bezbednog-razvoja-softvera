@@ -137,13 +137,15 @@ router.post('/get', verifyToken, async (req, res) => {
   // RBAC
   let role = await getUserRole(uid);
 
+  console.log("role" + role);
   if (role == null || role != "admin") {
-    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+    return res.status(401).json({ code: 401, payload: "You don't have permission to view this data" });
   }
 
   let reqs = await checkRole(role, "users", "read");
+  console.log("reqs" + reqs);
   if (reqs === false) {
-    return res.status(403).json({ code: 403, payload: "You don't have permission to view this data" });
+    return res.status(402).json({ code: 402, payload: "You don't have permission to view this data" });
   }
   // END OF RBAC
 
