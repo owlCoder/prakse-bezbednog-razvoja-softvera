@@ -13,7 +13,6 @@ export async function getAuditsAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getAdminAudits:', error);
         throw error;
     }
 }
@@ -31,7 +30,6 @@ export async function getUserByIdAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getUserByIdAdmin:', error);
         throw error;
     }
 }
@@ -49,7 +47,6 @@ export async function getOrdersAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getOrdersAdmin:', error);
         throw error;
     }
 }
@@ -65,7 +62,6 @@ export async function getProductsAdmin(token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getProductsAdmin:', error);
         throw error;
     }
 }
@@ -83,7 +79,6 @@ export async function getGenresAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getGenresAdmin:', error);
         throw error;
     }
 }
@@ -93,7 +88,7 @@ export async function deleteProductAdmin(uidToDelete, sellerUidToDelete, current
         const response = await axios.post(`${global.APIEndpoint}/api/product/delete`, {
             uid: uidToDelete,
             sellerUid: sellerUidToDelete,
-            currentUserUid: currentUser.uid
+            uid: currentUser.uid
         }, {
             headers: {
                 Authorization: `${token}`,
@@ -103,7 +98,6 @@ export async function deleteProductAdmin(uidToDelete, sellerUidToDelete, current
 
         return response;
     } catch (error) {
-        console.error('Error in deleteProductAdmin:', error);
         throw error;
     }
 }
@@ -111,7 +105,7 @@ export async function deleteProductAdmin(uidToDelete, sellerUidToDelete, current
 export async function updateProductAdmin(currentUser, editData, token) {
     try {
         const response = await axios.post(`${global.APIEndpoint}/api/product/update`, {
-            currentUserUid: currentUser.uid,
+            uid: currentUser.uid,
             payload: editData,
         }, {
             headers: {
@@ -122,7 +116,6 @@ export async function updateProductAdmin(currentUser, editData, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in updateProductAdmin:', error);
         throw error;
     }
 }
@@ -130,7 +123,7 @@ export async function updateProductAdmin(currentUser, editData, token) {
 export async function getUsersAdmin(currentUser, token) {
     try {
         const response = await axios.post(`${global.APIEndpoint}/api/user/get`, {
-            currentUserUid: currentUser.uid,
+            uid: currentUser.uid,
         }, {
             headers: {
                 Authorization: `${token}`,
@@ -140,7 +133,6 @@ export async function getUsersAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getUsersAdmin:', error);
         throw error;
     }
 }
@@ -148,7 +140,7 @@ export async function getUsersAdmin(currentUser, token) {
 export async function getRolesAdmin(currentUser, token) {
     try {
         const response = await axios.post(`${global.APIEndpoint}/api/role/get`, {
-            currentUserUid: currentUser.uid,
+            uid: currentUser.uid,
         }, {
             headers: {
                 Authorization: `${token}`,
@@ -158,7 +150,6 @@ export async function getRolesAdmin(currentUser, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in getRolesAdmin:', error);
         throw error;
     }
 }
@@ -196,7 +187,6 @@ export async function createNewUserAdmin(currentUser, userProperties, userData, 
 
         return response;
     } catch (error) {
-        console.error('Error in createNewUserAdmin:', error);
         throw error;
     }
 }
@@ -215,7 +205,6 @@ export async function updateUserAdmin(currentUser, editData, token) {
 
         return response;
     } catch (error) {
-        console.error('Error in updateUserAdmin:', error);
         throw error;
     }
 }

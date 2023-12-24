@@ -56,17 +56,17 @@ const UsersTab = () => {
                 const token = await currentUser.getIdToken();
 
                 const response = await getUsersAdmin(currentUser, token); 
+                
+                if (response.status !== 200) navigate('/' + response.status.toString());
 
-                // if (response.status !== 200) navigate('/' + response.status.toString());
-
-                // setData(response.data.payload);
-                // const responseRole = await getRolesAdmin(currentUser, token);
-                // setRoles(responseRole.data.payload);
+                setData(response.data.payload);
+                const responseRole = await getRolesAdmin(currentUser, token);
+                setRoles(responseRole.data.payload);
 
                 setLoading(false);
                
             } catch (error) {
-                //navigate('/403');
+                navigate('/403');
             }
         };
 
