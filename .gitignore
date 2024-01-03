@@ -61,4 +61,4 @@ logs/
 .vscode/
 
 
-/api/serviceAccount.json
+serviceAccount.json
