@@ -94,4 +94,6 @@ Thumbs.db
 # ESLint cache
 .eslintcache
 
-.serviceAccount.json
+serviceAccount.json
+api/serviceAccount.json
+api/serviceAccount.json
