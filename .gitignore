@@ -63,3 +63,4 @@ logs/
 
 serviceAccount.json
 api/serviceAccount.json
+*.json
