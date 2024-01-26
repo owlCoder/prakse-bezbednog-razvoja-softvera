@@ -109,7 +109,7 @@ Following API endpoints are available:
 
 ### Miscellaneous
 
-- `ANY /(.*)`: Redirects to the main application or handles unmatched routes.
+- `ANY /(.*)`: Redirects eroror page.
 
 Each endpoint performs specific actions and requires certain parameters in the request body. It responds with relevant data or error messages based on the operation performed.
 
